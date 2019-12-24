@@ -122,118 +122,6 @@ extension Webview_nativeVersionNumber_result : TStruct {
 
 
 
-fileprivate final class Webview_testThree_args {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Webview_testThree_args, rhs: Webview_testThree_args) -> Bool {
-  return true
-}
-
-extension Webview_testThree_args : Hashable {
-
-  fileprivate var hashValue : Int {
-    return 31
-  }
-
-}
-
-extension Webview_testThree_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Webview_testThree_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Webview_testThree_args {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Webview_testThree_args()
-  }
-
-}
-
-
-
-fileprivate final class Webview_testThree_result {
-
-  fileprivate var success: Int32?
-
-
-  fileprivate init() { }
-  fileprivate init(success: Int32?) {
-    self.success = success
-  }
-
-}
-
-fileprivate func ==(lhs: Webview_testThree_result, rhs: Webview_testThree_result) -> Bool {
-  return
-    (lhs.success == rhs.success)
-}
-
-extension Webview_testThree_result : Hashable {
-
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (success?.hashValue ?? 0)
-    return result
-  }
-
-}
-
-extension Webview_testThree_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return ["success": 0, ]
-  }
-
-  fileprivate static var structName: String { return "Webview_testThree_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Webview_testThree_result {
-    _ = try proto.readStructBegin()
-    var success: Int32?
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (0, .i32):             success = try Int32.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Webview_testThree_result(success: success)
-  }
-
-}
-
-
-
 extension WebviewClient : Webview {
 
   private func send_nativeVersionNumber() throws {
@@ -260,30 +148,6 @@ extension WebviewClient : Webview {
     return try recv_nativeVersionNumber()
   }
 
-  private func send_testThree() throws {
-    try outProtocol.writeMessageBegin(name: "testThree", type: .call, sequenceID: 0)
-    let args = Webview_testThree_args()
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_testThree() throws -> Int32 {
-    try inProtocol.readResultMessageBegin() 
-    let result = try Webview_testThree_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-    if let success = result.success {
-      return success
-    }
-    throw TApplicationError(error: .missingResult(methodName: "testThree"))
-  }
-
-  public func testThree() throws -> Int32 {
-    try send_testThree()
-    try outProtocol.transport.flush()
-    return try recv_testThree()
-  }
-
 }
 
 extension WebviewProcessor : TProcessor {
@@ -305,22 +169,6 @@ extension WebviewProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "nativeVersionNumber", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["testThree"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Webview_testThree_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Webview_testThree_result()
-      do {
-        result.success = try handler.testThree()
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "testThree", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
