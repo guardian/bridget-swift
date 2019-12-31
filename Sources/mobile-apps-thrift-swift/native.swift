@@ -44,6 +44,11 @@ public protocol Native {
   /// - Throws: 
   func webviewVersionNumber() throws -> Int32
 
+  ///
+  /// - Returns: Int32
+  /// - Throws: 
+  func testSeven() throws -> Int32
+
 }
 
 open class NativeClient : TClient /* , Native */ {
