@@ -310,118 +310,6 @@ extension Native_webviewVersionNumber_result : TStruct {
 
 
 
-fileprivate final class Native_testSeven_args {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Native_testSeven_args, rhs: Native_testSeven_args) -> Bool {
-  return true
-}
-
-extension Native_testSeven_args : Hashable {
-
-  fileprivate var hashValue : Int {
-    return 31
-  }
-
-}
-
-extension Native_testSeven_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Native_testSeven_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_testSeven_args {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_testSeven_args()
-  }
-
-}
-
-
-
-fileprivate final class Native_testSeven_result {
-
-  fileprivate var success: Int32?
-
-
-  fileprivate init() { }
-  fileprivate init(success: Int32?) {
-    self.success = success
-  }
-
-}
-
-fileprivate func ==(lhs: Native_testSeven_result, rhs: Native_testSeven_result) -> Bool {
-  return
-    (lhs.success == rhs.success)
-}
-
-extension Native_testSeven_result : Hashable {
-
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (success?.hashValue ?? 0)
-    return result
-  }
-
-}
-
-extension Native_testSeven_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return ["success": 0, ]
-  }
-
-  fileprivate static var structName: String { return "Native_testSeven_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_testSeven_result {
-    _ = try proto.readStructBegin()
-    var success: Int32?
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (0, .i32):             success = try Int32.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_testSeven_result(success: success)
-  }
-
-}
-
-
-
 extension NativeClient : Native {
 
   private func send_insertAdverts(adSlots: TList<AdSlot>) throws {
@@ -468,30 +356,6 @@ extension NativeClient : Native {
     return try recv_webviewVersionNumber()
   }
 
-  private func send_testSeven() throws {
-    try outProtocol.writeMessageBegin(name: "testSeven", type: .call, sequenceID: 0)
-    let args = Native_testSeven_args()
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_testSeven() throws -> Int32 {
-    try inProtocol.readResultMessageBegin() 
-    let result = try Native_testSeven_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-    if let success = result.success {
-      return success
-    }
-    throw TApplicationError(error: .missingResult(methodName: "testSeven"))
-  }
-
-  public func testSeven() throws -> Int32 {
-    try send_testSeven()
-    try outProtocol.transport.flush()
-    return try recv_testSeven()
-  }
-
 }
 
 extension NativeProcessor : TProcessor {
@@ -529,22 +393,6 @@ extension NativeProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "webviewVersionNumber", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["testSeven"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_testSeven_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_testSeven_result()
-      do {
-        result.success = try handler.testSeven()
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "testSeven", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
