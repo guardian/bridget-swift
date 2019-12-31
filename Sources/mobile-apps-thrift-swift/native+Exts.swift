@@ -14,7 +14,8 @@ public func ==(lhs: AdSlot, rhs: AdSlot) -> Bool {
   return
     (lhs.x == rhs.x) &&
     (lhs.y == rhs.y) &&
-    (lhs.height == rhs.height)
+    (lhs.height == rhs.height) &&
+    (lhs.width == rhs.width)
 }
 
 extension AdSlot : CustomStringConvertible {
@@ -23,7 +24,8 @@ extension AdSlot : CustomStringConvertible {
     var desc = "AdSlot("
     desc += "x=\(String(describing: self.x)), "
     desc += "y=\(String(describing: self.y)), "
-    desc += "height=\(String(describing: self.height))"
+    desc += "height=\(String(describing: self.height)), "
+    desc += "width=\(String(describing: self.width))"
     return desc
   }
 
@@ -37,6 +39,7 @@ extension AdSlot : Hashable {
     result = prime &* result &+ (x?.hashValue ?? 0)
     result = prime &* result &+ (y?.hashValue ?? 0)
     result = prime &* result &+ (height?.hashValue ?? 0)
+    result = prime &* result &+ (width?.hashValue ?? 0)
     return result
   }
 
@@ -45,7 +48,7 @@ extension AdSlot : Hashable {
 extension AdSlot : TStruct {
 
   public static var fieldIds: [String: Int32] {
-    return ["x": 1, "y": 2, "height": 3, ]
+    return ["x": 1, "y": 2, "height": 3, "width": 4, ]
   }
 
   public static var structName: String { return "AdSlot" }
@@ -55,6 +58,7 @@ extension AdSlot : TStruct {
     var x: Int32?
     var y: Int32?
     var height: Int32?
+    var width: Int32?
 
     fields: while true {
 
@@ -65,6 +69,7 @@ extension AdSlot : TStruct {
         case (1, .i32):             x = try Int32.read(from: proto)
         case (2, .i32):             y = try Int32.read(from: proto)
         case (3, .i32):             height = try Int32.read(from: proto)
+        case (4, .i32):             width = try Int32.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -73,7 +78,7 @@ extension AdSlot : TStruct {
 
     try proto.readStructEnd()
 
-    return AdSlot(x: x, y: y, height: height)
+    return AdSlot(x: x, y: y, height: height, width: width)
   }
 
 }
@@ -305,118 +310,6 @@ extension Native_webviewVersionNumber_result : TStruct {
 
 
 
-fileprivate final class Native_test_args {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Native_test_args, rhs: Native_test_args) -> Bool {
-  return true
-}
-
-extension Native_test_args : Hashable {
-
-  fileprivate var hashValue : Int {
-    return 31
-  }
-
-}
-
-extension Native_test_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Native_test_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_test_args {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_test_args()
-  }
-
-}
-
-
-
-fileprivate final class Native_test_result {
-
-  fileprivate var success: Int32?
-
-
-  fileprivate init() { }
-  fileprivate init(success: Int32?) {
-    self.success = success
-  }
-
-}
-
-fileprivate func ==(lhs: Native_test_result, rhs: Native_test_result) -> Bool {
-  return
-    (lhs.success == rhs.success)
-}
-
-extension Native_test_result : Hashable {
-
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (success?.hashValue ?? 0)
-    return result
-  }
-
-}
-
-extension Native_test_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return ["success": 0, ]
-  }
-
-  fileprivate static var structName: String { return "Native_test_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_test_result {
-    _ = try proto.readStructBegin()
-    var success: Int32?
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (0, .i32):             success = try Int32.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_test_result(success: success)
-  }
-
-}
-
-
-
 extension NativeClient : Native {
 
   private func send_insertAdverts(adSlots: TList<AdSlot>) throws {
@@ -463,30 +356,6 @@ extension NativeClient : Native {
     return try recv_webviewVersionNumber()
   }
 
-  private func send_test() throws {
-    try outProtocol.writeMessageBegin(name: "test", type: .call, sequenceID: 0)
-    let args = Native_test_args()
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_test() throws -> Int32 {
-    try inProtocol.readResultMessageBegin() 
-    let result = try Native_test_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-    if let success = result.success {
-      return success
-    }
-    throw TApplicationError(error: .missingResult(methodName: "test"))
-  }
-
-  public func test() throws -> Int32 {
-    try send_test()
-    try outProtocol.transport.flush()
-    return try recv_test()
-  }
-
 }
 
 extension NativeProcessor : TProcessor {
@@ -524,22 +393,6 @@ extension NativeProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "webviewVersionNumber", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["test"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_test_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_test_result()
-      do {
-        result.success = try handler.test()
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "test", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }

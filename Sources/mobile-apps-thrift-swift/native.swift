@@ -18,12 +18,15 @@ public final class AdSlot {
 
   public var height: Int32?
 
+  public var width: Int32?
+
 
   public init() { }
-  public init(x: Int32?, y: Int32?, height: Int32?) {
+  public init(x: Int32?, y: Int32?, height: Int32?, width: Int32?) {
     self.x = x
     self.y = y
     self.height = height
+    self.width = width
   }
 
 }
@@ -40,11 +43,6 @@ public protocol Native {
   /// - Returns: Int32
   /// - Throws: 
   func webviewVersionNumber() throws -> Int32
-
-  ///
-  /// - Returns: Int32
-  /// - Throws: 
-  func test() throws -> Int32
 
 }
 
