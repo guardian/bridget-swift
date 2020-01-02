@@ -15,7 +15,7 @@ public protocol Webview {
   ///
   /// - Returns: Int32
   /// - Throws: 
-  func nativeVersionNumber() throws -> Int32
+  func webviewThriftVersionNumber() throws -> Int32
 
 }
 

@@ -10,17 +10,17 @@ import Foundation
 import Thrift
 
 
-fileprivate final class Webview_nativeVersionNumber_args {
+fileprivate final class Webview_webviewThriftVersionNumber_args {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Webview_nativeVersionNumber_args, rhs: Webview_nativeVersionNumber_args) -> Bool {
+fileprivate func ==(lhs: Webview_webviewThriftVersionNumber_args, rhs: Webview_webviewThriftVersionNumber_args) -> Bool {
   return true
 }
 
-extension Webview_nativeVersionNumber_args : Hashable {
+extension Webview_webviewThriftVersionNumber_args : Hashable {
 
   fileprivate var hashValue : Int {
     return 31
@@ -28,15 +28,15 @@ extension Webview_nativeVersionNumber_args : Hashable {
 
 }
 
-extension Webview_nativeVersionNumber_args : TStruct {
+extension Webview_webviewThriftVersionNumber_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Webview_nativeVersionNumber_args" }
+  fileprivate static var structName: String { return "Webview_webviewThriftVersionNumber_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Webview_nativeVersionNumber_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Webview_webviewThriftVersionNumber_args {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -53,14 +53,14 @@ extension Webview_nativeVersionNumber_args : TStruct {
 
     try proto.readStructEnd()
 
-    return Webview_nativeVersionNumber_args()
+    return Webview_webviewThriftVersionNumber_args()
   }
 
 }
 
 
 
-fileprivate final class Webview_nativeVersionNumber_result {
+fileprivate final class Webview_webviewThriftVersionNumber_result {
 
   fileprivate var success: Int32?
 
@@ -72,12 +72,12 @@ fileprivate final class Webview_nativeVersionNumber_result {
 
 }
 
-fileprivate func ==(lhs: Webview_nativeVersionNumber_result, rhs: Webview_nativeVersionNumber_result) -> Bool {
+fileprivate func ==(lhs: Webview_webviewThriftVersionNumber_result, rhs: Webview_webviewThriftVersionNumber_result) -> Bool {
   return
     (lhs.success == rhs.success)
 }
 
-extension Webview_nativeVersionNumber_result : Hashable {
+extension Webview_webviewThriftVersionNumber_result : Hashable {
 
   fileprivate var hashValue : Int {
     let prime = 31
@@ -88,15 +88,15 @@ extension Webview_nativeVersionNumber_result : Hashable {
 
 }
 
-extension Webview_nativeVersionNumber_result : TStruct {
+extension Webview_webviewThriftVersionNumber_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return ["success": 0, ]
   }
 
-  fileprivate static var structName: String { return "Webview_nativeVersionNumber_result" }
+  fileprivate static var structName: String { return "Webview_webviewThriftVersionNumber_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Webview_nativeVersionNumber_result {
+  fileprivate static func read(from proto: TProtocol) throws -> Webview_webviewThriftVersionNumber_result {
     _ = try proto.readStructBegin()
     var success: Int32?
 
@@ -115,7 +115,7 @@ extension Webview_nativeVersionNumber_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Webview_nativeVersionNumber_result(success: success)
+    return Webview_webviewThriftVersionNumber_result(success: success)
   }
 
 }
@@ -124,28 +124,28 @@ extension Webview_nativeVersionNumber_result : TStruct {
 
 extension WebviewClient : Webview {
 
-  private func send_nativeVersionNumber() throws {
-    try outProtocol.writeMessageBegin(name: "nativeVersionNumber", type: .call, sequenceID: 0)
-    let args = Webview_nativeVersionNumber_args()
+  private func send_webviewThriftVersionNumber() throws {
+    try outProtocol.writeMessageBegin(name: "webviewThriftVersionNumber", type: .call, sequenceID: 0)
+    let args = Webview_webviewThriftVersionNumber_args()
     try args.write(to: outProtocol)
     try outProtocol.writeMessageEnd()
   }
 
-  private func recv_nativeVersionNumber() throws -> Int32 {
+  private func recv_webviewThriftVersionNumber() throws -> Int32 {
     try inProtocol.readResultMessageBegin() 
-    let result = try Webview_nativeVersionNumber_result.read(from: inProtocol)
+    let result = try Webview_webviewThriftVersionNumber_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
 
     if let success = result.success {
       return success
     }
-    throw TApplicationError(error: .missingResult(methodName: "nativeVersionNumber"))
+    throw TApplicationError(error: .missingResult(methodName: "webviewThriftVersionNumber"))
   }
 
-  public func nativeVersionNumber() throws -> Int32 {
-    try send_nativeVersionNumber()
+  public func webviewThriftVersionNumber() throws -> Int32 {
+    try send_webviewThriftVersionNumber()
     try outProtocol.transport.flush()
-    return try recv_nativeVersionNumber()
+    return try recv_webviewThriftVersionNumber()
   }
 
 }
@@ -156,19 +156,19 @@ extension WebviewProcessor : TProcessor {
 
     var processorHandlers = ProcessorHandlerDictionary()
 
-    processorHandlers["nativeVersionNumber"] = { sequenceID, inProtocol, outProtocol, handler in
+    processorHandlers["webviewThriftVersionNumber"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Webview_nativeVersionNumber_args.read(from: inProtocol)
+      let args = try Webview_webviewThriftVersionNumber_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
-      var result = Webview_nativeVersionNumber_result()
+      var result = Webview_webviewThriftVersionNumber_result()
       do {
-        result.success = try handler.nativeVersionNumber()
+        result.success = try handler.webviewThriftVersionNumber()
       }
       catch let error { throw error }
 
-      try outProtocol.writeMessageBegin(name: "nativeVersionNumber", type: .reply, sequenceID: sequenceID)
+      try outProtocol.writeMessageBegin(name: "webviewThriftVersionNumber", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
