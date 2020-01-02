@@ -36,8 +36,8 @@ extension AdSlot : Hashable {
   public var hashValue : Int {
     let prime = 31
     var result = 1
-    result = prime &* result &+ (x?.hashValue ?? 0)
-    result = prime &* result &+ (y?.hashValue ?? 0)
+    result = prime &* result &+ (x.hashValue)
+    result = prime &* result &+ (y.hashValue)
     result = prime &* result &+ (height?.hashValue ?? 0)
     result = prime &* result &+ (width?.hashValue ?? 0)
     return result
@@ -55,8 +55,8 @@ extension AdSlot : TStruct {
 
   public static func read(from proto: TProtocol) throws -> AdSlot {
     _ = try proto.readStructBegin()
-    var x: Int32?
-    var y: Int32?
+    var x: Int32!
+    var y: Int32!
     var height: Int32?
     var width: Int32?
 
@@ -77,6 +77,9 @@ extension AdSlot : TStruct {
     }
 
     try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(x, named: "x")
+    try proto.validateValue(y, named: "y")
 
     return AdSlot(x: x, y: y, height: height, width: width)
   }

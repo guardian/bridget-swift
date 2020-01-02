@@ -12,17 +12,21 @@ import Thrift
 
 public final class AdSlot {
 
-  public var x: Int32?
+  public var x: Int32
 
-  public var y: Int32?
+  public var y: Int32
 
   public var height: Int32?
 
   public var width: Int32?
 
 
-  public init() { }
-  public init(x: Int32?, y: Int32?, height: Int32?, width: Int32?) {
+  public init(x: Int32, y: Int32) {
+    self.x = x
+    self.y = y
+  }
+
+  public init(x: Int32, y: Int32, height: Int32?, width: Int32?) {
     self.x = x
     self.y = y
     self.height = height
