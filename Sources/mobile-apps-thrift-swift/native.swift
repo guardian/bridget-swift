@@ -35,6 +35,38 @@ public final class AdSlot {
 
 }
 
+public final class Topic {
+
+  public var id: String
+
+
+  public init(id: String) {
+    self.id = id
+  }
+
+}
+
+public final class Image {
+
+  public var url: String
+
+  public var caption: String?
+
+  public var credit: String?
+
+
+  public init(url: String) {
+    self.url = url
+  }
+
+  public init(url: String, caption: String?, credit: String?) {
+    self.url = url
+    self.caption = caption
+    self.credit = credit
+  }
+
+}
+
 public protocol Native {
 
   ///
@@ -47,6 +79,41 @@ public protocol Native {
   /// - Returns: Int32
   /// - Throws: 
   func nativeThriftPackageVersion() throws -> Int32
+
+  ///
+  /// - Throws: 
+  func launchFrictionScreen() throws
+
+  ///
+  /// - Parameters:
+  ///   - topic: 
+  /// - Throws: 
+  func follow(topic: Topic) throws
+
+  ///
+  /// - Parameters:
+  ///   - topic: 
+  /// - Throws: 
+  func unfollow(topic: Topic) throws
+
+  ///
+  /// - Parameters:
+  ///   - topic: 
+  /// - Returns: Bool
+  /// - Throws: 
+  func isFollowing(topic: Topic) throws -> Bool
+
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isPremiumUser() throws -> Bool
+
+  ///
+  /// - Parameters:
+  ///   - images: 
+  ///   - selectedIndex: 
+  /// - Throws: 
+  func launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws
 
 }
 

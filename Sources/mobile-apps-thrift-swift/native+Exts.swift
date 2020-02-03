@@ -88,6 +88,140 @@ extension AdSlot : TStruct {
 
 
 
+public func ==(lhs: Topic, rhs: Topic) -> Bool {
+  return
+    (lhs.id == rhs.id)
+}
+
+extension Topic : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "Topic("
+    desc += "id=\(String(describing: self.id))"
+    return desc
+  }
+
+}
+
+extension Topic : Hashable {
+
+  public var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (id.hashValue)
+    return result
+  }
+
+}
+
+extension Topic : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["id": 1, ]
+  }
+
+  public static var structName: String { return "Topic" }
+
+  public static func read(from proto: TProtocol) throws -> Topic {
+    _ = try proto.readStructBegin()
+    var id: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           id = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(id, named: "id")
+
+    return Topic(id: id)
+  }
+
+}
+
+
+
+public func ==(lhs: Image, rhs: Image) -> Bool {
+  return
+    (lhs.url == rhs.url) &&
+    (lhs.caption == rhs.caption) &&
+    (lhs.credit == rhs.credit)
+}
+
+extension Image : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "Image("
+    desc += "url=\(String(describing: self.url)), "
+    desc += "caption=\(String(describing: self.caption)), "
+    desc += "credit=\(String(describing: self.credit))"
+    return desc
+  }
+
+}
+
+extension Image : Hashable {
+
+  public var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (url.hashValue)
+    result = prime &* result &+ (caption?.hashValue ?? 0)
+    result = prime &* result &+ (credit?.hashValue ?? 0)
+    return result
+  }
+
+}
+
+extension Image : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["url": 1, "caption": 2, "credit": 3, ]
+  }
+
+  public static var structName: String { return "Image" }
+
+  public static func read(from proto: TProtocol) throws -> Image {
+    _ = try proto.readStructBegin()
+    var url: String!
+    var caption: String?
+    var credit: String?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           url = try String.read(from: proto)
+        case (2, .string):           caption = try String.read(from: proto)
+        case (3, .string):           credit = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(url, named: "url")
+
+    return Image(url: url, caption: caption, credit: credit)
+  }
+
+}
+
+
+
 fileprivate final class Native_insertAdverts_args {
 
   fileprivate var adSlots: TList<AdSlot>
@@ -313,6 +447,690 @@ extension Native_nativeThriftPackageVersion_result : TStruct {
 
 
 
+fileprivate final class Native_launchFrictionScreen_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Native_launchFrictionScreen_args, rhs: Native_launchFrictionScreen_args) -> Bool {
+  return true
+}
+
+extension Native_launchFrictionScreen_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Native_launchFrictionScreen_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Native_launchFrictionScreen_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_launchFrictionScreen_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_launchFrictionScreen_args()
+  }
+
+}
+
+
+
+fileprivate final class Native_launchFrictionScreen_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Native_launchFrictionScreen_result, rhs: Native_launchFrictionScreen_result) -> Bool {
+  return true
+}
+
+extension Native_launchFrictionScreen_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Native_launchFrictionScreen_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Native_launchFrictionScreen_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_launchFrictionScreen_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_launchFrictionScreen_result()
+  }
+
+}
+
+
+
+fileprivate final class Native_follow_args {
+
+  fileprivate var topic: Topic
+
+
+  fileprivate init(topic: Topic) {
+    self.topic = topic
+  }
+
+}
+
+fileprivate func ==(lhs: Native_follow_args, rhs: Native_follow_args) -> Bool {
+  return
+    (lhs.topic == rhs.topic)
+}
+
+extension Native_follow_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (topic.hashValue)
+    return result
+  }
+
+}
+
+extension Native_follow_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["topic": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Native_follow_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_follow_args {
+    _ = try proto.readStructBegin()
+    var topic: Topic!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           topic = try Topic.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(topic, named: "topic")
+
+    return Native_follow_args(topic: topic)
+  }
+
+}
+
+
+
+fileprivate final class Native_follow_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Native_follow_result, rhs: Native_follow_result) -> Bool {
+  return true
+}
+
+extension Native_follow_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Native_follow_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Native_follow_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_follow_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_follow_result()
+  }
+
+}
+
+
+
+fileprivate final class Native_unfollow_args {
+
+  fileprivate var topic: Topic
+
+
+  fileprivate init(topic: Topic) {
+    self.topic = topic
+  }
+
+}
+
+fileprivate func ==(lhs: Native_unfollow_args, rhs: Native_unfollow_args) -> Bool {
+  return
+    (lhs.topic == rhs.topic)
+}
+
+extension Native_unfollow_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (topic.hashValue)
+    return result
+  }
+
+}
+
+extension Native_unfollow_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["topic": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Native_unfollow_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_unfollow_args {
+    _ = try proto.readStructBegin()
+    var topic: Topic!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           topic = try Topic.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(topic, named: "topic")
+
+    return Native_unfollow_args(topic: topic)
+  }
+
+}
+
+
+
+fileprivate final class Native_unfollow_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Native_unfollow_result, rhs: Native_unfollow_result) -> Bool {
+  return true
+}
+
+extension Native_unfollow_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Native_unfollow_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Native_unfollow_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_unfollow_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_unfollow_result()
+  }
+
+}
+
+
+
+fileprivate final class Native_isFollowing_args {
+
+  fileprivate var topic: Topic
+
+
+  fileprivate init(topic: Topic) {
+    self.topic = topic
+  }
+
+}
+
+fileprivate func ==(lhs: Native_isFollowing_args, rhs: Native_isFollowing_args) -> Bool {
+  return
+    (lhs.topic == rhs.topic)
+}
+
+extension Native_isFollowing_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (topic.hashValue)
+    return result
+  }
+
+}
+
+extension Native_isFollowing_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["topic": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Native_isFollowing_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_isFollowing_args {
+    _ = try proto.readStructBegin()
+    var topic: Topic!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           topic = try Topic.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(topic, named: "topic")
+
+    return Native_isFollowing_args(topic: topic)
+  }
+
+}
+
+
+
+fileprivate final class Native_isFollowing_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Native_isFollowing_result, rhs: Native_isFollowing_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Native_isFollowing_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (success?.hashValue ?? 0)
+    return result
+  }
+
+}
+
+extension Native_isFollowing_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Native_isFollowing_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_isFollowing_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_isFollowing_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class Native_isPremiumUser_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Native_isPremiumUser_args, rhs: Native_isPremiumUser_args) -> Bool {
+  return true
+}
+
+extension Native_isPremiumUser_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Native_isPremiumUser_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Native_isPremiumUser_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_isPremiumUser_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_isPremiumUser_args()
+  }
+
+}
+
+
+
+fileprivate final class Native_isPremiumUser_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Native_isPremiumUser_result, rhs: Native_isPremiumUser_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Native_isPremiumUser_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (success?.hashValue ?? 0)
+    return result
+  }
+
+}
+
+extension Native_isPremiumUser_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Native_isPremiumUser_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_isPremiumUser_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_isPremiumUser_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class Native_launchSlideshow_args {
+
+  fileprivate var images: TList<Image>
+
+  fileprivate var selectedIndex: Int32
+
+
+  fileprivate init(images: TList<Image>, selectedIndex: Int32) {
+    self.images = images
+    self.selectedIndex = selectedIndex
+  }
+
+}
+
+fileprivate func ==(lhs: Native_launchSlideshow_args, rhs: Native_launchSlideshow_args) -> Bool {
+  return
+    (lhs.images == rhs.images) &&
+    (lhs.selectedIndex == rhs.selectedIndex)
+}
+
+extension Native_launchSlideshow_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (images.hashValue)
+    result = prime &* result &+ (selectedIndex.hashValue)
+    return result
+  }
+
+}
+
+extension Native_launchSlideshow_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["images": 1, "selectedIndex": 2, ]
+  }
+
+  fileprivate static var structName: String { return "Native_launchSlideshow_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_launchSlideshow_args {
+    _ = try proto.readStructBegin()
+    var images: TList<Image>!
+    var selectedIndex: Int32!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .list):            images = try TList<Image>.read(from: proto)
+        case (2, .i32):             selectedIndex = try Int32.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(images, named: "images")
+    try proto.validateValue(selectedIndex, named: "selectedIndex")
+
+    return Native_launchSlideshow_args(images: images, selectedIndex: selectedIndex)
+  }
+
+}
+
+
+
+fileprivate final class Native_launchSlideshow_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Native_launchSlideshow_result, rhs: Native_launchSlideshow_result) -> Bool {
+  return true
+}
+
+extension Native_launchSlideshow_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Native_launchSlideshow_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Native_launchSlideshow_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_launchSlideshow_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_launchSlideshow_result()
+  }
+
+}
+
+
+
 extension NativeClient : Native {
 
   private func send_insertAdverts(adSlots: TList<AdSlot>) throws {
@@ -359,6 +1177,134 @@ extension NativeClient : Native {
     return try recv_nativeThriftPackageVersion()
   }
 
+  private func send_launchFrictionScreen() throws {
+    try outProtocol.writeMessageBegin(name: "launchFrictionScreen", type: .call, sequenceID: 0)
+    let args = Native_launchFrictionScreen_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_launchFrictionScreen() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Native_launchFrictionScreen_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func launchFrictionScreen() throws {
+    try send_launchFrictionScreen()
+    try outProtocol.transport.flush()
+    try recv_launchFrictionScreen()
+  }
+
+  private func send_follow(topic: Topic) throws {
+    try outProtocol.writeMessageBegin(name: "follow", type: .call, sequenceID: 0)
+    let args = Native_follow_args(topic: topic)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_follow() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Native_follow_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func follow(topic: Topic) throws {
+    try send_follow(topic: topic)
+    try outProtocol.transport.flush()
+    try recv_follow()
+  }
+
+  private func send_unfollow(topic: Topic) throws {
+    try outProtocol.writeMessageBegin(name: "unfollow", type: .call, sequenceID: 0)
+    let args = Native_unfollow_args(topic: topic)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_unfollow() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Native_unfollow_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func unfollow(topic: Topic) throws {
+    try send_unfollow(topic: topic)
+    try outProtocol.transport.flush()
+    try recv_unfollow()
+  }
+
+  private func send_isFollowing(topic: Topic) throws {
+    try outProtocol.writeMessageBegin(name: "isFollowing", type: .call, sequenceID: 0)
+    let args = Native_isFollowing_args(topic: topic)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isFollowing() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Native_isFollowing_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isFollowing"))
+  }
+
+  public func isFollowing(topic: Topic) throws -> Bool {
+    try send_isFollowing(topic: topic)
+    try outProtocol.transport.flush()
+    return try recv_isFollowing()
+  }
+
+  private func send_isPremiumUser() throws {
+    try outProtocol.writeMessageBegin(name: "isPremiumUser", type: .call, sequenceID: 0)
+    let args = Native_isPremiumUser_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isPremiumUser() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Native_isPremiumUser_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isPremiumUser"))
+  }
+
+  public func isPremiumUser() throws -> Bool {
+    try send_isPremiumUser()
+    try outProtocol.transport.flush()
+    return try recv_isPremiumUser()
+  }
+
+  private func send_launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws {
+    try outProtocol.writeMessageBegin(name: "launchSlideshow", type: .call, sequenceID: 0)
+    let args = Native_launchSlideshow_args(images: images, selectedIndex: selectedIndex)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_launchSlideshow() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Native_launchSlideshow_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws {
+    try send_launchSlideshow(images: images, selectedIndex: selectedIndex)
+    try outProtocol.transport.flush()
+    try recv_launchSlideshow()
+  }
+
 }
 
 extension NativeProcessor : TProcessor {
@@ -396,6 +1342,102 @@ extension NativeProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["launchFrictionScreen"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Native_launchFrictionScreen_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Native_launchFrictionScreen_result()
+      do {
+        try handler.launchFrictionScreen()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "launchFrictionScreen", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["follow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Native_follow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Native_follow_result()
+      do {
+        try handler.follow(topic: args.topic)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "follow", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["unfollow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Native_unfollow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Native_unfollow_result()
+      do {
+        try handler.unfollow(topic: args.topic)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "unfollow", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["isFollowing"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Native_isFollowing_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Native_isFollowing_result()
+      do {
+        result.success = try handler.isFollowing(topic: args.topic)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isFollowing", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["isPremiumUser"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Native_isPremiumUser_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Native_isPremiumUser_result()
+      do {
+        result.success = try handler.isPremiumUser()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isPremiumUser", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["launchSlideshow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Native_launchSlideshow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Native_launchSlideshow_result()
+      do {
+        try handler.launchSlideshow(images: args.images, selectedIndex: args.selectedIndex)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "launchSlideshow", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
