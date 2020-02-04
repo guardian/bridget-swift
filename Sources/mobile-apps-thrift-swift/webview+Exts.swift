@@ -201,7 +201,7 @@ extension Webview_webviewThriftPackage_result : TStruct {
 
 
 
-fileprivate final class Webview_insertEpic_args {
+fileprivate final class Webview_insertEpics_args {
 
   fileprivate var epics: TList<Epic>
 
@@ -212,12 +212,12 @@ fileprivate final class Webview_insertEpic_args {
 
 }
 
-fileprivate func ==(lhs: Webview_insertEpic_args, rhs: Webview_insertEpic_args) -> Bool {
+fileprivate func ==(lhs: Webview_insertEpics_args, rhs: Webview_insertEpics_args) -> Bool {
   return
     (lhs.epics == rhs.epics)
 }
 
-extension Webview_insertEpic_args : Hashable {
+extension Webview_insertEpics_args : Hashable {
 
   fileprivate var hashValue : Int {
     let prime = 31
@@ -228,15 +228,15 @@ extension Webview_insertEpic_args : Hashable {
 
 }
 
-extension Webview_insertEpic_args : TStruct {
+extension Webview_insertEpics_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return ["epics": 1, ]
   }
 
-  fileprivate static var structName: String { return "Webview_insertEpic_args" }
+  fileprivate static var structName: String { return "Webview_insertEpics_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Webview_insertEpic_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Webview_insertEpics_args {
     _ = try proto.readStructBegin()
     var epics: TList<Epic>!
 
@@ -257,7 +257,120 @@ extension Webview_insertEpic_args : TStruct {
     // Required fields
     try proto.validateValue(epics, named: "epics")
 
-    return Webview_insertEpic_args(epics: epics)
+    return Webview_insertEpics_args(epics: epics)
+  }
+
+}
+
+
+
+fileprivate final class Webview_insertEpics_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Webview_insertEpics_result, rhs: Webview_insertEpics_result) -> Bool {
+  return true
+}
+
+extension Webview_insertEpics_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Webview_insertEpics_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Webview_insertEpics_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Webview_insertEpics_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Webview_insertEpics_result()
+  }
+
+}
+
+
+
+fileprivate final class Webview_insertEpic_args {
+
+  fileprivate var epic: Epic
+
+
+  fileprivate init(epic: Epic) {
+    self.epic = epic
+  }
+
+}
+
+fileprivate func ==(lhs: Webview_insertEpic_args, rhs: Webview_insertEpic_args) -> Bool {
+  return
+    (lhs.epic == rhs.epic)
+}
+
+extension Webview_insertEpic_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (epic.hashValue)
+    return result
+  }
+
+}
+
+extension Webview_insertEpic_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["epic": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Webview_insertEpic_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Webview_insertEpic_args {
+    _ = try proto.readStructBegin()
+    var epic: Epic!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           epic = try Epic.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(epic, named: "epic")
+
+    return Webview_insertEpic_args(epic: epic)
   }
 
 }
@@ -340,9 +453,29 @@ extension WebviewClient : Webview {
     return try recv_webviewThriftPackage()
   }
 
-  private func send_insertEpic(epics: TList<Epic>) throws {
+  private func send_insertEpics(epics: TList<Epic>) throws {
+    try outProtocol.writeMessageBegin(name: "insertEpics", type: .call, sequenceID: 0)
+    let args = Webview_insertEpics_args(epics: epics)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_insertEpics() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Webview_insertEpics_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func insertEpics(epics: TList<Epic>) throws {
+    try send_insertEpics(epics: epics)
+    try outProtocol.transport.flush()
+    try recv_insertEpics()
+  }
+
+  private func send_insertEpic(epic: Epic) throws {
     try outProtocol.writeMessageBegin(name: "insertEpic", type: .call, sequenceID: 0)
-    let args = Webview_insertEpic_args(epics: epics)
+    let args = Webview_insertEpic_args(epic: epic)
     try args.write(to: outProtocol)
     try outProtocol.writeMessageEnd()
   }
@@ -354,8 +487,8 @@ extension WebviewClient : Webview {
 
   }
 
-  public func insertEpic(epics: TList<Epic>) throws {
-    try send_insertEpic(epics: epics)
+  public func insertEpic(epic: Epic) throws {
+    try send_insertEpic(epic: epic)
     try outProtocol.transport.flush()
     try recv_insertEpic()
   }
@@ -384,6 +517,22 @@ extension WebviewProcessor : TProcessor {
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
+    processorHandlers["insertEpics"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Webview_insertEpics_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Webview_insertEpics_result()
+      do {
+        try handler.insertEpics(epics: args.epics)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "insertEpics", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
     processorHandlers["insertEpic"] = { sequenceID, inProtocol, outProtocol, handler in
 
       let args = try Webview_insertEpic_args.read(from: inProtocol)
@@ -392,7 +541,7 @@ extension WebviewProcessor : TProcessor {
 
       var result = Webview_insertEpic_result()
       do {
-        try handler.insertEpic(epics: args.epics)
+        try handler.insertEpic(epic: args.epic)
       }
       catch let error { throw error }
 

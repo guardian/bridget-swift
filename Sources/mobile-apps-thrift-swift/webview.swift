@@ -47,7 +47,13 @@ public protocol Webview {
   /// - Parameters:
   ///   - epics: 
   /// - Throws: 
-  func insertEpic(epics: TList<Epic>) throws
+  func insertEpics(epics: TList<Epic>) throws
+
+  ///
+  /// - Parameters:
+  ///   - epic: 
+  /// - Throws: 
+  func insertEpic(epic: Epic) throws
 
 }
 
