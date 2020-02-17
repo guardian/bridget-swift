@@ -201,119 +201,6 @@ extension Webview_webviewThriftPackage_result : TStruct {
 
 
 
-fileprivate final class Webview_insertEpics_args {
-
-  fileprivate var epics: TList<Epic>
-
-
-  fileprivate init(epics: TList<Epic>) {
-    self.epics = epics
-  }
-
-}
-
-fileprivate func ==(lhs: Webview_insertEpics_args, rhs: Webview_insertEpics_args) -> Bool {
-  return
-    (lhs.epics == rhs.epics)
-}
-
-extension Webview_insertEpics_args : Hashable {
-
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (epics.hashValue)
-    return result
-  }
-
-}
-
-extension Webview_insertEpics_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return ["epics": 1, ]
-  }
-
-  fileprivate static var structName: String { return "Webview_insertEpics_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Webview_insertEpics_args {
-    _ = try proto.readStructBegin()
-    var epics: TList<Epic>!
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (1, .list):            epics = try TList<Epic>.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-    // Required fields
-    try proto.validateValue(epics, named: "epics")
-
-    return Webview_insertEpics_args(epics: epics)
-  }
-
-}
-
-
-
-fileprivate final class Webview_insertEpics_result {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Webview_insertEpics_result, rhs: Webview_insertEpics_result) -> Bool {
-  return true
-}
-
-extension Webview_insertEpics_result : Hashable {
-
-  fileprivate var hashValue : Int {
-    return 31
-  }
-
-}
-
-extension Webview_insertEpics_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Webview_insertEpics_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Webview_insertEpics_result {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Webview_insertEpics_result()
-  }
-
-}
-
-
-
 fileprivate final class Webview_insertEpic_args {
 
   fileprivate var epic: Epic
@@ -427,6 +314,119 @@ extension Webview_insertEpic_result : TStruct {
 
 
 
+fileprivate final class Webview_updateFontSize_args {
+
+  fileprivate var size: Int32
+
+
+  fileprivate init(size: Int32) {
+    self.size = size
+  }
+
+}
+
+fileprivate func ==(lhs: Webview_updateFontSize_args, rhs: Webview_updateFontSize_args) -> Bool {
+  return
+    (lhs.size == rhs.size)
+}
+
+extension Webview_updateFontSize_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (size.hashValue)
+    return result
+  }
+
+}
+
+extension Webview_updateFontSize_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["size": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Webview_updateFontSize_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Webview_updateFontSize_args {
+    _ = try proto.readStructBegin()
+    var size: Int32!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .i32):             size = try Int32.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(size, named: "size")
+
+    return Webview_updateFontSize_args(size: size)
+  }
+
+}
+
+
+
+fileprivate final class Webview_updateFontSize_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Webview_updateFontSize_result, rhs: Webview_updateFontSize_result) -> Bool {
+  return true
+}
+
+extension Webview_updateFontSize_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Webview_updateFontSize_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Webview_updateFontSize_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Webview_updateFontSize_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Webview_updateFontSize_result()
+  }
+
+}
+
+
+
 extension WebviewClient : Webview {
 
   private func send_webviewThriftPackage() throws {
@@ -453,26 +453,6 @@ extension WebviewClient : Webview {
     return try recv_webviewThriftPackage()
   }
 
-  private func send_insertEpics(epics: TList<Epic>) throws {
-    try outProtocol.writeMessageBegin(name: "insertEpics", type: .call, sequenceID: 0)
-    let args = Webview_insertEpics_args(epics: epics)
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_insertEpics() throws {
-    try inProtocol.readResultMessageBegin() 
-    _ = try Webview_insertEpics_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-  }
-
-  public func insertEpics(epics: TList<Epic>) throws {
-    try send_insertEpics(epics: epics)
-    try outProtocol.transport.flush()
-    try recv_insertEpics()
-  }
-
   private func send_insertEpic(epic: Epic) throws {
     try outProtocol.writeMessageBegin(name: "insertEpic", type: .call, sequenceID: 0)
     let args = Webview_insertEpic_args(epic: epic)
@@ -491,6 +471,26 @@ extension WebviewClient : Webview {
     try send_insertEpic(epic: epic)
     try outProtocol.transport.flush()
     try recv_insertEpic()
+  }
+
+  private func send_updateFontSize(size: Int32) throws {
+    try outProtocol.writeMessageBegin(name: "updateFontSize", type: .call, sequenceID: 0)
+    let args = Webview_updateFontSize_args(size: size)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_updateFontSize() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Webview_updateFontSize_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func updateFontSize(size: Int32) throws {
+    try send_updateFontSize(size: size)
+    try outProtocol.transport.flush()
+    try recv_updateFontSize()
   }
 
 }
@@ -517,22 +517,6 @@ extension WebviewProcessor : TProcessor {
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
-    processorHandlers["insertEpics"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Webview_insertEpics_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Webview_insertEpics_result()
-      do {
-        try handler.insertEpics(epics: args.epics)
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "insertEpics", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
     processorHandlers["insertEpic"] = { sequenceID, inProtocol, outProtocol, handler in
 
       let args = try Webview_insertEpic_args.read(from: inProtocol)
@@ -546,6 +530,22 @@ extension WebviewProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "insertEpic", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["updateFontSize"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Webview_updateFontSize_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Webview_updateFontSize_result()
+      do {
+        try handler.updateFontSize(size: args.size)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "updateFontSize", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }

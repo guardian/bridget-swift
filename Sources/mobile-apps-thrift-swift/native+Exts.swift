@@ -222,6 +222,118 @@ extension Image : TStruct {
 
 
 
+fileprivate final class Native_nativeThriftPackageVersion_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Native_nativeThriftPackageVersion_args, rhs: Native_nativeThriftPackageVersion_args) -> Bool {
+  return true
+}
+
+extension Native_nativeThriftPackageVersion_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Native_nativeThriftPackageVersion_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Native_nativeThriftPackageVersion_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_nativeThriftPackageVersion_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_nativeThriftPackageVersion_args()
+  }
+
+}
+
+
+
+fileprivate final class Native_nativeThriftPackageVersion_result {
+
+  fileprivate var success: Int32?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Int32?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Native_nativeThriftPackageVersion_result, rhs: Native_nativeThriftPackageVersion_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Native_nativeThriftPackageVersion_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (success?.hashValue ?? 0)
+    return result
+  }
+
+}
+
+extension Native_nativeThriftPackageVersion_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Native_nativeThriftPackageVersion_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_nativeThriftPackageVersion_result {
+    _ = try proto.readStructBegin()
+    var success: Int32?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .i32):             success = try Int32.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_nativeThriftPackageVersion_result(success: success)
+  }
+
+}
+
+
+
 fileprivate final class Native_insertAdverts_args {
 
   fileprivate var adSlots: TList<AdSlot>
@@ -335,17 +447,80 @@ extension Native_insertAdverts_result : TStruct {
 
 
 
-fileprivate final class Native_nativeThriftPackageVersion_args {
+fileprivate final class Native_updateAdverts_args {
+
+  fileprivate var adSlots: TList<AdSlot>
+
+
+  fileprivate init(adSlots: TList<AdSlot>) {
+    self.adSlots = adSlots
+  }
+
+}
+
+fileprivate func ==(lhs: Native_updateAdverts_args, rhs: Native_updateAdverts_args) -> Bool {
+  return
+    (lhs.adSlots == rhs.adSlots)
+}
+
+extension Native_updateAdverts_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (adSlots.hashValue)
+    return result
+  }
+
+}
+
+extension Native_updateAdverts_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["adSlots": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Native_updateAdverts_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_updateAdverts_args {
+    _ = try proto.readStructBegin()
+    var adSlots: TList<AdSlot>!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .list):            adSlots = try TList<AdSlot>.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(adSlots, named: "adSlots")
+
+    return Native_updateAdverts_args(adSlots: adSlots)
+  }
+
+}
+
+
+
+fileprivate final class Native_updateAdverts_result {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Native_nativeThriftPackageVersion_args, rhs: Native_nativeThriftPackageVersion_args) -> Bool {
+fileprivate func ==(lhs: Native_updateAdverts_result, rhs: Native_updateAdverts_result) -> Bool {
   return true
 }
 
-extension Native_nativeThriftPackageVersion_args : Hashable {
+extension Native_updateAdverts_result : Hashable {
 
   fileprivate var hashValue : Int {
     return 31
@@ -353,15 +528,15 @@ extension Native_nativeThriftPackageVersion_args : Hashable {
 
 }
 
-extension Native_nativeThriftPackageVersion_args : TStruct {
+extension Native_updateAdverts_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Native_nativeThriftPackageVersion_args" }
+  fileprivate static var structName: String { return "Native_updateAdverts_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_nativeThriftPackageVersion_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Native_updateAdverts_result {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -378,69 +553,7 @@ extension Native_nativeThriftPackageVersion_args : TStruct {
 
     try proto.readStructEnd()
 
-    return Native_nativeThriftPackageVersion_args()
-  }
-
-}
-
-
-
-fileprivate final class Native_nativeThriftPackageVersion_result {
-
-  fileprivate var success: Int32?
-
-
-  fileprivate init() { }
-  fileprivate init(success: Int32?) {
-    self.success = success
-  }
-
-}
-
-fileprivate func ==(lhs: Native_nativeThriftPackageVersion_result, rhs: Native_nativeThriftPackageVersion_result) -> Bool {
-  return
-    (lhs.success == rhs.success)
-}
-
-extension Native_nativeThriftPackageVersion_result : Hashable {
-
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (success?.hashValue ?? 0)
-    return result
-  }
-
-}
-
-extension Native_nativeThriftPackageVersion_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return ["success": 0, ]
-  }
-
-  fileprivate static var structName: String { return "Native_nativeThriftPackageVersion_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_nativeThriftPackageVersion_result {
-    _ = try proto.readStructBegin()
-    var success: Int32?
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (0, .i32):             success = try Int32.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_nativeThriftPackageVersion_result(success: success)
+    return Native_updateAdverts_result()
   }
 
 }
@@ -773,6 +886,127 @@ extension Native_unfollow_result : TStruct {
 
 
 
+fileprivate final class Native_launchSlideshow_args {
+
+  fileprivate var images: TList<Image>
+
+  fileprivate var selectedIndex: Int32
+
+
+  fileprivate init(images: TList<Image>, selectedIndex: Int32) {
+    self.images = images
+    self.selectedIndex = selectedIndex
+  }
+
+}
+
+fileprivate func ==(lhs: Native_launchSlideshow_args, rhs: Native_launchSlideshow_args) -> Bool {
+  return
+    (lhs.images == rhs.images) &&
+    (lhs.selectedIndex == rhs.selectedIndex)
+}
+
+extension Native_launchSlideshow_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (images.hashValue)
+    result = prime &* result &+ (selectedIndex.hashValue)
+    return result
+  }
+
+}
+
+extension Native_launchSlideshow_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["images": 1, "selectedIndex": 2, ]
+  }
+
+  fileprivate static var structName: String { return "Native_launchSlideshow_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_launchSlideshow_args {
+    _ = try proto.readStructBegin()
+    var images: TList<Image>!
+    var selectedIndex: Int32!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .list):            images = try TList<Image>.read(from: proto)
+        case (2, .i32):             selectedIndex = try Int32.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(images, named: "images")
+    try proto.validateValue(selectedIndex, named: "selectedIndex")
+
+    return Native_launchSlideshow_args(images: images, selectedIndex: selectedIndex)
+  }
+
+}
+
+
+
+fileprivate final class Native_launchSlideshow_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Native_launchSlideshow_result, rhs: Native_launchSlideshow_result) -> Bool {
+  return true
+}
+
+extension Native_launchSlideshow_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Native_launchSlideshow_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Native_launchSlideshow_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_launchSlideshow_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_launchSlideshow_result()
+  }
+
+}
+
+
+
 fileprivate final class Native_isFollowing_args {
 
   fileprivate var topic: Topic
@@ -1010,148 +1244,7 @@ extension Native_isPremiumUser_result : TStruct {
 
 
 
-fileprivate final class Native_launchSlideshow_args {
-
-  fileprivate var images: TList<Image>
-
-  fileprivate var selectedIndex: Int32
-
-
-  fileprivate init(images: TList<Image>, selectedIndex: Int32) {
-    self.images = images
-    self.selectedIndex = selectedIndex
-  }
-
-}
-
-fileprivate func ==(lhs: Native_launchSlideshow_args, rhs: Native_launchSlideshow_args) -> Bool {
-  return
-    (lhs.images == rhs.images) &&
-    (lhs.selectedIndex == rhs.selectedIndex)
-}
-
-extension Native_launchSlideshow_args : Hashable {
-
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (images.hashValue)
-    result = prime &* result &+ (selectedIndex.hashValue)
-    return result
-  }
-
-}
-
-extension Native_launchSlideshow_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return ["images": 1, "selectedIndex": 2, ]
-  }
-
-  fileprivate static var structName: String { return "Native_launchSlideshow_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_launchSlideshow_args {
-    _ = try proto.readStructBegin()
-    var images: TList<Image>!
-    var selectedIndex: Int32!
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (1, .list):            images = try TList<Image>.read(from: proto)
-        case (2, .i32):             selectedIndex = try Int32.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-    // Required fields
-    try proto.validateValue(images, named: "images")
-    try proto.validateValue(selectedIndex, named: "selectedIndex")
-
-    return Native_launchSlideshow_args(images: images, selectedIndex: selectedIndex)
-  }
-
-}
-
-
-
-fileprivate final class Native_launchSlideshow_result {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Native_launchSlideshow_result, rhs: Native_launchSlideshow_result) -> Bool {
-  return true
-}
-
-extension Native_launchSlideshow_result : Hashable {
-
-  fileprivate var hashValue : Int {
-    return 31
-  }
-
-}
-
-extension Native_launchSlideshow_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Native_launchSlideshow_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_launchSlideshow_result {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_launchSlideshow_result()
-  }
-
-}
-
-
-
 extension NativeClient : Native {
-
-  private func send_insertAdverts(adSlots: TList<AdSlot>) throws {
-    try outProtocol.writeMessageBegin(name: "insertAdverts", type: .call, sequenceID: 0)
-    let args = Native_insertAdverts_args(adSlots: adSlots)
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_insertAdverts() throws {
-    try inProtocol.readResultMessageBegin() 
-    _ = try Native_insertAdverts_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-  }
-
-  public func insertAdverts(adSlots: TList<AdSlot>) throws {
-    try send_insertAdverts(adSlots: adSlots)
-    try outProtocol.transport.flush()
-    try recv_insertAdverts()
-  }
 
   private func send_nativeThriftPackageVersion() throws {
     try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .call, sequenceID: 0)
@@ -1175,6 +1268,46 @@ extension NativeClient : Native {
     try send_nativeThriftPackageVersion()
     try outProtocol.transport.flush()
     return try recv_nativeThriftPackageVersion()
+  }
+
+  private func send_insertAdverts(adSlots: TList<AdSlot>) throws {
+    try outProtocol.writeMessageBegin(name: "insertAdverts", type: .call, sequenceID: 0)
+    let args = Native_insertAdverts_args(adSlots: adSlots)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_insertAdverts() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Native_insertAdverts_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func insertAdverts(adSlots: TList<AdSlot>) throws {
+    try send_insertAdverts(adSlots: adSlots)
+    try outProtocol.transport.flush()
+    try recv_insertAdverts()
+  }
+
+  private func send_updateAdverts(adSlots: TList<AdSlot>) throws {
+    try outProtocol.writeMessageBegin(name: "updateAdverts", type: .call, sequenceID: 0)
+    let args = Native_updateAdverts_args(adSlots: adSlots)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_updateAdverts() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Native_updateAdverts_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func updateAdverts(adSlots: TList<AdSlot>) throws {
+    try send_updateAdverts(adSlots: adSlots)
+    try outProtocol.transport.flush()
+    try recv_updateAdverts()
   }
 
   private func send_launchFrictionScreen() throws {
@@ -1237,6 +1370,26 @@ extension NativeClient : Native {
     try recv_unfollow()
   }
 
+  private func send_launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws {
+    try outProtocol.writeMessageBegin(name: "launchSlideshow", type: .call, sequenceID: 0)
+    let args = Native_launchSlideshow_args(images: images, selectedIndex: selectedIndex)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_launchSlideshow() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Native_launchSlideshow_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws {
+    try send_launchSlideshow(images: images, selectedIndex: selectedIndex)
+    try outProtocol.transport.flush()
+    try recv_launchSlideshow()
+  }
+
   private func send_isFollowing(topic: Topic) throws {
     try outProtocol.writeMessageBegin(name: "isFollowing", type: .call, sequenceID: 0)
     let args = Native_isFollowing_args(topic: topic)
@@ -1285,26 +1438,6 @@ extension NativeClient : Native {
     return try recv_isPremiumUser()
   }
 
-  private func send_launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws {
-    try outProtocol.writeMessageBegin(name: "launchSlideshow", type: .call, sequenceID: 0)
-    let args = Native_launchSlideshow_args(images: images, selectedIndex: selectedIndex)
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_launchSlideshow() throws {
-    try inProtocol.readResultMessageBegin() 
-    _ = try Native_launchSlideshow_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-  }
-
-  public func launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws {
-    try send_launchSlideshow(images: images, selectedIndex: selectedIndex)
-    try outProtocol.transport.flush()
-    try recv_launchSlideshow()
-  }
-
 }
 
 extension NativeProcessor : TProcessor {
@@ -1313,6 +1446,22 @@ extension NativeProcessor : TProcessor {
 
     var processorHandlers = ProcessorHandlerDictionary()
 
+    processorHandlers["nativeThriftPackageVersion"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Native_nativeThriftPackageVersion_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Native_nativeThriftPackageVersion_result()
+      do {
+        result.success = try handler.nativeThriftPackageVersion()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
     processorHandlers["insertAdverts"] = { sequenceID, inProtocol, outProtocol, handler in
 
       let args = try Native_insertAdverts_args.read(from: inProtocol)
@@ -1329,19 +1478,19 @@ extension NativeProcessor : TProcessor {
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
-    processorHandlers["nativeThriftPackageVersion"] = { sequenceID, inProtocol, outProtocol, handler in
+    processorHandlers["updateAdverts"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Native_nativeThriftPackageVersion_args.read(from: inProtocol)
+      let args = try Native_updateAdverts_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
-      var result = Native_nativeThriftPackageVersion_result()
+      var result = Native_updateAdverts_result()
       do {
-        result.success = try handler.nativeThriftPackageVersion()
+        try handler.updateAdverts(adSlots: args.adSlots)
       }
       catch let error { throw error }
 
-      try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
+      try outProtocol.writeMessageBegin(name: "updateAdverts", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
@@ -1393,6 +1542,22 @@ extension NativeProcessor : TProcessor {
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
+    processorHandlers["launchSlideshow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Native_launchSlideshow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Native_launchSlideshow_result()
+      do {
+        try handler.launchSlideshow(images: args.images, selectedIndex: args.selectedIndex)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "launchSlideshow", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
     processorHandlers["isFollowing"] = { sequenceID, inProtocol, outProtocol, handler in
 
       let args = try Native_isFollowing_args.read(from: inProtocol)
@@ -1422,22 +1587,6 @@ extension NativeProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "isPremiumUser", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["launchSlideshow"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_launchSlideshow_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_launchSlideshow_result()
-      do {
-        try handler.launchSlideshow(images: args.images, selectedIndex: args.selectedIndex)
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "launchSlideshow", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }

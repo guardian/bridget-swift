@@ -70,15 +70,21 @@ public final class Image {
 public protocol Native {
 
   ///
+  /// - Returns: Int32
+  /// - Throws: 
+  func nativeThriftPackageVersion() throws -> Int32
+
+  ///
   /// - Parameters:
   ///   - adSlots: 
   /// - Throws: 
   func insertAdverts(adSlots: TList<AdSlot>) throws
 
   ///
-  /// - Returns: Int32
+  /// - Parameters:
+  ///   - adSlots: 
   /// - Throws: 
-  func nativeThriftPackageVersion() throws -> Int32
+  func updateAdverts(adSlots: TList<AdSlot>) throws
 
   ///
   /// - Throws: 
@@ -98,6 +104,13 @@ public protocol Native {
 
   ///
   /// - Parameters:
+  ///   - images: 
+  ///   - selectedIndex: 
+  /// - Throws: 
+  func launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws
+
+  ///
+  /// - Parameters:
   ///   - topic: 
   /// - Returns: Bool
   /// - Throws: 
@@ -107,13 +120,6 @@ public protocol Native {
   /// - Returns: Bool
   /// - Throws: 
   func isPremiumUser() throws -> Bool
-
-  ///
-  /// - Parameters:
-  ///   - images: 
-  ///   - selectedIndex: 
-  /// - Throws: 
-  func launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws
 
 }
 

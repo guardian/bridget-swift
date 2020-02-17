@@ -45,15 +45,15 @@ public protocol Webview {
 
   ///
   /// - Parameters:
-  ///   - epics: 
-  /// - Throws: 
-  func insertEpics(epics: TList<Epic>) throws
-
-  ///
-  /// - Parameters:
   ///   - epic: 
   /// - Throws: 
   func insertEpic(epic: Epic) throws
+
+  ///
+  /// - Parameters:
+  ///   - size: 
+  /// - Throws: 
+  func updateFontSize(size: Int32) throws
 
 }
 
