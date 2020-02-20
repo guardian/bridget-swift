@@ -67,6 +67,44 @@ public final class Image {
 
 }
 
+public final class Epic {
+
+  public var title: String
+
+  public var body: String
+
+  public var firstButton: String
+
+  public var secondButton: String?
+
+
+  public init(title: String, body: String, firstButton: String) {
+    self.title = title
+    self.body = body
+    self.firstButton = firstButton
+  }
+
+  public init(title: String, body: String, firstButton: String, secondButton: String?) {
+    self.title = title
+    self.body = body
+    self.firstButton = firstButton
+    self.secondButton = secondButton
+  }
+
+}
+
+public final class MaybeEpic {
+
+  public var epic: Epic?
+
+
+  public init() { }
+  public init(epic: Epic?) {
+    self.epic = epic
+  }
+
+}
+
 public protocol Native {
 
   ///
@@ -120,6 +158,11 @@ public protocol Native {
   /// - Returns: Bool
   /// - Throws: 
   func isPremiumUser() throws -> Bool
+
+  ///
+  /// - Returns: MaybeEpic
+  /// - Throws: 
+  func getEpics() throws -> MaybeEpic
 
 }
 

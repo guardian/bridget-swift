@@ -10,44 +10,12 @@ import Foundation
 import Thrift
 
 
-public final class Epic {
-
-  public var title: String
-
-  public var body: String
-
-  public var firstButton: String
-
-  public var secondButton: String?
-
-
-  public init(title: String, body: String, firstButton: String) {
-    self.title = title
-    self.body = body
-    self.firstButton = firstButton
-  }
-
-  public init(title: String, body: String, firstButton: String, secondButton: String?) {
-    self.title = title
-    self.body = body
-    self.firstButton = firstButton
-    self.secondButton = secondButton
-  }
-
-}
-
 public protocol Webview {
 
   ///
   /// - Returns: Int32
   /// - Throws: 
   func webviewThriftPackage() throws -> Int32
-
-  ///
-  /// - Parameters:
-  ///   - epic: 
-  /// - Throws: 
-  func insertEpic(epic: Epic) throws
 
   ///
   /// - Parameters:

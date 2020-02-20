@@ -222,6 +222,145 @@ extension Image : TStruct {
 
 
 
+public func ==(lhs: Epic, rhs: Epic) -> Bool {
+  return
+    (lhs.title == rhs.title) &&
+    (lhs.body == rhs.body) &&
+    (lhs.firstButton == rhs.firstButton) &&
+    (lhs.secondButton == rhs.secondButton)
+}
+
+extension Epic : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "Epic("
+    desc += "title=\(String(describing: self.title)), "
+    desc += "body=\(String(describing: self.body)), "
+    desc += "firstButton=\(String(describing: self.firstButton)), "
+    desc += "secondButton=\(String(describing: self.secondButton))"
+    return desc
+  }
+
+}
+
+extension Epic : Hashable {
+
+  public var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (title.hashValue)
+    result = prime &* result &+ (body.hashValue)
+    result = prime &* result &+ (firstButton.hashValue)
+    result = prime &* result &+ (secondButton?.hashValue ?? 0)
+    return result
+  }
+
+}
+
+extension Epic : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["title": 1, "body": 2, "firstButton": 3, "secondButton": 4, ]
+  }
+
+  public static var structName: String { return "Epic" }
+
+  public static func read(from proto: TProtocol) throws -> Epic {
+    _ = try proto.readStructBegin()
+    var title: String!
+    var body: String!
+    var firstButton: String!
+    var secondButton: String?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           title = try String.read(from: proto)
+        case (2, .string):           body = try String.read(from: proto)
+        case (3, .string):           firstButton = try String.read(from: proto)
+        case (4, .string):           secondButton = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(title, named: "title")
+    try proto.validateValue(body, named: "body")
+    try proto.validateValue(firstButton, named: "firstButton")
+
+    return Epic(title: title, body: body, firstButton: firstButton, secondButton: secondButton)
+  }
+
+}
+
+
+
+public func ==(lhs: MaybeEpic, rhs: MaybeEpic) -> Bool {
+  return
+    (lhs.epic == rhs.epic)
+}
+
+extension MaybeEpic : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "MaybeEpic("
+    desc += "epic=\(String(describing: self.epic))"
+    return desc
+  }
+
+}
+
+extension MaybeEpic : Hashable {
+
+  public var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (epic?.hashValue ?? 0)
+    return result
+  }
+
+}
+
+extension MaybeEpic : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["epic": 1, ]
+  }
+
+  public static var structName: String { return "MaybeEpic" }
+
+  public static func read(from proto: TProtocol) throws -> MaybeEpic {
+    _ = try proto.readStructBegin()
+    var epic: Epic?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           epic = try Epic.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return MaybeEpic(epic: epic)
+  }
+
+}
+
+
+
 fileprivate final class Native_nativeThriftPackageVersion_args {
 
 
@@ -1244,6 +1383,118 @@ extension Native_isPremiumUser_result : TStruct {
 
 
 
+fileprivate final class Native_getEpics_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Native_getEpics_args, rhs: Native_getEpics_args) -> Bool {
+  return true
+}
+
+extension Native_getEpics_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Native_getEpics_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Native_getEpics_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_getEpics_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_getEpics_args()
+  }
+
+}
+
+
+
+fileprivate final class Native_getEpics_result {
+
+  fileprivate var success: MaybeEpic?
+
+
+  fileprivate init() { }
+  fileprivate init(success: MaybeEpic?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Native_getEpics_result, rhs: Native_getEpics_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Native_getEpics_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (success?.hashValue ?? 0)
+    return result
+  }
+
+}
+
+extension Native_getEpics_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Native_getEpics_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_getEpics_result {
+    _ = try proto.readStructBegin()
+    var success: MaybeEpic?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .struct):           success = try MaybeEpic.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_getEpics_result(success: success)
+  }
+
+}
+
+
+
 extension NativeClient : Native {
 
   private func send_nativeThriftPackageVersion() throws {
@@ -1438,6 +1689,30 @@ extension NativeClient : Native {
     return try recv_isPremiumUser()
   }
 
+  private func send_getEpics() throws {
+    try outProtocol.writeMessageBegin(name: "getEpics", type: .call, sequenceID: 0)
+    let args = Native_getEpics_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_getEpics() throws -> MaybeEpic {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Native_getEpics_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "getEpics"))
+  }
+
+  public func getEpics() throws -> MaybeEpic {
+    try send_getEpics()
+    try outProtocol.transport.flush()
+    return try recv_getEpics()
+  }
+
 }
 
 extension NativeProcessor : TProcessor {
@@ -1587,6 +1862,22 @@ extension NativeProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "isPremiumUser", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["getEpics"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Native_getEpics_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Native_getEpics_result()
+      do {
+        result.success = try handler.getEpics()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "getEpics", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
