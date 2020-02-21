@@ -164,6 +164,10 @@ public protocol Native {
   /// - Throws: 
   func getEpics() throws -> MaybeEpic
 
+  ///
+  /// - Throws: 
+  func epicSeen() throws
+
 }
 
 open class NativeClient : TClient /* , Native */ {

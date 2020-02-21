@@ -1495,6 +1495,106 @@ extension Native_getEpics_result : TStruct {
 
 
 
+fileprivate final class Native_epicSeen_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Native_epicSeen_args, rhs: Native_epicSeen_args) -> Bool {
+  return true
+}
+
+extension Native_epicSeen_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Native_epicSeen_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Native_epicSeen_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_epicSeen_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_epicSeen_args()
+  }
+
+}
+
+
+
+fileprivate final class Native_epicSeen_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Native_epicSeen_result, rhs: Native_epicSeen_result) -> Bool {
+  return true
+}
+
+extension Native_epicSeen_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Native_epicSeen_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Native_epicSeen_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Native_epicSeen_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Native_epicSeen_result()
+  }
+
+}
+
+
+
 extension NativeClient : Native {
 
   private func send_nativeThriftPackageVersion() throws {
@@ -1713,6 +1813,26 @@ extension NativeClient : Native {
     return try recv_getEpics()
   }
 
+  private func send_epicSeen() throws {
+    try outProtocol.writeMessageBegin(name: "epicSeen", type: .call, sequenceID: 0)
+    let args = Native_epicSeen_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_epicSeen() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Native_epicSeen_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func epicSeen() throws {
+    try send_epicSeen()
+    try outProtocol.transport.flush()
+    try recv_epicSeen()
+  }
+
 }
 
 extension NativeProcessor : TProcessor {
@@ -1878,6 +1998,22 @@ extension NativeProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "getEpics", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["epicSeen"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Native_epicSeen_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Native_epicSeen_result()
+      do {
+        try handler.epicSeen()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "epicSeen", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
