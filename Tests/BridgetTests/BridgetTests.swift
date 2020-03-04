@@ -1,12 +1,12 @@
 import XCTest
-@testable import mobile_apps_thrift_swift
+@testable import Bridget
 
-final class mobile_apps_thrift_swiftTests: XCTestCase {
+final class BridgetTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(mobile_apps_thrift_swift().text, "Hello, World!")
+        XCTAssertEqual(String(describing: Bridget.AdSlot.self), "AdSlot")
     }
 
     static var allTests = [
