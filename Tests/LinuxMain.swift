@@ -1,7 +1,7 @@
 import XCTest
 
-import mobile_apps_thrift_swiftTests
+import BridgetTests
 
 var tests = [XCTestCaseEntry]()
-tests += mobile_apps_thrift_swiftTests.allTests()
+tests += BridgetTests.allTests()
 XCTMain(tests)
