@@ -1,4 +1,4 @@
-# mobile-apps-thrift-swift
+# BridgetSwift
 .
 .
 .
