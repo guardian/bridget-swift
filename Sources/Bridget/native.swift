@@ -168,9 +168,78 @@ public protocol Native {
   /// - Throws: 
   func epicSeen() throws
 
+  ///
+  /// - Throws: 
+  func test() throws
+
 }
 
 open class NativeClient : TClient /* , Native */ {
+
+}
+
+public protocol NativeAsync {
+
+  ///
+  ///   - completion: TAsyncResult<Int32> wrapping return and following Exceptions: 
+  func nativeThriftPackageVersion(completion: @escaping (TAsyncResult<Int32>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - adSlots: 
+  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
+  func insertAdverts(adSlots: TList<AdSlot>, completion: @escaping (TAsyncResult<Void>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - adSlots: 
+  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
+  func updateAdverts(adSlots: TList<AdSlot>, completion: @escaping (TAsyncResult<Void>) -> Void)
+
+  ///
+  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
+  func launchFrictionScreen(completion: @escaping (TAsyncResult<Void>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - topic: 
+  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
+  func follow(topic: Topic, completion: @escaping (TAsyncResult<Void>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - topic: 
+  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
+  func unfollow(topic: Topic, completion: @escaping (TAsyncResult<Void>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - images: 
+  ///   - selectedIndex: 
+  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
+  func launchSlideshow(images: TList<Image>, selectedIndex: Int32, completion: @escaping (TAsyncResult<Void>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - topic: 
+  ///   - completion: TAsyncResult<Bool> wrapping return and following Exceptions: 
+  func isFollowing(topic: Topic, completion: @escaping (TAsyncResult<Bool>) -> Void)
+
+  ///
+  ///   - completion: TAsyncResult<Bool> wrapping return and following Exceptions: 
+  func isPremiumUser(completion: @escaping (TAsyncResult<Bool>) -> Void)
+
+  ///
+  ///   - completion: TAsyncResult<MaybeEpic> wrapping return and following Exceptions: 
+  func getEpics(completion: @escaping (TAsyncResult<MaybeEpic>) -> Void)
+
+  ///
+  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
+  func epicSeen(completion: @escaping (TAsyncResult<Void>) -> Void)
+
+  ///
+  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
+  func test(completion: @escaping (TAsyncResult<Void>) -> Void)
 
 }
 
@@ -181,6 +250,18 @@ open class NativeProcessor /* Native */ {
   public var service: Native
 
   public required init(service: Native) {
+    self.service = service
+  }
+
+}
+
+open class NativeProcessorAsync /* Native */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, NativeAsync) throws -> Void]
+
+  public var service: NativeAsync
+
+  public required init(service: NativeAsync) {
     self.service = service
   }
 
