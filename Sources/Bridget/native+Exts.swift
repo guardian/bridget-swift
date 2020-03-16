@@ -361,17 +361,17 @@ extension MaybeEpic : TStruct {
 
 
 
-fileprivate final class Native_nativeThriftPackageVersion_args {
+fileprivate final class Environment_nativeThriftPackageVersion_args {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Native_nativeThriftPackageVersion_args, rhs: Native_nativeThriftPackageVersion_args) -> Bool {
+fileprivate func ==(lhs: Environment_nativeThriftPackageVersion_args, rhs: Environment_nativeThriftPackageVersion_args) -> Bool {
   return true
 }
 
-extension Native_nativeThriftPackageVersion_args : Hashable {
+extension Environment_nativeThriftPackageVersion_args : Hashable {
 
   fileprivate var hashValue : Int {
     return 31
@@ -379,15 +379,15 @@ extension Native_nativeThriftPackageVersion_args : Hashable {
 
 }
 
-extension Native_nativeThriftPackageVersion_args : TStruct {
+extension Environment_nativeThriftPackageVersion_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Native_nativeThriftPackageVersion_args" }
+  fileprivate static var structName: String { return "Environment_nativeThriftPackageVersion_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_nativeThriftPackageVersion_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Environment_nativeThriftPackageVersion_args {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -404,14 +404,14 @@ extension Native_nativeThriftPackageVersion_args : TStruct {
 
     try proto.readStructEnd()
 
-    return Native_nativeThriftPackageVersion_args()
+    return Environment_nativeThriftPackageVersion_args()
   }
 
 }
 
 
 
-fileprivate final class Native_nativeThriftPackageVersion_result {
+fileprivate final class Environment_nativeThriftPackageVersion_result {
 
   fileprivate var success: Int32?
 
@@ -423,12 +423,12 @@ fileprivate final class Native_nativeThriftPackageVersion_result {
 
 }
 
-fileprivate func ==(lhs: Native_nativeThriftPackageVersion_result, rhs: Native_nativeThriftPackageVersion_result) -> Bool {
+fileprivate func ==(lhs: Environment_nativeThriftPackageVersion_result, rhs: Environment_nativeThriftPackageVersion_result) -> Bool {
   return
     (lhs.success == rhs.success)
 }
 
-extension Native_nativeThriftPackageVersion_result : Hashable {
+extension Environment_nativeThriftPackageVersion_result : Hashable {
 
   fileprivate var hashValue : Int {
     let prime = 31
@@ -439,15 +439,15 @@ extension Native_nativeThriftPackageVersion_result : Hashable {
 
 }
 
-extension Native_nativeThriftPackageVersion_result : TStruct {
+extension Environment_nativeThriftPackageVersion_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return ["success": 0, ]
   }
 
-  fileprivate static var structName: String { return "Native_nativeThriftPackageVersion_result" }
+  fileprivate static var structName: String { return "Environment_nativeThriftPackageVersion_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_nativeThriftPackageVersion_result {
+  fileprivate static func read(from proto: TProtocol) throws -> Environment_nativeThriftPackageVersion_result {
     _ = try proto.readStructBegin()
     var success: Int32?
 
@@ -466,14 +466,143 @@ extension Native_nativeThriftPackageVersion_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Native_nativeThriftPackageVersion_result(success: success)
+    return Environment_nativeThriftPackageVersion_result(success: success)
   }
 
 }
 
 
 
-fileprivate final class Native_insertAdverts_args {
+extension EnvironmentClient : Environment {
+
+  private func send_nativeThriftPackageVersion() throws {
+    try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .call, sequenceID: 0)
+    let args = Environment_nativeThriftPackageVersion_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_nativeThriftPackageVersion() throws -> Int32 {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Environment_nativeThriftPackageVersion_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "nativeThriftPackageVersion"))
+  }
+
+  public func nativeThriftPackageVersion() throws -> Int32 {
+    try send_nativeThriftPackageVersion()
+    try outProtocol.transport.flush()
+    return try recv_nativeThriftPackageVersion()
+  }
+
+}
+
+extension EnvironmentProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["nativeThriftPackageVersion"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Environment_nativeThriftPackageVersion_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Environment_nativeThriftPackageVersion_result()
+      do {
+        result.success = try handler.nativeThriftPackageVersion()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = EnvironmentProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+extension EnvironmentProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["nativeThriftPackageVersion"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Environment_nativeThriftPackageVersion_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.nativeThriftPackageVersion(completion: { asyncResult in
+        var result = Environment_nativeThriftPackageVersion_result()
+        do {
+          try result.success = asyncResult.value()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "nativeThriftPackageVersion", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "nativeThriftPackageVersion", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = EnvironmentProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+fileprivate final class Commercial_insertAdverts_args {
 
   fileprivate var adSlots: TList<AdSlot>
 
@@ -484,12 +613,12 @@ fileprivate final class Native_insertAdverts_args {
 
 }
 
-fileprivate func ==(lhs: Native_insertAdverts_args, rhs: Native_insertAdverts_args) -> Bool {
+fileprivate func ==(lhs: Commercial_insertAdverts_args, rhs: Commercial_insertAdverts_args) -> Bool {
   return
     (lhs.adSlots == rhs.adSlots)
 }
 
-extension Native_insertAdverts_args : Hashable {
+extension Commercial_insertAdverts_args : Hashable {
 
   fileprivate var hashValue : Int {
     let prime = 31
@@ -500,15 +629,15 @@ extension Native_insertAdverts_args : Hashable {
 
 }
 
-extension Native_insertAdverts_args : TStruct {
+extension Commercial_insertAdverts_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return ["adSlots": 1, ]
   }
 
-  fileprivate static var structName: String { return "Native_insertAdverts_args" }
+  fileprivate static var structName: String { return "Commercial_insertAdverts_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_insertAdverts_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Commercial_insertAdverts_args {
     _ = try proto.readStructBegin()
     var adSlots: TList<AdSlot>!
 
@@ -529,24 +658,24 @@ extension Native_insertAdverts_args : TStruct {
     // Required fields
     try proto.validateValue(adSlots, named: "adSlots")
 
-    return Native_insertAdverts_args(adSlots: adSlots)
+    return Commercial_insertAdverts_args(adSlots: adSlots)
   }
 
 }
 
 
 
-fileprivate final class Native_insertAdverts_result {
+fileprivate final class Commercial_insertAdverts_result {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Native_insertAdverts_result, rhs: Native_insertAdverts_result) -> Bool {
+fileprivate func ==(lhs: Commercial_insertAdverts_result, rhs: Commercial_insertAdverts_result) -> Bool {
   return true
 }
 
-extension Native_insertAdverts_result : Hashable {
+extension Commercial_insertAdverts_result : Hashable {
 
   fileprivate var hashValue : Int {
     return 31
@@ -554,15 +683,15 @@ extension Native_insertAdverts_result : Hashable {
 
 }
 
-extension Native_insertAdverts_result : TStruct {
+extension Commercial_insertAdverts_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Native_insertAdverts_result" }
+  fileprivate static var structName: String { return "Commercial_insertAdverts_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_insertAdverts_result {
+  fileprivate static func read(from proto: TProtocol) throws -> Commercial_insertAdverts_result {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -579,14 +708,14 @@ extension Native_insertAdverts_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Native_insertAdverts_result()
+    return Commercial_insertAdverts_result()
   }
 
 }
 
 
 
-fileprivate final class Native_updateAdverts_args {
+fileprivate final class Commercial_updateAdverts_args {
 
   fileprivate var adSlots: TList<AdSlot>
 
@@ -597,12 +726,12 @@ fileprivate final class Native_updateAdverts_args {
 
 }
 
-fileprivate func ==(lhs: Native_updateAdverts_args, rhs: Native_updateAdverts_args) -> Bool {
+fileprivate func ==(lhs: Commercial_updateAdverts_args, rhs: Commercial_updateAdverts_args) -> Bool {
   return
     (lhs.adSlots == rhs.adSlots)
 }
 
-extension Native_updateAdverts_args : Hashable {
+extension Commercial_updateAdverts_args : Hashable {
 
   fileprivate var hashValue : Int {
     let prime = 31
@@ -613,15 +742,15 @@ extension Native_updateAdverts_args : Hashable {
 
 }
 
-extension Native_updateAdverts_args : TStruct {
+extension Commercial_updateAdverts_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return ["adSlots": 1, ]
   }
 
-  fileprivate static var structName: String { return "Native_updateAdverts_args" }
+  fileprivate static var structName: String { return "Commercial_updateAdverts_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_updateAdverts_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Commercial_updateAdverts_args {
     _ = try proto.readStructBegin()
     var adSlots: TList<AdSlot>!
 
@@ -642,24 +771,24 @@ extension Native_updateAdverts_args : TStruct {
     // Required fields
     try proto.validateValue(adSlots, named: "adSlots")
 
-    return Native_updateAdverts_args(adSlots: adSlots)
+    return Commercial_updateAdverts_args(adSlots: adSlots)
   }
 
 }
 
 
 
-fileprivate final class Native_updateAdverts_result {
+fileprivate final class Commercial_updateAdverts_result {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Native_updateAdverts_result, rhs: Native_updateAdverts_result) -> Bool {
+fileprivate func ==(lhs: Commercial_updateAdverts_result, rhs: Commercial_updateAdverts_result) -> Bool {
   return true
 }
 
-extension Native_updateAdverts_result : Hashable {
+extension Commercial_updateAdverts_result : Hashable {
 
   fileprivate var hashValue : Int {
     return 31
@@ -667,15 +796,15 @@ extension Native_updateAdverts_result : Hashable {
 
 }
 
-extension Native_updateAdverts_result : TStruct {
+extension Commercial_updateAdverts_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Native_updateAdverts_result" }
+  fileprivate static var structName: String { return "Commercial_updateAdverts_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_updateAdverts_result {
+  fileprivate static func read(from proto: TProtocol) throws -> Commercial_updateAdverts_result {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -692,24 +821,210 @@ extension Native_updateAdverts_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Native_updateAdverts_result()
+    return Commercial_updateAdverts_result()
   }
 
 }
 
 
 
-fileprivate final class Native_launchFrictionScreen_args {
+extension CommercialClient : Commercial {
+
+  private func send_insertAdverts(adSlots: TList<AdSlot>) throws {
+    try outProtocol.writeMessageBegin(name: "insertAdverts", type: .call, sequenceID: 0)
+    let args = Commercial_insertAdverts_args(adSlots: adSlots)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_insertAdverts() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Commercial_insertAdverts_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func insertAdverts(adSlots: TList<AdSlot>) throws {
+    try send_insertAdverts(adSlots: adSlots)
+    try outProtocol.transport.flush()
+    try recv_insertAdverts()
+  }
+
+  private func send_updateAdverts(adSlots: TList<AdSlot>) throws {
+    try outProtocol.writeMessageBegin(name: "updateAdverts", type: .call, sequenceID: 0)
+    let args = Commercial_updateAdverts_args(adSlots: adSlots)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_updateAdverts() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Commercial_updateAdverts_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func updateAdverts(adSlots: TList<AdSlot>) throws {
+    try send_updateAdverts(adSlots: adSlots)
+    try outProtocol.transport.flush()
+    try recv_updateAdverts()
+  }
+
+}
+
+extension CommercialProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["insertAdverts"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Commercial_insertAdverts_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Commercial_insertAdverts_result()
+      do {
+        try handler.insertAdverts(adSlots: args.adSlots)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "insertAdverts", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["updateAdverts"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Commercial_updateAdverts_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Commercial_updateAdverts_result()
+      do {
+        try handler.updateAdverts(adSlots: args.adSlots)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "updateAdverts", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = CommercialProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+extension CommercialProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["insertAdverts"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Commercial_insertAdverts_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.insertAdverts(adSlots: args.adSlots, completion: { asyncResult in
+        var result = Commercial_insertAdverts_result()
+        do {
+          try asyncResult.value()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "insertAdverts", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "insertAdverts", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "insertAdverts", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["updateAdverts"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Commercial_updateAdverts_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.updateAdverts(adSlots: args.adSlots, completion: { asyncResult in
+        var result = Commercial_updateAdverts_result()
+        do {
+          try asyncResult.value()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "updateAdverts", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "updateAdverts", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "updateAdverts", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = CommercialProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+fileprivate final class Acquistions_launchFrictionScreen_args {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Native_launchFrictionScreen_args, rhs: Native_launchFrictionScreen_args) -> Bool {
+fileprivate func ==(lhs: Acquistions_launchFrictionScreen_args, rhs: Acquistions_launchFrictionScreen_args) -> Bool {
   return true
 }
 
-extension Native_launchFrictionScreen_args : Hashable {
+extension Acquistions_launchFrictionScreen_args : Hashable {
 
   fileprivate var hashValue : Int {
     return 31
@@ -717,15 +1032,15 @@ extension Native_launchFrictionScreen_args : Hashable {
 
 }
 
-extension Native_launchFrictionScreen_args : TStruct {
+extension Acquistions_launchFrictionScreen_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Native_launchFrictionScreen_args" }
+  fileprivate static var structName: String { return "Acquistions_launchFrictionScreen_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_launchFrictionScreen_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Acquistions_launchFrictionScreen_args {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -742,24 +1057,24 @@ extension Native_launchFrictionScreen_args : TStruct {
 
     try proto.readStructEnd()
 
-    return Native_launchFrictionScreen_args()
+    return Acquistions_launchFrictionScreen_args()
   }
 
 }
 
 
 
-fileprivate final class Native_launchFrictionScreen_result {
+fileprivate final class Acquistions_launchFrictionScreen_result {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Native_launchFrictionScreen_result, rhs: Native_launchFrictionScreen_result) -> Bool {
+fileprivate func ==(lhs: Acquistions_launchFrictionScreen_result, rhs: Acquistions_launchFrictionScreen_result) -> Bool {
   return true
 }
 
-extension Native_launchFrictionScreen_result : Hashable {
+extension Acquistions_launchFrictionScreen_result : Hashable {
 
   fileprivate var hashValue : Int {
     return 31
@@ -767,15 +1082,15 @@ extension Native_launchFrictionScreen_result : Hashable {
 
 }
 
-extension Native_launchFrictionScreen_result : TStruct {
+extension Acquistions_launchFrictionScreen_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Native_launchFrictionScreen_result" }
+  fileprivate static var structName: String { return "Acquistions_launchFrictionScreen_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_launchFrictionScreen_result {
+  fileprivate static func read(from proto: TProtocol) throws -> Acquistions_launchFrictionScreen_result {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -792,14 +1107,477 @@ extension Native_launchFrictionScreen_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Native_launchFrictionScreen_result()
+    return Acquistions_launchFrictionScreen_result()
   }
 
 }
 
 
 
-fileprivate final class Native_follow_args {
+fileprivate final class Acquistions_getEpics_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Acquistions_getEpics_args, rhs: Acquistions_getEpics_args) -> Bool {
+  return true
+}
+
+extension Acquistions_getEpics_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Acquistions_getEpics_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Acquistions_getEpics_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Acquistions_getEpics_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Acquistions_getEpics_args()
+  }
+
+}
+
+
+
+fileprivate final class Acquistions_getEpics_result {
+
+  fileprivate var success: MaybeEpic?
+
+
+  fileprivate init() { }
+  fileprivate init(success: MaybeEpic?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Acquistions_getEpics_result, rhs: Acquistions_getEpics_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Acquistions_getEpics_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (success?.hashValue ?? 0)
+    return result
+  }
+
+}
+
+extension Acquistions_getEpics_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Acquistions_getEpics_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Acquistions_getEpics_result {
+    _ = try proto.readStructBegin()
+    var success: MaybeEpic?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .struct):           success = try MaybeEpic.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Acquistions_getEpics_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class Acquistions_epicSeen_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Acquistions_epicSeen_args, rhs: Acquistions_epicSeen_args) -> Bool {
+  return true
+}
+
+extension Acquistions_epicSeen_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Acquistions_epicSeen_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Acquistions_epicSeen_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Acquistions_epicSeen_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Acquistions_epicSeen_args()
+  }
+
+}
+
+
+
+fileprivate final class Acquistions_epicSeen_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Acquistions_epicSeen_result, rhs: Acquistions_epicSeen_result) -> Bool {
+  return true
+}
+
+extension Acquistions_epicSeen_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension Acquistions_epicSeen_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Acquistions_epicSeen_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Acquistions_epicSeen_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Acquistions_epicSeen_result()
+  }
+
+}
+
+
+
+extension AcquistionsClient : Acquistions {
+
+  private func send_launchFrictionScreen() throws {
+    try outProtocol.writeMessageBegin(name: "launchFrictionScreen", type: .call, sequenceID: 0)
+    let args = Acquistions_launchFrictionScreen_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_launchFrictionScreen() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Acquistions_launchFrictionScreen_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func launchFrictionScreen() throws {
+    try send_launchFrictionScreen()
+    try outProtocol.transport.flush()
+    try recv_launchFrictionScreen()
+  }
+
+  private func send_getEpics() throws {
+    try outProtocol.writeMessageBegin(name: "getEpics", type: .call, sequenceID: 0)
+    let args = Acquistions_getEpics_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_getEpics() throws -> MaybeEpic {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Acquistions_getEpics_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "getEpics"))
+  }
+
+  public func getEpics() throws -> MaybeEpic {
+    try send_getEpics()
+    try outProtocol.transport.flush()
+    return try recv_getEpics()
+  }
+
+  private func send_epicSeen() throws {
+    try outProtocol.writeMessageBegin(name: "epicSeen", type: .call, sequenceID: 0)
+    let args = Acquistions_epicSeen_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_epicSeen() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Acquistions_epicSeen_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func epicSeen() throws {
+    try send_epicSeen()
+    try outProtocol.transport.flush()
+    try recv_epicSeen()
+  }
+
+}
+
+extension AcquistionsProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["launchFrictionScreen"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Acquistions_launchFrictionScreen_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Acquistions_launchFrictionScreen_result()
+      do {
+        try handler.launchFrictionScreen()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "launchFrictionScreen", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["getEpics"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Acquistions_getEpics_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Acquistions_getEpics_result()
+      do {
+        result.success = try handler.getEpics()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "getEpics", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["epicSeen"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Acquistions_epicSeen_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Acquistions_epicSeen_result()
+      do {
+        try handler.epicSeen()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "epicSeen", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = AcquistionsProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+extension AcquistionsProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["launchFrictionScreen"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Acquistions_launchFrictionScreen_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.launchFrictionScreen(completion: { asyncResult in
+        var result = Acquistions_launchFrictionScreen_result()
+        do {
+          try asyncResult.value()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "launchFrictionScreen", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "launchFrictionScreen", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "launchFrictionScreen", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["getEpics"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Acquistions_getEpics_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.getEpics(completion: { asyncResult in
+        var result = Acquistions_getEpics_result()
+        do {
+          try result.success = asyncResult.value()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "getEpics", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "getEpics", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "getEpics", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["epicSeen"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Acquistions_epicSeen_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.epicSeen(completion: { asyncResult in
+        var result = Acquistions_epicSeen_result()
+        do {
+          try asyncResult.value()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "epicSeen", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "epicSeen", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "epicSeen", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = AcquistionsProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+fileprivate final class Notifications_follow_args {
 
   fileprivate var topic: Topic
 
@@ -810,12 +1588,12 @@ fileprivate final class Native_follow_args {
 
 }
 
-fileprivate func ==(lhs: Native_follow_args, rhs: Native_follow_args) -> Bool {
+fileprivate func ==(lhs: Notifications_follow_args, rhs: Notifications_follow_args) -> Bool {
   return
     (lhs.topic == rhs.topic)
 }
 
-extension Native_follow_args : Hashable {
+extension Notifications_follow_args : Hashable {
 
   fileprivate var hashValue : Int {
     let prime = 31
@@ -826,15 +1604,15 @@ extension Native_follow_args : Hashable {
 
 }
 
-extension Native_follow_args : TStruct {
+extension Notifications_follow_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return ["topic": 1, ]
   }
 
-  fileprivate static var structName: String { return "Native_follow_args" }
+  fileprivate static var structName: String { return "Notifications_follow_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_follow_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Notifications_follow_args {
     _ = try proto.readStructBegin()
     var topic: Topic!
 
@@ -855,24 +1633,24 @@ extension Native_follow_args : TStruct {
     // Required fields
     try proto.validateValue(topic, named: "topic")
 
-    return Native_follow_args(topic: topic)
+    return Notifications_follow_args(topic: topic)
   }
 
 }
 
 
 
-fileprivate final class Native_follow_result {
+fileprivate final class Notifications_follow_result {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Native_follow_result, rhs: Native_follow_result) -> Bool {
+fileprivate func ==(lhs: Notifications_follow_result, rhs: Notifications_follow_result) -> Bool {
   return true
 }
 
-extension Native_follow_result : Hashable {
+extension Notifications_follow_result : Hashable {
 
   fileprivate var hashValue : Int {
     return 31
@@ -880,15 +1658,15 @@ extension Native_follow_result : Hashable {
 
 }
 
-extension Native_follow_result : TStruct {
+extension Notifications_follow_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Native_follow_result" }
+  fileprivate static var structName: String { return "Notifications_follow_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_follow_result {
+  fileprivate static func read(from proto: TProtocol) throws -> Notifications_follow_result {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -905,14 +1683,14 @@ extension Native_follow_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Native_follow_result()
+    return Notifications_follow_result()
   }
 
 }
 
 
 
-fileprivate final class Native_unfollow_args {
+fileprivate final class Notifications_unfollow_args {
 
   fileprivate var topic: Topic
 
@@ -923,12 +1701,12 @@ fileprivate final class Native_unfollow_args {
 
 }
 
-fileprivate func ==(lhs: Native_unfollow_args, rhs: Native_unfollow_args) -> Bool {
+fileprivate func ==(lhs: Notifications_unfollow_args, rhs: Notifications_unfollow_args) -> Bool {
   return
     (lhs.topic == rhs.topic)
 }
 
-extension Native_unfollow_args : Hashable {
+extension Notifications_unfollow_args : Hashable {
 
   fileprivate var hashValue : Int {
     let prime = 31
@@ -939,15 +1717,15 @@ extension Native_unfollow_args : Hashable {
 
 }
 
-extension Native_unfollow_args : TStruct {
+extension Notifications_unfollow_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return ["topic": 1, ]
   }
 
-  fileprivate static var structName: String { return "Native_unfollow_args" }
+  fileprivate static var structName: String { return "Notifications_unfollow_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_unfollow_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Notifications_unfollow_args {
     _ = try proto.readStructBegin()
     var topic: Topic!
 
@@ -968,24 +1746,24 @@ extension Native_unfollow_args : TStruct {
     // Required fields
     try proto.validateValue(topic, named: "topic")
 
-    return Native_unfollow_args(topic: topic)
+    return Notifications_unfollow_args(topic: topic)
   }
 
 }
 
 
 
-fileprivate final class Native_unfollow_result {
+fileprivate final class Notifications_unfollow_result {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Native_unfollow_result, rhs: Native_unfollow_result) -> Bool {
+fileprivate func ==(lhs: Notifications_unfollow_result, rhs: Notifications_unfollow_result) -> Bool {
   return true
 }
 
-extension Native_unfollow_result : Hashable {
+extension Notifications_unfollow_result : Hashable {
 
   fileprivate var hashValue : Int {
     return 31
@@ -993,15 +1771,15 @@ extension Native_unfollow_result : Hashable {
 
 }
 
-extension Native_unfollow_result : TStruct {
+extension Notifications_unfollow_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Native_unfollow_result" }
+  fileprivate static var structName: String { return "Notifications_unfollow_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_unfollow_result {
+  fileprivate static func read(from proto: TProtocol) throws -> Notifications_unfollow_result {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -1018,14 +1796,631 @@ extension Native_unfollow_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Native_unfollow_result()
+    return Notifications_unfollow_result()
   }
 
 }
 
 
 
-fileprivate final class Native_launchSlideshow_args {
+fileprivate final class Notifications_isFollowing_args {
+
+  fileprivate var topic: Topic
+
+
+  fileprivate init(topic: Topic) {
+    self.topic = topic
+  }
+
+}
+
+fileprivate func ==(lhs: Notifications_isFollowing_args, rhs: Notifications_isFollowing_args) -> Bool {
+  return
+    (lhs.topic == rhs.topic)
+}
+
+extension Notifications_isFollowing_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (topic.hashValue)
+    return result
+  }
+
+}
+
+extension Notifications_isFollowing_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["topic": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Notifications_isFollowing_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Notifications_isFollowing_args {
+    _ = try proto.readStructBegin()
+    var topic: Topic!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           topic = try Topic.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(topic, named: "topic")
+
+    return Notifications_isFollowing_args(topic: topic)
+  }
+
+}
+
+
+
+fileprivate final class Notifications_isFollowing_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Notifications_isFollowing_result, rhs: Notifications_isFollowing_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Notifications_isFollowing_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (success?.hashValue ?? 0)
+    return result
+  }
+
+}
+
+extension Notifications_isFollowing_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Notifications_isFollowing_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Notifications_isFollowing_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Notifications_isFollowing_result(success: success)
+  }
+
+}
+
+
+
+extension NotificationsClient : Notifications {
+
+  private func send_follow(topic: Topic) throws {
+    try outProtocol.writeMessageBegin(name: "follow", type: .call, sequenceID: 0)
+    let args = Notifications_follow_args(topic: topic)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_follow() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Notifications_follow_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func follow(topic: Topic) throws {
+    try send_follow(topic: topic)
+    try outProtocol.transport.flush()
+    try recv_follow()
+  }
+
+  private func send_unfollow(topic: Topic) throws {
+    try outProtocol.writeMessageBegin(name: "unfollow", type: .call, sequenceID: 0)
+    let args = Notifications_unfollow_args(topic: topic)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_unfollow() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Notifications_unfollow_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func unfollow(topic: Topic) throws {
+    try send_unfollow(topic: topic)
+    try outProtocol.transport.flush()
+    try recv_unfollow()
+  }
+
+  private func send_isFollowing(topic: Topic) throws {
+    try outProtocol.writeMessageBegin(name: "isFollowing", type: .call, sequenceID: 0)
+    let args = Notifications_isFollowing_args(topic: topic)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isFollowing() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Notifications_isFollowing_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isFollowing"))
+  }
+
+  public func isFollowing(topic: Topic) throws -> Bool {
+    try send_isFollowing(topic: topic)
+    try outProtocol.transport.flush()
+    return try recv_isFollowing()
+  }
+
+}
+
+extension NotificationsProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["follow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Notifications_follow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Notifications_follow_result()
+      do {
+        try handler.follow(topic: args.topic)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "follow", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["unfollow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Notifications_unfollow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Notifications_unfollow_result()
+      do {
+        try handler.unfollow(topic: args.topic)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "unfollow", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["isFollowing"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Notifications_isFollowing_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Notifications_isFollowing_result()
+      do {
+        result.success = try handler.isFollowing(topic: args.topic)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isFollowing", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = NotificationsProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+extension NotificationsProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["follow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Notifications_follow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.follow(topic: args.topic, completion: { asyncResult in
+        var result = Notifications_follow_result()
+        do {
+          try asyncResult.value()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "follow", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "follow", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "follow", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["unfollow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Notifications_unfollow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.unfollow(topic: args.topic, completion: { asyncResult in
+        var result = Notifications_unfollow_result()
+        do {
+          try asyncResult.value()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "unfollow", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "unfollow", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "unfollow", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["isFollowing"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Notifications_isFollowing_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isFollowing(topic: args.topic, completion: { asyncResult in
+        var result = Notifications_isFollowing_result()
+        do {
+          try result.success = asyncResult.value()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isFollowing", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isFollowing", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isFollowing", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = NotificationsProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+fileprivate final class User_isPremium_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: User_isPremium_args, rhs: User_isPremium_args) -> Bool {
+  return true
+}
+
+extension User_isPremium_args : Hashable {
+
+  fileprivate var hashValue : Int {
+    return 31
+  }
+
+}
+
+extension User_isPremium_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "User_isPremium_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> User_isPremium_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return User_isPremium_args()
+  }
+
+}
+
+
+
+fileprivate final class User_isPremium_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: User_isPremium_result, rhs: User_isPremium_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension User_isPremium_result : Hashable {
+
+  fileprivate var hashValue : Int {
+    let prime = 31
+    var result = 1
+    result = prime &* result &+ (success?.hashValue ?? 0)
+    return result
+  }
+
+}
+
+extension User_isPremium_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "User_isPremium_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> User_isPremium_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return User_isPremium_result(success: success)
+  }
+
+}
+
+
+
+extension UserClient : User {
+
+  private func send_isPremium() throws {
+    try outProtocol.writeMessageBegin(name: "isPremium", type: .call, sequenceID: 0)
+    let args = User_isPremium_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isPremium() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try User_isPremium_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isPremium"))
+  }
+
+  public func isPremium() throws -> Bool {
+    try send_isPremium()
+    try outProtocol.transport.flush()
+    return try recv_isPremium()
+  }
+
+}
+
+extension UserProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["isPremium"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try User_isPremium_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = User_isPremium_result()
+      do {
+        result.success = try handler.isPremium()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isPremium", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = UserProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+extension UserProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["isPremium"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try User_isPremium_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isPremium(completion: { asyncResult in
+        var result = User_isPremium_result()
+        do {
+          try result.success = asyncResult.value()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isPremium", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isPremium", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isPremium", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = UserProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+fileprivate final class Gallery_launchSlideshow_args {
 
   fileprivate var images: TList<Image>
 
@@ -1039,13 +2434,13 @@ fileprivate final class Native_launchSlideshow_args {
 
 }
 
-fileprivate func ==(lhs: Native_launchSlideshow_args, rhs: Native_launchSlideshow_args) -> Bool {
+fileprivate func ==(lhs: Gallery_launchSlideshow_args, rhs: Gallery_launchSlideshow_args) -> Bool {
   return
     (lhs.images == rhs.images) &&
     (lhs.selectedIndex == rhs.selectedIndex)
 }
 
-extension Native_launchSlideshow_args : Hashable {
+extension Gallery_launchSlideshow_args : Hashable {
 
   fileprivate var hashValue : Int {
     let prime = 31
@@ -1057,15 +2452,15 @@ extension Native_launchSlideshow_args : Hashable {
 
 }
 
-extension Native_launchSlideshow_args : TStruct {
+extension Gallery_launchSlideshow_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return ["images": 1, "selectedIndex": 2, ]
   }
 
-  fileprivate static var structName: String { return "Native_launchSlideshow_args" }
+  fileprivate static var structName: String { return "Gallery_launchSlideshow_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_launchSlideshow_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Gallery_launchSlideshow_args {
     _ = try proto.readStructBegin()
     var images: TList<Image>!
     var selectedIndex: Int32!
@@ -1089,24 +2484,24 @@ extension Native_launchSlideshow_args : TStruct {
     try proto.validateValue(images, named: "images")
     try proto.validateValue(selectedIndex, named: "selectedIndex")
 
-    return Native_launchSlideshow_args(images: images, selectedIndex: selectedIndex)
+    return Gallery_launchSlideshow_args(images: images, selectedIndex: selectedIndex)
   }
 
 }
 
 
 
-fileprivate final class Native_launchSlideshow_result {
+fileprivate final class Gallery_launchSlideshow_result {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Native_launchSlideshow_result, rhs: Native_launchSlideshow_result) -> Bool {
+fileprivate func ==(lhs: Gallery_launchSlideshow_result, rhs: Gallery_launchSlideshow_result) -> Bool {
   return true
 }
 
-extension Native_launchSlideshow_result : Hashable {
+extension Gallery_launchSlideshow_result : Hashable {
 
   fileprivate var hashValue : Int {
     return 31
@@ -1114,15 +2509,15 @@ extension Native_launchSlideshow_result : Hashable {
 
 }
 
-extension Native_launchSlideshow_result : TStruct {
+extension Gallery_launchSlideshow_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Native_launchSlideshow_result" }
+  fileprivate static var structName: String { return "Gallery_launchSlideshow_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Native_launchSlideshow_result {
+  fileprivate static func read(from proto: TProtocol) throws -> Gallery_launchSlideshow_result {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -1139,698 +2534,25 @@ extension Native_launchSlideshow_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Native_launchSlideshow_result()
+    return Gallery_launchSlideshow_result()
   }
 
 }
 
 
 
-fileprivate final class Native_isFollowing_args {
-
-  fileprivate var topic: Topic
-
-
-  fileprivate init(topic: Topic) {
-    self.topic = topic
-  }
-
-}
-
-fileprivate func ==(lhs: Native_isFollowing_args, rhs: Native_isFollowing_args) -> Bool {
-  return
-    (lhs.topic == rhs.topic)
-}
-
-extension Native_isFollowing_args : Hashable {
-
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (topic.hashValue)
-    return result
-  }
-
-}
-
-extension Native_isFollowing_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return ["topic": 1, ]
-  }
-
-  fileprivate static var structName: String { return "Native_isFollowing_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_isFollowing_args {
-    _ = try proto.readStructBegin()
-    var topic: Topic!
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (1, .struct):           topic = try Topic.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-    // Required fields
-    try proto.validateValue(topic, named: "topic")
-
-    return Native_isFollowing_args(topic: topic)
-  }
-
-}
-
-
-
-fileprivate final class Native_isFollowing_result {
-
-  fileprivate var success: Bool?
-
-
-  fileprivate init() { }
-  fileprivate init(success: Bool?) {
-    self.success = success
-  }
-
-}
-
-fileprivate func ==(lhs: Native_isFollowing_result, rhs: Native_isFollowing_result) -> Bool {
-  return
-    (lhs.success == rhs.success)
-}
-
-extension Native_isFollowing_result : Hashable {
-
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (success?.hashValue ?? 0)
-    return result
-  }
-
-}
-
-extension Native_isFollowing_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return ["success": 0, ]
-  }
-
-  fileprivate static var structName: String { return "Native_isFollowing_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_isFollowing_result {
-    _ = try proto.readStructBegin()
-    var success: Bool?
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (0, .bool):            success = try Bool.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_isFollowing_result(success: success)
-  }
-
-}
-
-
-
-fileprivate final class Native_isPremiumUser_args {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Native_isPremiumUser_args, rhs: Native_isPremiumUser_args) -> Bool {
-  return true
-}
-
-extension Native_isPremiumUser_args : Hashable {
-
-  fileprivate var hashValue : Int {
-    return 31
-  }
-
-}
-
-extension Native_isPremiumUser_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Native_isPremiumUser_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_isPremiumUser_args {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_isPremiumUser_args()
-  }
-
-}
-
-
-
-fileprivate final class Native_isPremiumUser_result {
-
-  fileprivate var success: Bool?
-
-
-  fileprivate init() { }
-  fileprivate init(success: Bool?) {
-    self.success = success
-  }
-
-}
-
-fileprivate func ==(lhs: Native_isPremiumUser_result, rhs: Native_isPremiumUser_result) -> Bool {
-  return
-    (lhs.success == rhs.success)
-}
-
-extension Native_isPremiumUser_result : Hashable {
-
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (success?.hashValue ?? 0)
-    return result
-  }
-
-}
-
-extension Native_isPremiumUser_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return ["success": 0, ]
-  }
-
-  fileprivate static var structName: String { return "Native_isPremiumUser_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_isPremiumUser_result {
-    _ = try proto.readStructBegin()
-    var success: Bool?
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (0, .bool):            success = try Bool.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_isPremiumUser_result(success: success)
-  }
-
-}
-
-
-
-fileprivate final class Native_getEpics_args {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Native_getEpics_args, rhs: Native_getEpics_args) -> Bool {
-  return true
-}
-
-extension Native_getEpics_args : Hashable {
-
-  fileprivate var hashValue : Int {
-    return 31
-  }
-
-}
-
-extension Native_getEpics_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Native_getEpics_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_getEpics_args {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_getEpics_args()
-  }
-
-}
-
-
-
-fileprivate final class Native_getEpics_result {
-
-  fileprivate var success: MaybeEpic?
-
-
-  fileprivate init() { }
-  fileprivate init(success: MaybeEpic?) {
-    self.success = success
-  }
-
-}
-
-fileprivate func ==(lhs: Native_getEpics_result, rhs: Native_getEpics_result) -> Bool {
-  return
-    (lhs.success == rhs.success)
-}
-
-extension Native_getEpics_result : Hashable {
-
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (success?.hashValue ?? 0)
-    return result
-  }
-
-}
-
-extension Native_getEpics_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return ["success": 0, ]
-  }
-
-  fileprivate static var structName: String { return "Native_getEpics_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_getEpics_result {
-    _ = try proto.readStructBegin()
-    var success: MaybeEpic?
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (0, .struct):           success = try MaybeEpic.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_getEpics_result(success: success)
-  }
-
-}
-
-
-
-fileprivate final class Native_epicSeen_args {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Native_epicSeen_args, rhs: Native_epicSeen_args) -> Bool {
-  return true
-}
-
-extension Native_epicSeen_args : Hashable {
-
-  fileprivate var hashValue : Int {
-    return 31
-  }
-
-}
-
-extension Native_epicSeen_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Native_epicSeen_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_epicSeen_args {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_epicSeen_args()
-  }
-
-}
-
-
-
-fileprivate final class Native_epicSeen_result {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Native_epicSeen_result, rhs: Native_epicSeen_result) -> Bool {
-  return true
-}
-
-extension Native_epicSeen_result : Hashable {
-
-  fileprivate var hashValue : Int {
-    return 31
-  }
-
-}
-
-extension Native_epicSeen_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Native_epicSeen_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_epicSeen_result {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_epicSeen_result()
-  }
-
-}
-
-
-
-fileprivate final class Native_test_args {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Native_test_args, rhs: Native_test_args) -> Bool {
-  return true
-}
-
-extension Native_test_args : Hashable {
-
-  fileprivate var hashValue : Int {
-    return 31
-  }
-
-}
-
-extension Native_test_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Native_test_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_test_args {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_test_args()
-  }
-
-}
-
-
-
-fileprivate final class Native_test_result {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Native_test_result, rhs: Native_test_result) -> Bool {
-  return true
-}
-
-extension Native_test_result : Hashable {
-
-  fileprivate var hashValue : Int {
-    return 31
-  }
-
-}
-
-extension Native_test_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Native_test_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Native_test_result {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Native_test_result()
-  }
-
-}
-
-
-
-extension NativeClient : Native {
-
-  private func send_nativeThriftPackageVersion() throws {
-    try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .call, sequenceID: 0)
-    let args = Native_nativeThriftPackageVersion_args()
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_nativeThriftPackageVersion() throws -> Int32 {
-    try inProtocol.readResultMessageBegin() 
-    let result = try Native_nativeThriftPackageVersion_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-    if let success = result.success {
-      return success
-    }
-    throw TApplicationError(error: .missingResult(methodName: "nativeThriftPackageVersion"))
-  }
-
-  public func nativeThriftPackageVersion() throws -> Int32 {
-    try send_nativeThriftPackageVersion()
-    try outProtocol.transport.flush()
-    return try recv_nativeThriftPackageVersion()
-  }
-
-  private func send_insertAdverts(adSlots: TList<AdSlot>) throws {
-    try outProtocol.writeMessageBegin(name: "insertAdverts", type: .call, sequenceID: 0)
-    let args = Native_insertAdverts_args(adSlots: adSlots)
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_insertAdverts() throws {
-    try inProtocol.readResultMessageBegin() 
-    _ = try Native_insertAdverts_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-  }
-
-  public func insertAdverts(adSlots: TList<AdSlot>) throws {
-    try send_insertAdverts(adSlots: adSlots)
-    try outProtocol.transport.flush()
-    try recv_insertAdverts()
-  }
-
-  private func send_updateAdverts(adSlots: TList<AdSlot>) throws {
-    try outProtocol.writeMessageBegin(name: "updateAdverts", type: .call, sequenceID: 0)
-    let args = Native_updateAdverts_args(adSlots: adSlots)
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_updateAdverts() throws {
-    try inProtocol.readResultMessageBegin() 
-    _ = try Native_updateAdverts_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-  }
-
-  public func updateAdverts(adSlots: TList<AdSlot>) throws {
-    try send_updateAdverts(adSlots: adSlots)
-    try outProtocol.transport.flush()
-    try recv_updateAdverts()
-  }
-
-  private func send_launchFrictionScreen() throws {
-    try outProtocol.writeMessageBegin(name: "launchFrictionScreen", type: .call, sequenceID: 0)
-    let args = Native_launchFrictionScreen_args()
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_launchFrictionScreen() throws {
-    try inProtocol.readResultMessageBegin() 
-    _ = try Native_launchFrictionScreen_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-  }
-
-  public func launchFrictionScreen() throws {
-    try send_launchFrictionScreen()
-    try outProtocol.transport.flush()
-    try recv_launchFrictionScreen()
-  }
-
-  private func send_follow(topic: Topic) throws {
-    try outProtocol.writeMessageBegin(name: "follow", type: .call, sequenceID: 0)
-    let args = Native_follow_args(topic: topic)
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_follow() throws {
-    try inProtocol.readResultMessageBegin() 
-    _ = try Native_follow_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-  }
-
-  public func follow(topic: Topic) throws {
-    try send_follow(topic: topic)
-    try outProtocol.transport.flush()
-    try recv_follow()
-  }
-
-  private func send_unfollow(topic: Topic) throws {
-    try outProtocol.writeMessageBegin(name: "unfollow", type: .call, sequenceID: 0)
-    let args = Native_unfollow_args(topic: topic)
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_unfollow() throws {
-    try inProtocol.readResultMessageBegin() 
-    _ = try Native_unfollow_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-  }
-
-  public func unfollow(topic: Topic) throws {
-    try send_unfollow(topic: topic)
-    try outProtocol.transport.flush()
-    try recv_unfollow()
-  }
+extension GalleryClient : Gallery {
 
   private func send_launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws {
     try outProtocol.writeMessageBegin(name: "launchSlideshow", type: .call, sequenceID: 0)
-    let args = Native_launchSlideshow_args(images: images, selectedIndex: selectedIndex)
+    let args = Gallery_launchSlideshow_args(images: images, selectedIndex: selectedIndex)
     try args.write(to: outProtocol)
     try outProtocol.writeMessageEnd()
   }
 
   private func recv_launchSlideshow() throws {
     try inProtocol.readResultMessageBegin() 
-    _ = try Native_launchSlideshow_result.read(from: inProtocol)
+    _ = try Gallery_launchSlideshow_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
 
   }
@@ -1841,315 +2563,27 @@ extension NativeClient : Native {
     try recv_launchSlideshow()
   }
 
-  private func send_isFollowing(topic: Topic) throws {
-    try outProtocol.writeMessageBegin(name: "isFollowing", type: .call, sequenceID: 0)
-    let args = Native_isFollowing_args(topic: topic)
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_isFollowing() throws -> Bool {
-    try inProtocol.readResultMessageBegin() 
-    let result = try Native_isFollowing_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-    if let success = result.success {
-      return success
-    }
-    throw TApplicationError(error: .missingResult(methodName: "isFollowing"))
-  }
-
-  public func isFollowing(topic: Topic) throws -> Bool {
-    try send_isFollowing(topic: topic)
-    try outProtocol.transport.flush()
-    return try recv_isFollowing()
-  }
-
-  private func send_isPremiumUser() throws {
-    try outProtocol.writeMessageBegin(name: "isPremiumUser", type: .call, sequenceID: 0)
-    let args = Native_isPremiumUser_args()
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_isPremiumUser() throws -> Bool {
-    try inProtocol.readResultMessageBegin() 
-    let result = try Native_isPremiumUser_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-    if let success = result.success {
-      return success
-    }
-    throw TApplicationError(error: .missingResult(methodName: "isPremiumUser"))
-  }
-
-  public func isPremiumUser() throws -> Bool {
-    try send_isPremiumUser()
-    try outProtocol.transport.flush()
-    return try recv_isPremiumUser()
-  }
-
-  private func send_getEpics() throws {
-    try outProtocol.writeMessageBegin(name: "getEpics", type: .call, sequenceID: 0)
-    let args = Native_getEpics_args()
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_getEpics() throws -> MaybeEpic {
-    try inProtocol.readResultMessageBegin() 
-    let result = try Native_getEpics_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-    if let success = result.success {
-      return success
-    }
-    throw TApplicationError(error: .missingResult(methodName: "getEpics"))
-  }
-
-  public func getEpics() throws -> MaybeEpic {
-    try send_getEpics()
-    try outProtocol.transport.flush()
-    return try recv_getEpics()
-  }
-
-  private func send_epicSeen() throws {
-    try outProtocol.writeMessageBegin(name: "epicSeen", type: .call, sequenceID: 0)
-    let args = Native_epicSeen_args()
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_epicSeen() throws {
-    try inProtocol.readResultMessageBegin() 
-    _ = try Native_epicSeen_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-  }
-
-  public func epicSeen() throws {
-    try send_epicSeen()
-    try outProtocol.transport.flush()
-    try recv_epicSeen()
-  }
-
-  private func send_test() throws {
-    try outProtocol.writeMessageBegin(name: "test", type: .call, sequenceID: 0)
-    let args = Native_test_args()
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_test() throws {
-    try inProtocol.readResultMessageBegin() 
-    _ = try Native_test_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-  }
-
-  public func test() throws {
-    try send_test()
-    try outProtocol.transport.flush()
-    try recv_test()
-  }
-
 }
 
-extension NativeProcessor : TProcessor {
+extension GalleryProcessor : TProcessor {
 
   static let processorHandlers: ProcessorHandlerDictionary = {
 
     var processorHandlers = ProcessorHandlerDictionary()
 
-    processorHandlers["nativeThriftPackageVersion"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_nativeThriftPackageVersion_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_nativeThriftPackageVersion_result()
-      do {
-        result.success = try handler.nativeThriftPackageVersion()
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["insertAdverts"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_insertAdverts_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_insertAdverts_result()
-      do {
-        try handler.insertAdverts(adSlots: args.adSlots)
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "insertAdverts", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["updateAdverts"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_updateAdverts_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_updateAdverts_result()
-      do {
-        try handler.updateAdverts(adSlots: args.adSlots)
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "updateAdverts", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["launchFrictionScreen"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_launchFrictionScreen_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_launchFrictionScreen_result()
-      do {
-        try handler.launchFrictionScreen()
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "launchFrictionScreen", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["follow"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_follow_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_follow_result()
-      do {
-        try handler.follow(topic: args.topic)
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "follow", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["unfollow"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_unfollow_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_unfollow_result()
-      do {
-        try handler.unfollow(topic: args.topic)
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "unfollow", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
     processorHandlers["launchSlideshow"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Native_launchSlideshow_args.read(from: inProtocol)
+      let args = try Gallery_launchSlideshow_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
-      var result = Native_launchSlideshow_result()
+      var result = Gallery_launchSlideshow_result()
       do {
         try handler.launchSlideshow(images: args.images, selectedIndex: args.selectedIndex)
       }
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "launchSlideshow", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["isFollowing"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_isFollowing_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_isFollowing_result()
-      do {
-        result.success = try handler.isFollowing(topic: args.topic)
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "isFollowing", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["isPremiumUser"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_isPremiumUser_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_isPremiumUser_result()
-      do {
-        result.success = try handler.isPremiumUser()
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "isPremiumUser", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["getEpics"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_getEpics_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_getEpics_result()
-      do {
-        result.success = try handler.getEpics()
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "getEpics", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["epicSeen"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_epicSeen_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_epicSeen_result()
-      do {
-        try handler.epicSeen()
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "epicSeen", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["test"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_test_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Native_test_result()
-      do {
-        try handler.test()
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "test", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
@@ -2160,7 +2594,7 @@ extension NativeProcessor : TProcessor {
 
     let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
 
-    if let processorHandler = NativeProcessor.processorHandlers[messageName] {
+    if let processorHandler = GalleryProcessor.processorHandlers[messageName] {
       do {
         try processorHandler(sequenceID, inProtocol, outProtocol, service)
       }
@@ -2177,170 +2611,20 @@ extension NativeProcessor : TProcessor {
   }
 }
 
-extension NativeProcessorAsync : TProcessor {
+extension GalleryProcessorAsync : TProcessor {
 
   static let processorHandlers: ProcessorHandlerDictionary = {
 
     var processorHandlers = ProcessorHandlerDictionary()
 
-    processorHandlers["nativeThriftPackageVersion"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_nativeThriftPackageVersion_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.nativeThriftPackageVersion(completion: { asyncResult in
-        var result = Native_nativeThriftPackageVersion_result()
-        do {
-          try result.success = asyncResult.value()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "nativeThriftPackageVersion", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "nativeThriftPackageVersion", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
-    processorHandlers["insertAdverts"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_insertAdverts_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.insertAdverts(adSlots: args.adSlots, completion: { asyncResult in
-        var result = Native_insertAdverts_result()
-        do {
-          try asyncResult.value()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "insertAdverts", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "insertAdverts", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "insertAdverts", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
-    processorHandlers["updateAdverts"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_updateAdverts_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.updateAdverts(adSlots: args.adSlots, completion: { asyncResult in
-        var result = Native_updateAdverts_result()
-        do {
-          try asyncResult.value()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "updateAdverts", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "updateAdverts", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "updateAdverts", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
-    processorHandlers["launchFrictionScreen"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_launchFrictionScreen_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.launchFrictionScreen(completion: { asyncResult in
-        var result = Native_launchFrictionScreen_result()
-        do {
-          try asyncResult.value()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "launchFrictionScreen", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "launchFrictionScreen", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "launchFrictionScreen", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
-    processorHandlers["follow"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_follow_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.follow(topic: args.topic, completion: { asyncResult in
-        var result = Native_follow_result()
-        do {
-          try asyncResult.value()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "follow", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "follow", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "follow", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
-    processorHandlers["unfollow"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_unfollow_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.unfollow(topic: args.topic, completion: { asyncResult in
-        var result = Native_unfollow_result()
-        do {
-          try asyncResult.value()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "unfollow", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "unfollow", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "unfollow", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
     processorHandlers["launchSlideshow"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Native_launchSlideshow_args.read(from: inProtocol)
+      let args = try Gallery_launchSlideshow_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
       handler.launchSlideshow(images: args.images, selectedIndex: args.selectedIndex, completion: { asyncResult in
-        var result = Native_launchSlideshow_result()
+        var result = Gallery_launchSlideshow_result()
         do {
           try asyncResult.value()
         } catch let error as TApplicationError {
@@ -2358,131 +2642,6 @@ extension NativeProcessorAsync : TProcessor {
         } catch { }
       })
     }
-    processorHandlers["isFollowing"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_isFollowing_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.isFollowing(topic: args.topic, completion: { asyncResult in
-        var result = Native_isFollowing_result()
-        do {
-          try result.success = asyncResult.value()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "isFollowing", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "isFollowing", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "isFollowing", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
-    processorHandlers["isPremiumUser"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_isPremiumUser_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.isPremiumUser(completion: { asyncResult in
-        var result = Native_isPremiumUser_result()
-        do {
-          try result.success = asyncResult.value()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "isPremiumUser", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "isPremiumUser", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "isPremiumUser", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
-    processorHandlers["getEpics"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_getEpics_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.getEpics(completion: { asyncResult in
-        var result = Native_getEpics_result()
-        do {
-          try result.success = asyncResult.value()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "getEpics", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "getEpics", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "getEpics", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
-    processorHandlers["epicSeen"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_epicSeen_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.epicSeen(completion: { asyncResult in
-        var result = Native_epicSeen_result()
-        do {
-          try asyncResult.value()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "epicSeen", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "epicSeen", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "epicSeen", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
-    processorHandlers["test"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Native_test_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.test(completion: { asyncResult in
-        var result = Native_test_result()
-        do {
-          try asyncResult.value()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "test", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "test", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "test", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
     return processorHandlers
   }()
 
@@ -2490,7 +2649,7 @@ extension NativeProcessorAsync : TProcessor {
 
     let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
 
-    if let processorHandler = NativeProcessorAsync.processorHandlers[messageName] {
+    if let processorHandler = GalleryProcessorAsync.processorHandlers[messageName] {
       do {
         try processorHandler(sequenceID, inProtocol, outProtocol, service)
       }

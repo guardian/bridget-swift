@@ -105,12 +105,52 @@ public final class MaybeEpic {
 
 }
 
-public protocol Native {
+public protocol Environment {
 
   ///
   /// - Returns: Int32
   /// - Throws: 
   func nativeThriftPackageVersion() throws -> Int32
+
+}
+
+open class EnvironmentClient : TClient /* , Environment */ {
+
+}
+
+public protocol EnvironmentAsync {
+
+  ///
+  ///   - completion: TAsyncResult<Int32> wrapping return and following Exceptions: 
+  func nativeThriftPackageVersion(completion: @escaping (TAsyncResult<Int32>) -> Void)
+
+}
+
+open class EnvironmentProcessor /* Environment */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Environment) throws -> Void]
+
+  public var service: Environment
+
+  public required init(service: Environment) {
+    self.service = service
+  }
+
+}
+
+open class EnvironmentProcessorAsync /* Environment */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, EnvironmentAsync) throws -> Void]
+
+  public var service: EnvironmentAsync
+
+  public required init(service: EnvironmentAsync) {
+    self.service = service
+  }
+
+}
+
+public protocol Commercial {
 
   ///
   /// - Parameters:
@@ -124,9 +164,114 @@ public protocol Native {
   /// - Throws: 
   func updateAdverts(adSlots: TList<AdSlot>) throws
 
+}
+
+open class CommercialClient : TClient /* , Commercial */ {
+
+}
+
+public protocol CommercialAsync {
+
+  ///
+  /// - Parameters:
+  ///   - adSlots: 
+  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
+  func insertAdverts(adSlots: TList<AdSlot>, completion: @escaping (TAsyncResult<Void>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - adSlots: 
+  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
+  func updateAdverts(adSlots: TList<AdSlot>, completion: @escaping (TAsyncResult<Void>) -> Void)
+
+}
+
+open class CommercialProcessor /* Commercial */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Commercial) throws -> Void]
+
+  public var service: Commercial
+
+  public required init(service: Commercial) {
+    self.service = service
+  }
+
+}
+
+open class CommercialProcessorAsync /* Commercial */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, CommercialAsync) throws -> Void]
+
+  public var service: CommercialAsync
+
+  public required init(service: CommercialAsync) {
+    self.service = service
+  }
+
+}
+
+public protocol Acquistions {
+
   ///
   /// - Throws: 
   func launchFrictionScreen() throws
+
+  ///
+  /// - Returns: MaybeEpic
+  /// - Throws: 
+  func getEpics() throws -> MaybeEpic
+
+  ///
+  /// - Throws: 
+  func epicSeen() throws
+
+}
+
+open class AcquistionsClient : TClient /* , Acquistions */ {
+
+}
+
+public protocol AcquistionsAsync {
+
+  ///
+  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
+  func launchFrictionScreen(completion: @escaping (TAsyncResult<Void>) -> Void)
+
+  ///
+  ///   - completion: TAsyncResult<MaybeEpic> wrapping return and following Exceptions: 
+  func getEpics(completion: @escaping (TAsyncResult<MaybeEpic>) -> Void)
+
+  ///
+  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
+  func epicSeen(completion: @escaping (TAsyncResult<Void>) -> Void)
+
+}
+
+open class AcquistionsProcessor /* Acquistions */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Acquistions) throws -> Void]
+
+  public var service: Acquistions
+
+  public required init(service: Acquistions) {
+    self.service = service
+  }
+
+}
+
+open class AcquistionsProcessorAsync /* Acquistions */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, AcquistionsAsync) throws -> Void]
+
+  public var service: AcquistionsAsync
+
+  public required init(service: AcquistionsAsync) {
+    self.service = service
+  }
+
+}
+
+public protocol Notifications {
 
   ///
   /// - Parameters:
@@ -142,63 +287,18 @@ public protocol Native {
 
   ///
   /// - Parameters:
-  ///   - images: 
-  ///   - selectedIndex: 
-  /// - Throws: 
-  func launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws
-
-  ///
-  /// - Parameters:
   ///   - topic: 
   /// - Returns: Bool
   /// - Throws: 
   func isFollowing(topic: Topic) throws -> Bool
 
-  ///
-  /// - Returns: Bool
-  /// - Throws: 
-  func isPremiumUser() throws -> Bool
+}
 
-  ///
-  /// - Returns: MaybeEpic
-  /// - Throws: 
-  func getEpics() throws -> MaybeEpic
-
-  ///
-  /// - Throws: 
-  func epicSeen() throws
-
-  ///
-  /// - Throws: 
-  func test() throws
+open class NotificationsClient : TClient /* , Notifications */ {
 
 }
 
-open class NativeClient : TClient /* , Native */ {
-
-}
-
-public protocol NativeAsync {
-
-  ///
-  ///   - completion: TAsyncResult<Int32> wrapping return and following Exceptions: 
-  func nativeThriftPackageVersion(completion: @escaping (TAsyncResult<Int32>) -> Void)
-
-  ///
-  /// - Parameters:
-  ///   - adSlots: 
-  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
-  func insertAdverts(adSlots: TList<AdSlot>, completion: @escaping (TAsyncResult<Void>) -> Void)
-
-  ///
-  /// - Parameters:
-  ///   - adSlots: 
-  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
-  func updateAdverts(adSlots: TList<AdSlot>, completion: @escaping (TAsyncResult<Void>) -> Void)
-
-  ///
-  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
-  func launchFrictionScreen(completion: @escaping (TAsyncResult<Void>) -> Void)
+public protocol NotificationsAsync {
 
   ///
   /// - Parameters:
@@ -214,54 +314,126 @@ public protocol NativeAsync {
 
   ///
   /// - Parameters:
-  ///   - images: 
-  ///   - selectedIndex: 
-  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
-  func launchSlideshow(images: TList<Image>, selectedIndex: Int32, completion: @escaping (TAsyncResult<Void>) -> Void)
-
-  ///
-  /// - Parameters:
   ///   - topic: 
   ///   - completion: TAsyncResult<Bool> wrapping return and following Exceptions: 
   func isFollowing(topic: Topic, completion: @escaping (TAsyncResult<Bool>) -> Void)
 
-  ///
-  ///   - completion: TAsyncResult<Bool> wrapping return and following Exceptions: 
-  func isPremiumUser(completion: @escaping (TAsyncResult<Bool>) -> Void)
-
-  ///
-  ///   - completion: TAsyncResult<MaybeEpic> wrapping return and following Exceptions: 
-  func getEpics(completion: @escaping (TAsyncResult<MaybeEpic>) -> Void)
-
-  ///
-  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
-  func epicSeen(completion: @escaping (TAsyncResult<Void>) -> Void)
-
-  ///
-  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
-  func test(completion: @escaping (TAsyncResult<Void>) -> Void)
-
 }
 
-open class NativeProcessor /* Native */ {
+open class NotificationsProcessor /* Notifications */ {
 
-  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Native) throws -> Void]
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Notifications) throws -> Void]
 
-  public var service: Native
+  public var service: Notifications
 
-  public required init(service: Native) {
+  public required init(service: Notifications) {
     self.service = service
   }
 
 }
 
-open class NativeProcessorAsync /* Native */ {
+open class NotificationsProcessorAsync /* Notifications */ {
 
-  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, NativeAsync) throws -> Void]
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, NotificationsAsync) throws -> Void]
 
-  public var service: NativeAsync
+  public var service: NotificationsAsync
 
-  public required init(service: NativeAsync) {
+  public required init(service: NotificationsAsync) {
+    self.service = service
+  }
+
+}
+
+public protocol User {
+
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isPremium() throws -> Bool
+
+}
+
+open class UserClient : TClient /* , User */ {
+
+}
+
+public protocol UserAsync {
+
+  ///
+  ///   - completion: TAsyncResult<Bool> wrapping return and following Exceptions: 
+  func isPremium(completion: @escaping (TAsyncResult<Bool>) -> Void)
+
+}
+
+open class UserProcessor /* User */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, User) throws -> Void]
+
+  public var service: User
+
+  public required init(service: User) {
+    self.service = service
+  }
+
+}
+
+open class UserProcessorAsync /* User */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, UserAsync) throws -> Void]
+
+  public var service: UserAsync
+
+  public required init(service: UserAsync) {
+    self.service = service
+  }
+
+}
+
+public protocol Gallery {
+
+  ///
+  /// - Parameters:
+  ///   - images: 
+  ///   - selectedIndex: 
+  /// - Throws: 
+  func launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws
+
+}
+
+open class GalleryClient : TClient /* , Gallery */ {
+
+}
+
+public protocol GalleryAsync {
+
+  ///
+  /// - Parameters:
+  ///   - images: 
+  ///   - selectedIndex: 
+  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
+  func launchSlideshow(images: TList<Image>, selectedIndex: Int32, completion: @escaping (TAsyncResult<Void>) -> Void)
+
+}
+
+open class GalleryProcessor /* Gallery */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Gallery) throws -> Void]
+
+  public var service: Gallery
+
+  public required init(service: Gallery) {
+    self.service = service
+  }
+
+}
+
+open class GalleryProcessorAsync /* Gallery */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, GalleryAsync) throws -> Void]
+
+  public var service: GalleryAsync
+
+  public required init(service: GalleryAsync) {
     self.service = service
   }
 
