@@ -112,6 +112,10 @@ public protocol Environment {
   /// - Throws: 
   func nativeThriftPackageVersion() throws -> Int32
 
+  ///
+  /// - Throws: 
+  func dummy() throws
+
 }
 
 open class EnvironmentClient : TClient /* , Environment */ {
@@ -121,8 +125,12 @@ open class EnvironmentClient : TClient /* , Environment */ {
 public protocol EnvironmentAsync {
 
   ///
-  ///   - completion: TAsyncResult<Int32> wrapping return and following Exceptions: 
-  func nativeThriftPackageVersion(completion: @escaping (TAsyncResult<Int32>) -> Void)
+  ///   - completion: Result<Int32, Error> wrapping return and following Exceptions: 
+  func nativeThriftPackageVersion(completion: @escaping (Result<Int32, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func dummy(completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 
@@ -175,14 +183,14 @@ public protocol CommercialAsync {
   ///
   /// - Parameters:
   ///   - adSlots: 
-  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
-  func insertAdverts(adSlots: TList<AdSlot>, completion: @escaping (TAsyncResult<Void>) -> Void)
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func insertAdverts(adSlots: TList<AdSlot>, completion: @escaping (Result<Void, Error>) -> Void)
 
   ///
   /// - Parameters:
   ///   - adSlots: 
-  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
-  func updateAdverts(adSlots: TList<AdSlot>, completion: @escaping (TAsyncResult<Void>) -> Void)
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func updateAdverts(adSlots: TList<AdSlot>, completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 
@@ -234,16 +242,16 @@ open class AcquistionsClient : TClient /* , Acquistions */ {
 public protocol AcquistionsAsync {
 
   ///
-  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
-  func launchFrictionScreen(completion: @escaping (TAsyncResult<Void>) -> Void)
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func launchFrictionScreen(completion: @escaping (Result<Void, Error>) -> Void)
 
   ///
-  ///   - completion: TAsyncResult<MaybeEpic> wrapping return and following Exceptions: 
-  func getEpics(completion: @escaping (TAsyncResult<MaybeEpic>) -> Void)
+  ///   - completion: Result<MaybeEpic, Error> wrapping return and following Exceptions: 
+  func getEpics(completion: @escaping (Result<MaybeEpic, Error>) -> Void)
 
   ///
-  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
-  func epicSeen(completion: @escaping (TAsyncResult<Void>) -> Void)
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func epicSeen(completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 
@@ -303,20 +311,20 @@ public protocol NotificationsAsync {
   ///
   /// - Parameters:
   ///   - topic: 
-  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
-  func follow(topic: Topic, completion: @escaping (TAsyncResult<Void>) -> Void)
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func follow(topic: Topic, completion: @escaping (Result<Void, Error>) -> Void)
 
   ///
   /// - Parameters:
   ///   - topic: 
-  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
-  func unfollow(topic: Topic, completion: @escaping (TAsyncResult<Void>) -> Void)
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func unfollow(topic: Topic, completion: @escaping (Result<Void, Error>) -> Void)
 
   ///
   /// - Parameters:
   ///   - topic: 
-  ///   - completion: TAsyncResult<Bool> wrapping return and following Exceptions: 
-  func isFollowing(topic: Topic, completion: @escaping (TAsyncResult<Bool>) -> Void)
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isFollowing(topic: Topic, completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -360,8 +368,8 @@ open class UserClient : TClient /* , User */ {
 public protocol UserAsync {
 
   ///
-  ///   - completion: TAsyncResult<Bool> wrapping return and following Exceptions: 
-  func isPremium(completion: @escaping (TAsyncResult<Bool>) -> Void)
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isPremium(completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -410,8 +418,8 @@ public protocol GalleryAsync {
   /// - Parameters:
   ///   - images: 
   ///   - selectedIndex: 
-  ///   - completion: TAsyncResult<Void> wrapping return and following Exceptions: 
-  func launchSlideshow(images: TList<Image>, selectedIndex: Int32, completion: @escaping (TAsyncResult<Void>) -> Void)
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func launchSlideshow(images: TList<Image>, selectedIndex: Int32, completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 

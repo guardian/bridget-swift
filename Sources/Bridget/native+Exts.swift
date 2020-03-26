@@ -33,14 +33,11 @@ extension AdSlot : CustomStringConvertible {
 
 extension AdSlot : Hashable {
 
-  public var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (x.hashValue)
-    result = prime &* result &+ (y.hashValue)
-    result = prime &* result &+ (height?.hashValue ?? 0)
-    result = prime &* result &+ (width?.hashValue ?? 0)
-    return result
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(x)
+    hasher.combine(y)
+    hasher.combine(height)
+    hasher.combine(width)
   }
 
 }
@@ -105,11 +102,8 @@ extension Topic : CustomStringConvertible {
 
 extension Topic : Hashable {
 
-  public var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (id.hashValue)
-    return result
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
   }
 
 }
@@ -171,13 +165,10 @@ extension Image : CustomStringConvertible {
 
 extension Image : Hashable {
 
-  public var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (url.hashValue)
-    result = prime &* result &+ (caption?.hashValue ?? 0)
-    result = prime &* result &+ (credit?.hashValue ?? 0)
-    return result
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(url)
+    hasher.combine(caption)
+    hasher.combine(credit)
   }
 
 }
@@ -245,14 +236,11 @@ extension Epic : CustomStringConvertible {
 
 extension Epic : Hashable {
 
-  public var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (title.hashValue)
-    result = prime &* result &+ (body.hashValue)
-    result = prime &* result &+ (firstButton.hashValue)
-    result = prime &* result &+ (secondButton?.hashValue ?? 0)
-    return result
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(title)
+    hasher.combine(body)
+    hasher.combine(firstButton)
+    hasher.combine(secondButton)
   }
 
 }
@@ -318,11 +306,8 @@ extension MaybeEpic : CustomStringConvertible {
 
 extension MaybeEpic : Hashable {
 
-  public var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (epic?.hashValue ?? 0)
-    return result
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(epic)
   }
 
 }
@@ -373,8 +358,7 @@ fileprivate func ==(lhs: Environment_nativeThriftPackageVersion_args, rhs: Envir
 
 extension Environment_nativeThriftPackageVersion_args : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
@@ -430,11 +414,8 @@ fileprivate func ==(lhs: Environment_nativeThriftPackageVersion_result, rhs: Env
 
 extension Environment_nativeThriftPackageVersion_result : Hashable {
 
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (success?.hashValue ?? 0)
-    return result
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
   }
 
 }
@@ -473,6 +454,104 @@ extension Environment_nativeThriftPackageVersion_result : TStruct {
 
 
 
+fileprivate final class Environment_dummy_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Environment_dummy_args, rhs: Environment_dummy_args) -> Bool {
+  return true
+}
+
+extension Environment_dummy_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Environment_dummy_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Environment_dummy_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Environment_dummy_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Environment_dummy_args()
+  }
+
+}
+
+
+
+fileprivate final class Environment_dummy_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Environment_dummy_result, rhs: Environment_dummy_result) -> Bool {
+  return true
+}
+
+extension Environment_dummy_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Environment_dummy_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Environment_dummy_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Environment_dummy_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Environment_dummy_result()
+  }
+
+}
+
+
+
 extension EnvironmentClient : Environment {
 
   private func send_nativeThriftPackageVersion() throws {
@@ -499,6 +578,26 @@ extension EnvironmentClient : Environment {
     return try recv_nativeThriftPackageVersion()
   }
 
+  private func send_dummy() throws {
+    try outProtocol.writeMessageBegin(name: "dummy", type: .call, sequenceID: 0)
+    let args = Environment_dummy_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_dummy() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Environment_dummy_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func dummy() throws {
+    try send_dummy()
+    try outProtocol.transport.flush()
+    try recv_dummy()
+  }
+
 }
 
 extension EnvironmentProcessor : TProcessor {
@@ -520,6 +619,22 @@ extension EnvironmentProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["dummy"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Environment_dummy_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Environment_dummy_result()
+      do {
+        try handler.dummy()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "dummy", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
@@ -562,7 +677,7 @@ extension EnvironmentProcessorAsync : TProcessor {
       handler.nativeThriftPackageVersion(completion: { asyncResult in
         var result = Environment_nativeThriftPackageVersion_result()
         do {
-          try result.success = asyncResult.value()
+          try result.success = asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "nativeThriftPackageVersion", sequenceID: sequenceID, ex: error)
           return
@@ -572,6 +687,31 @@ extension EnvironmentProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["dummy"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Environment_dummy_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.dummy(completion: { asyncResult in
+        var result = Environment_dummy_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "dummy", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "dummy", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "dummy", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
@@ -620,11 +760,8 @@ fileprivate func ==(lhs: Commercial_insertAdverts_args, rhs: Commercial_insertAd
 
 extension Commercial_insertAdverts_args : Hashable {
 
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (adSlots.hashValue)
-    return result
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(adSlots)
   }
 
 }
@@ -677,8 +814,7 @@ fileprivate func ==(lhs: Commercial_insertAdverts_result, rhs: Commercial_insert
 
 extension Commercial_insertAdverts_result : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
@@ -733,11 +869,8 @@ fileprivate func ==(lhs: Commercial_updateAdverts_args, rhs: Commercial_updateAd
 
 extension Commercial_updateAdverts_args : Hashable {
 
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (adSlots.hashValue)
-    return result
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(adSlots)
   }
 
 }
@@ -790,8 +923,7 @@ fileprivate func ==(lhs: Commercial_updateAdverts_result, rhs: Commercial_update
 
 extension Commercial_updateAdverts_result : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
@@ -949,7 +1081,7 @@ extension CommercialProcessorAsync : TProcessor {
       handler.insertAdverts(adSlots: args.adSlots, completion: { asyncResult in
         var result = Commercial_insertAdverts_result()
         do {
-          try asyncResult.value()
+          try asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "insertAdverts", sequenceID: sequenceID, ex: error)
           return
@@ -974,7 +1106,7 @@ extension CommercialProcessorAsync : TProcessor {
       handler.updateAdverts(adSlots: args.adSlots, completion: { asyncResult in
         var result = Commercial_updateAdverts_result()
         do {
-          try asyncResult.value()
+          try asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "updateAdverts", sequenceID: sequenceID, ex: error)
           return
@@ -1026,8 +1158,7 @@ fileprivate func ==(lhs: Acquistions_launchFrictionScreen_args, rhs: Acquistions
 
 extension Acquistions_launchFrictionScreen_args : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
@@ -1076,8 +1207,7 @@ fileprivate func ==(lhs: Acquistions_launchFrictionScreen_result, rhs: Acquistio
 
 extension Acquistions_launchFrictionScreen_result : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
@@ -1126,8 +1256,7 @@ fileprivate func ==(lhs: Acquistions_getEpics_args, rhs: Acquistions_getEpics_ar
 
 extension Acquistions_getEpics_args : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
@@ -1183,11 +1312,8 @@ fileprivate func ==(lhs: Acquistions_getEpics_result, rhs: Acquistions_getEpics_
 
 extension Acquistions_getEpics_result : Hashable {
 
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (success?.hashValue ?? 0)
-    return result
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
   }
 
 }
@@ -1238,8 +1364,7 @@ fileprivate func ==(lhs: Acquistions_epicSeen_args, rhs: Acquistions_epicSeen_ar
 
 extension Acquistions_epicSeen_args : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
@@ -1288,8 +1413,7 @@ fileprivate func ==(lhs: Acquistions_epicSeen_result, rhs: Acquistions_epicSeen_
 
 extension Acquistions_epicSeen_result : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
@@ -1487,7 +1611,7 @@ extension AcquistionsProcessorAsync : TProcessor {
       handler.launchFrictionScreen(completion: { asyncResult in
         var result = Acquistions_launchFrictionScreen_result()
         do {
-          try asyncResult.value()
+          try asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "launchFrictionScreen", sequenceID: sequenceID, ex: error)
           return
@@ -1512,7 +1636,7 @@ extension AcquistionsProcessorAsync : TProcessor {
       handler.getEpics(completion: { asyncResult in
         var result = Acquistions_getEpics_result()
         do {
-          try result.success = asyncResult.value()
+          try result.success = asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "getEpics", sequenceID: sequenceID, ex: error)
           return
@@ -1537,7 +1661,7 @@ extension AcquistionsProcessorAsync : TProcessor {
       handler.epicSeen(completion: { asyncResult in
         var result = Acquistions_epicSeen_result()
         do {
-          try asyncResult.value()
+          try asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "epicSeen", sequenceID: sequenceID, ex: error)
           return
@@ -1595,11 +1719,8 @@ fileprivate func ==(lhs: Notifications_follow_args, rhs: Notifications_follow_ar
 
 extension Notifications_follow_args : Hashable {
 
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (topic.hashValue)
-    return result
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(topic)
   }
 
 }
@@ -1652,8 +1773,7 @@ fileprivate func ==(lhs: Notifications_follow_result, rhs: Notifications_follow_
 
 extension Notifications_follow_result : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
@@ -1708,11 +1828,8 @@ fileprivate func ==(lhs: Notifications_unfollow_args, rhs: Notifications_unfollo
 
 extension Notifications_unfollow_args : Hashable {
 
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (topic.hashValue)
-    return result
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(topic)
   }
 
 }
@@ -1765,8 +1882,7 @@ fileprivate func ==(lhs: Notifications_unfollow_result, rhs: Notifications_unfol
 
 extension Notifications_unfollow_result : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
@@ -1821,11 +1937,8 @@ fileprivate func ==(lhs: Notifications_isFollowing_args, rhs: Notifications_isFo
 
 extension Notifications_isFollowing_args : Hashable {
 
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (topic.hashValue)
-    return result
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(topic)
   }
 
 }
@@ -1885,11 +1998,8 @@ fileprivate func ==(lhs: Notifications_isFollowing_result, rhs: Notifications_is
 
 extension Notifications_isFollowing_result : Hashable {
 
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (success?.hashValue ?? 0)
-    return result
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
   }
 
 }
@@ -2089,7 +2199,7 @@ extension NotificationsProcessorAsync : TProcessor {
       handler.follow(topic: args.topic, completion: { asyncResult in
         var result = Notifications_follow_result()
         do {
-          try asyncResult.value()
+          try asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "follow", sequenceID: sequenceID, ex: error)
           return
@@ -2114,7 +2224,7 @@ extension NotificationsProcessorAsync : TProcessor {
       handler.unfollow(topic: args.topic, completion: { asyncResult in
         var result = Notifications_unfollow_result()
         do {
-          try asyncResult.value()
+          try asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "unfollow", sequenceID: sequenceID, ex: error)
           return
@@ -2139,7 +2249,7 @@ extension NotificationsProcessorAsync : TProcessor {
       handler.isFollowing(topic: args.topic, completion: { asyncResult in
         var result = Notifications_isFollowing_result()
         do {
-          try result.success = asyncResult.value()
+          try result.success = asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "isFollowing", sequenceID: sequenceID, ex: error)
           return
@@ -2191,8 +2301,7 @@ fileprivate func ==(lhs: User_isPremium_args, rhs: User_isPremium_args) -> Bool 
 
 extension User_isPremium_args : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
@@ -2248,11 +2357,8 @@ fileprivate func ==(lhs: User_isPremium_result, rhs: User_isPremium_result) -> B
 
 extension User_isPremium_result : Hashable {
 
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (success?.hashValue ?? 0)
-    return result
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
   }
 
 }
@@ -2380,7 +2486,7 @@ extension UserProcessorAsync : TProcessor {
       handler.isPremium(completion: { asyncResult in
         var result = User_isPremium_result()
         do {
-          try result.success = asyncResult.value()
+          try result.success = asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "isPremium", sequenceID: sequenceID, ex: error)
           return
@@ -2442,12 +2548,9 @@ fileprivate func ==(lhs: Gallery_launchSlideshow_args, rhs: Gallery_launchSlides
 
 extension Gallery_launchSlideshow_args : Hashable {
 
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (images.hashValue)
-    result = prime &* result &+ (selectedIndex.hashValue)
-    return result
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(images)
+    hasher.combine(selectedIndex)
   }
 
 }
@@ -2503,8 +2606,7 @@ fileprivate func ==(lhs: Gallery_launchSlideshow_result, rhs: Gallery_launchSlid
 
 extension Gallery_launchSlideshow_result : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
@@ -2626,7 +2728,7 @@ extension GalleryProcessorAsync : TProcessor {
       handler.launchSlideshow(images: args.images, selectedIndex: args.selectedIndex, completion: { asyncResult in
         var result = Gallery_launchSlideshow_result()
         do {
-          try asyncResult.value()
+          try asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "launchSlideshow", sequenceID: sequenceID, ex: error)
           return

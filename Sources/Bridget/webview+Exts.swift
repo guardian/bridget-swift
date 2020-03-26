@@ -22,8 +22,7 @@ fileprivate func ==(lhs: Webview_webviewThriftPackage_args, rhs: Webview_webview
 
 extension Webview_webviewThriftPackage_args : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
@@ -79,11 +78,8 @@ fileprivate func ==(lhs: Webview_webviewThriftPackage_result, rhs: Webview_webvi
 
 extension Webview_webviewThriftPackage_result : Hashable {
 
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (success?.hashValue ?? 0)
-    return result
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
   }
 
 }
@@ -140,11 +136,8 @@ fileprivate func ==(lhs: Webview_updateFontSize_args, rhs: Webview_updateFontSiz
 
 extension Webview_updateFontSize_args : Hashable {
 
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (size.hashValue)
-    return result
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(size)
   }
 
 }
@@ -197,8 +190,7 @@ fileprivate func ==(lhs: Webview_updateFontSize_result, rhs: Webview_updateFontS
 
 extension Webview_updateFontSize_result : Hashable {
 
-  fileprivate var hashValue : Int {
-    return 31
+  fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
