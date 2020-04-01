@@ -112,6 +112,10 @@ public protocol Environment {
   /// - Throws: 
   func nativeThriftPackageVersion() throws -> Int32
 
+  ///
+  /// - Throws: 
+  func dummy() throws
+
 }
 
 open class EnvironmentClient : TClient /* , Environment */ {
@@ -123,6 +127,10 @@ public protocol EnvironmentAsync {
   ///
   ///   - completion: Result<Int32, Error> wrapping return and following Exceptions: 
   func nativeThriftPackageVersion(completion: @escaping (Result<Int32, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func dummy(completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 
