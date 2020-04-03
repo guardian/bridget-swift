@@ -454,104 +454,6 @@ extension Environment_nativeThriftPackageVersion_result : TStruct {
 
 
 
-fileprivate final class Environment_dummy_args {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Environment_dummy_args, rhs: Environment_dummy_args) -> Bool {
-  return true
-}
-
-extension Environment_dummy_args : Hashable {
-
-  fileprivate func hash(into hasher: inout Hasher) {
-  }
-
-}
-
-extension Environment_dummy_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Environment_dummy_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Environment_dummy_args {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Environment_dummy_args()
-  }
-
-}
-
-
-
-fileprivate final class Environment_dummy_result {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Environment_dummy_result, rhs: Environment_dummy_result) -> Bool {
-  return true
-}
-
-extension Environment_dummy_result : Hashable {
-
-  fileprivate func hash(into hasher: inout Hasher) {
-  }
-
-}
-
-extension Environment_dummy_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Environment_dummy_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Environment_dummy_result {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Environment_dummy_result()
-  }
-
-}
-
-
-
 extension EnvironmentClient : Environment {
 
   private func send_nativeThriftPackageVersion() throws {
@@ -578,26 +480,6 @@ extension EnvironmentClient : Environment {
     return try recv_nativeThriftPackageVersion()
   }
 
-  private func send_dummy() throws {
-    try outProtocol.writeMessageBegin(name: "dummy", type: .call, sequenceID: 0)
-    let args = Environment_dummy_args()
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_dummy() throws {
-    try inProtocol.readResultMessageBegin() 
-    _ = try Environment_dummy_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-  }
-
-  public func dummy() throws {
-    try send_dummy()
-    try outProtocol.transport.flush()
-    try recv_dummy()
-  }
-
 }
 
 extension EnvironmentProcessor : TProcessor {
@@ -619,22 +501,6 @@ extension EnvironmentProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["dummy"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Environment_dummy_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Environment_dummy_result()
-      do {
-        try handler.dummy()
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "dummy", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
@@ -687,31 +553,6 @@ extension EnvironmentProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
-    processorHandlers["dummy"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Environment_dummy_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.dummy(completion: { asyncResult in
-        var result = Environment_dummy_result()
-        do {
-          try asyncResult.get()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "dummy", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "dummy", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "dummy", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
