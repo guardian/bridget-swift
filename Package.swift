@@ -14,7 +14,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.com/guardian/thrift-swift.git", .exact("0.14.0-gu5"))
+        .package(url: "https://github.com/guardian/thrift-swift.git", .upToNextMinor("0.14.0-gu6"))
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
