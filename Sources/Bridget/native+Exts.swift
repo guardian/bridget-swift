@@ -87,14 +87,18 @@ extension AdSlot : TStruct {
 
 public func ==(lhs: Topic, rhs: Topic) -> Bool {
   return
-    (lhs.id == rhs.id)
+    (lhs.id == rhs.id) &&
+    (lhs.displayName == rhs.displayName) &&
+    (lhs.type == rhs.type)
 }
 
 extension Topic : CustomStringConvertible {
 
   public var description : String {
     var desc = "Topic("
-    desc += "id=\(String(describing: self.id))"
+    desc += "id=\(String(describing: self.id)), "
+    desc += "displayName=\(String(describing: self.displayName)), "
+    desc += "type=\(String(describing: self.type))"
     return desc
   }
 
@@ -104,6 +108,8 @@ extension Topic : Hashable {
 
   public func hash(into hasher: inout Hasher) {
     hasher.combine(id)
+    hasher.combine(displayName)
+    hasher.combine(type)
   }
 
 }
@@ -111,7 +117,7 @@ extension Topic : Hashable {
 extension Topic : TStruct {
 
   public static var fieldIds: [String: Int32] {
-    return ["id": 1, ]
+    return ["id": 1, "displayName": 2, "type": 3, ]
   }
 
   public static var structName: String { return "Topic" }
@@ -119,6 +125,8 @@ extension Topic : TStruct {
   public static func read(from proto: TProtocol) throws -> Topic {
     _ = try proto.readStructBegin()
     var id: String!
+    var displayName: String!
+    var type: String!
 
     fields: while true {
 
@@ -127,6 +135,8 @@ extension Topic : TStruct {
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
         case (1, .string):           id = try String.read(from: proto)
+        case (2, .string):           displayName = try String.read(from: proto)
+        case (3, .string):           type = try String.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -136,8 +146,10 @@ extension Topic : TStruct {
     try proto.readStructEnd()
     // Required fields
     try proto.validateValue(id, named: "id")
+    try proto.validateValue(displayName, named: "displayName")
+    try proto.validateValue(type, named: "type")
 
-    return Topic(id: id)
+    return Topic(id: id, displayName: displayName, type: type)
   }
 
 }

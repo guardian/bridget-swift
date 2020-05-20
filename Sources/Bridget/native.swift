@@ -39,9 +39,15 @@ public final class Topic {
 
   public var id: String
 
+  public var displayName: String
 
-  public init(id: String) {
+  public var type: String
+
+
+  public init(id: String, displayName: String, type: String) {
     self.id = id
+    self.displayName = displayName
+    self.type = type
   }
 
 }
