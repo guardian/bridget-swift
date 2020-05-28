@@ -2385,10 +2385,13 @@ fileprivate final class Gallery_launchSlideshow_args {
 
   fileprivate var selectedIndex: Int32
 
+  fileprivate var articleTitle: String
 
-  fileprivate init(images: TList<Image>, selectedIndex: Int32) {
+
+  fileprivate init(images: TList<Image>, selectedIndex: Int32, articleTitle: String) {
     self.images = images
     self.selectedIndex = selectedIndex
+    self.articleTitle = articleTitle
   }
 
 }
@@ -2396,7 +2399,8 @@ fileprivate final class Gallery_launchSlideshow_args {
 fileprivate func ==(lhs: Gallery_launchSlideshow_args, rhs: Gallery_launchSlideshow_args) -> Bool {
   return
     (lhs.images == rhs.images) &&
-    (lhs.selectedIndex == rhs.selectedIndex)
+    (lhs.selectedIndex == rhs.selectedIndex) &&
+    (lhs.articleTitle == rhs.articleTitle)
 }
 
 extension Gallery_launchSlideshow_args : Hashable {
@@ -2404,6 +2408,7 @@ extension Gallery_launchSlideshow_args : Hashable {
   fileprivate func hash(into hasher: inout Hasher) {
     hasher.combine(images)
     hasher.combine(selectedIndex)
+    hasher.combine(articleTitle)
   }
 
 }
@@ -2411,7 +2416,7 @@ extension Gallery_launchSlideshow_args : Hashable {
 extension Gallery_launchSlideshow_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
-    return ["images": 1, "selectedIndex": 2, ]
+    return ["images": 1, "selectedIndex": 2, "articleTitle": 3, ]
   }
 
   fileprivate static var structName: String { return "Gallery_launchSlideshow_args" }
@@ -2420,6 +2425,7 @@ extension Gallery_launchSlideshow_args : TStruct {
     _ = try proto.readStructBegin()
     var images: TList<Image>!
     var selectedIndex: Int32!
+    var articleTitle: String!
 
     fields: while true {
 
@@ -2429,6 +2435,7 @@ extension Gallery_launchSlideshow_args : TStruct {
         case (_, .stop):            break fields
         case (1, .list):            images = try TList<Image>.read(from: proto)
         case (2, .i32):             selectedIndex = try Int32.read(from: proto)
+        case (3, .string):           articleTitle = try String.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -2439,8 +2446,9 @@ extension Gallery_launchSlideshow_args : TStruct {
     // Required fields
     try proto.validateValue(images, named: "images")
     try proto.validateValue(selectedIndex, named: "selectedIndex")
+    try proto.validateValue(articleTitle, named: "articleTitle")
 
-    return Gallery_launchSlideshow_args(images: images, selectedIndex: selectedIndex)
+    return Gallery_launchSlideshow_args(images: images, selectedIndex: selectedIndex, articleTitle: articleTitle)
   }
 
 }
@@ -2498,9 +2506,9 @@ extension Gallery_launchSlideshow_result : TStruct {
 
 extension GalleryClient : Gallery {
 
-  private func send_launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws {
+  private func send_launchSlideshow(images: TList<Image>, selectedIndex: Int32, articleTitle: String) throws {
     try outProtocol.writeMessageBegin(name: "launchSlideshow", type: .call, sequenceID: 0)
-    let args = Gallery_launchSlideshow_args(images: images, selectedIndex: selectedIndex)
+    let args = Gallery_launchSlideshow_args(images: images, selectedIndex: selectedIndex, articleTitle: articleTitle)
     try args.write(to: outProtocol)
     try outProtocol.writeMessageEnd()
   }
@@ -2512,8 +2520,8 @@ extension GalleryClient : Gallery {
 
   }
 
-  public func launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws {
-    try send_launchSlideshow(images: images, selectedIndex: selectedIndex)
+  public func launchSlideshow(images: TList<Image>, selectedIndex: Int32, articleTitle: String) throws {
+    try send_launchSlideshow(images: images, selectedIndex: selectedIndex, articleTitle: articleTitle)
     try outProtocol.transport.flush()
     try recv_launchSlideshow()
   }
@@ -2534,7 +2542,7 @@ extension GalleryProcessor : TProcessor {
 
       var result = Gallery_launchSlideshow_result()
       do {
-        try handler.launchSlideshow(images: args.images, selectedIndex: args.selectedIndex)
+        try handler.launchSlideshow(images: args.images, selectedIndex: args.selectedIndex, articleTitle: args.articleTitle)
       }
       catch let error { throw error }
 
@@ -2578,7 +2586,7 @@ extension GalleryProcessorAsync : TProcessor {
 
       try inProtocol.readMessageEnd()
 
-      handler.launchSlideshow(images: args.images, selectedIndex: args.selectedIndex, completion: { asyncResult in
+      handler.launchSlideshow(images: args.images, selectedIndex: args.selectedIndex, articleTitle: args.articleTitle, completion: { asyncResult in
         var result = Gallery_launchSlideshow_result()
         do {
           try asyncResult.get()

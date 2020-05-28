@@ -401,8 +401,9 @@ public protocol Gallery {
   /// - Parameters:
   ///   - images: 
   ///   - selectedIndex: 
+  ///   - articleTitle: 
   /// - Throws: 
-  func launchSlideshow(images: TList<Image>, selectedIndex: Int32) throws
+  func launchSlideshow(images: TList<Image>, selectedIndex: Int32, articleTitle: String) throws
 
 }
 
@@ -416,8 +417,9 @@ public protocol GalleryAsync {
   /// - Parameters:
   ///   - images: 
   ///   - selectedIndex: 
+  ///   - articleTitle: 
   ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
-  func launchSlideshow(images: TList<Image>, selectedIndex: Int32, completion: @escaping (Result<Void, Error>) -> Void)
+  func launchSlideshow(images: TList<Image>, selectedIndex: Int32, articleTitle: String, completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 
