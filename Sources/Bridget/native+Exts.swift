@@ -1616,17 +1616,25 @@ extension Notifications_follow_args : TStruct {
 
 fileprivate final class Notifications_follow_result {
 
+  fileprivate var success: Bool?
+
 
   fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
 }
 
 fileprivate func ==(lhs: Notifications_follow_result, rhs: Notifications_follow_result) -> Bool {
-  return true
+  return
+    (lhs.success == rhs.success)
 }
 
 extension Notifications_follow_result : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
   }
 
 }
@@ -1634,13 +1642,14 @@ extension Notifications_follow_result : Hashable {
 extension Notifications_follow_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
-    return [:]
+    return ["success": 0, ]
   }
 
   fileprivate static var structName: String { return "Notifications_follow_result" }
 
   fileprivate static func read(from proto: TProtocol) throws -> Notifications_follow_result {
     _ = try proto.readStructBegin()
+    var success: Bool?
 
     fields: while true {
 
@@ -1648,6 +1657,7 @@ extension Notifications_follow_result : TStruct {
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -1656,7 +1666,7 @@ extension Notifications_follow_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Notifications_follow_result()
+    return Notifications_follow_result(success: success)
   }
 
 }
@@ -1725,17 +1735,25 @@ extension Notifications_unfollow_args : TStruct {
 
 fileprivate final class Notifications_unfollow_result {
 
+  fileprivate var success: Bool?
+
 
   fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
 }
 
 fileprivate func ==(lhs: Notifications_unfollow_result, rhs: Notifications_unfollow_result) -> Bool {
-  return true
+  return
+    (lhs.success == rhs.success)
 }
 
 extension Notifications_unfollow_result : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
   }
 
 }
@@ -1743,13 +1761,14 @@ extension Notifications_unfollow_result : Hashable {
 extension Notifications_unfollow_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
-    return [:]
+    return ["success": 0, ]
   }
 
   fileprivate static var structName: String { return "Notifications_unfollow_result" }
 
   fileprivate static func read(from proto: TProtocol) throws -> Notifications_unfollow_result {
     _ = try proto.readStructBegin()
+    var success: Bool?
 
     fields: while true {
 
@@ -1757,6 +1776,7 @@ extension Notifications_unfollow_result : TStruct {
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -1765,7 +1785,7 @@ extension Notifications_unfollow_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Notifications_unfollow_result()
+    return Notifications_unfollow_result(success: success)
   }
 
 }
@@ -1900,17 +1920,21 @@ extension NotificationsClient : Notifications {
     try outProtocol.writeMessageEnd()
   }
 
-  private func recv_follow() throws {
+  private func recv_follow() throws -> Bool {
     try inProtocol.readResultMessageBegin() 
-    _ = try Notifications_follow_result.read(from: inProtocol)
+    let result = try Notifications_follow_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
 
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "follow"))
   }
 
-  public func follow(topic: Topic) throws {
+  public func follow(topic: Topic) throws -> Bool {
     try send_follow(topic: topic)
     try outProtocol.transport.flush()
-    try recv_follow()
+    return try recv_follow()
   }
 
   private func send_unfollow(topic: Topic) throws {
@@ -1920,17 +1944,21 @@ extension NotificationsClient : Notifications {
     try outProtocol.writeMessageEnd()
   }
 
-  private func recv_unfollow() throws {
+  private func recv_unfollow() throws -> Bool {
     try inProtocol.readResultMessageBegin() 
-    _ = try Notifications_unfollow_result.read(from: inProtocol)
+    let result = try Notifications_unfollow_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
 
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "unfollow"))
   }
 
-  public func unfollow(topic: Topic) throws {
+  public func unfollow(topic: Topic) throws -> Bool {
     try send_unfollow(topic: topic)
     try outProtocol.transport.flush()
-    try recv_unfollow()
+    return try recv_unfollow()
   }
 
   private func send_isFollowing(topic: Topic) throws {
@@ -1973,7 +2001,7 @@ extension NotificationsProcessor : TProcessor {
 
       var result = Notifications_follow_result()
       do {
-        try handler.follow(topic: args.topic)
+        result.success = try handler.follow(topic: args.topic)
       }
       catch let error { throw error }
 
@@ -1989,7 +2017,7 @@ extension NotificationsProcessor : TProcessor {
 
       var result = Notifications_unfollow_result()
       do {
-        try handler.unfollow(topic: args.topic)
+        result.success = try handler.unfollow(topic: args.topic)
       }
       catch let error { throw error }
 
@@ -2052,7 +2080,7 @@ extension NotificationsProcessorAsync : TProcessor {
       handler.follow(topic: args.topic, completion: { asyncResult in
         var result = Notifications_follow_result()
         do {
-          try asyncResult.get()
+          try result.success = asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "follow", sequenceID: sequenceID, ex: error)
           return
@@ -2077,7 +2105,7 @@ extension NotificationsProcessorAsync : TProcessor {
       handler.unfollow(topic: args.topic, completion: { asyncResult in
         var result = Notifications_unfollow_result()
         do {
-          try asyncResult.get()
+          try result.success = asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "unfollow", sequenceID: sequenceID, ex: error)
           return
