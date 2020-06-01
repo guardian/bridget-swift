@@ -282,16 +282,14 @@ public protocol Notifications {
   ///
   /// - Parameters:
   ///   - topic: 
-  /// - Returns: Bool
   /// - Throws: 
-  func follow(topic: Topic) throws -> Bool
+  func follow(topic: Topic) throws
 
   ///
   /// - Parameters:
   ///   - topic: 
-  /// - Returns: Bool
   /// - Throws: 
-  func unfollow(topic: Topic) throws -> Bool
+  func unfollow(topic: Topic) throws
 
   ///
   /// - Parameters:
@@ -311,14 +309,14 @@ public protocol NotificationsAsync {
   ///
   /// - Parameters:
   ///   - topic: 
-  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
-  func follow(topic: Topic, completion: @escaping (Result<Bool, Error>) -> Void)
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func follow(topic: Topic, completion: @escaping (Result<Void, Error>) -> Void)
 
   ///
   /// - Parameters:
   ///   - topic: 
-  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
-  func unfollow(topic: Topic, completion: @escaping (Result<Bool, Error>) -> Void)
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func unfollow(topic: Topic, completion: @escaping (Result<Void, Error>) -> Void)
 
   ///
   /// - Parameters:
