@@ -409,11 +409,11 @@ extension Environment_nativeThriftPackageVersion_args : TStruct {
 
 fileprivate final class Environment_nativeThriftPackageVersion_result {
 
-  fileprivate var success: Int32?
+  fileprivate var success: String?
 
 
   fileprivate init() { }
-  fileprivate init(success: Int32?) {
+  fileprivate init(success: String?) {
     self.success = success
   }
 
@@ -442,7 +442,7 @@ extension Environment_nativeThriftPackageVersion_result : TStruct {
 
   fileprivate static func read(from proto: TProtocol) throws -> Environment_nativeThriftPackageVersion_result {
     _ = try proto.readStructBegin()
-    var success: Int32?
+    var success: String?
 
     fields: while true {
 
@@ -450,7 +450,7 @@ extension Environment_nativeThriftPackageVersion_result : TStruct {
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
-        case (0, .i32):             success = try Int32.read(from: proto)
+        case (0, .string):           success = try String.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -475,7 +475,7 @@ extension EnvironmentClient : Environment {
     try outProtocol.writeMessageEnd()
   }
 
-  private func recv_nativeThriftPackageVersion() throws -> Int32 {
+  private func recv_nativeThriftPackageVersion() throws -> String {
     try inProtocol.readResultMessageBegin() 
     let result = try Environment_nativeThriftPackageVersion_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
@@ -486,7 +486,7 @@ extension EnvironmentClient : Environment {
     throw TApplicationError(error: .missingResult(methodName: "nativeThriftPackageVersion"))
   }
 
-  public func nativeThriftPackageVersion() throws -> Int32 {
+  public func nativeThriftPackageVersion() throws -> String {
     try send_nativeThriftPackageVersion()
     try outProtocol.transport.flush()
     return try recv_nativeThriftPackageVersion()

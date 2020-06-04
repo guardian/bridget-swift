@@ -114,9 +114,9 @@ public final class MaybeEpic {
 public protocol Environment {
 
   ///
-  /// - Returns: Int32
+  /// - Returns: String
   /// - Throws: 
-  func nativeThriftPackageVersion() throws -> Int32
+  func nativeThriftPackageVersion() throws -> String
 
 }
 
@@ -127,8 +127,8 @@ open class EnvironmentClient : TClient /* , Environment */ {
 public protocol EnvironmentAsync {
 
   ///
-  ///   - completion: Result<Int32, Error> wrapping return and following Exceptions: 
-  func nativeThriftPackageVersion(completion: @escaping (Result<Int32, Error>) -> Void)
+  ///   - completion: Result<String, Error> wrapping return and following Exceptions: 
+  func nativeThriftPackageVersion(completion: @escaping (Result<String, Error>) -> Void)
 
 }
 
@@ -448,5 +448,7 @@ open class GalleryProcessorAsync /* Gallery */ {
   }
 
 }
+
+public let BRIDGET_VERSION : String = "0.59.0"
 
 
