@@ -216,7 +216,7 @@ open class CommercialProcessorAsync /* Commercial */ {
 
 }
 
-public protocol Acquistions {
+public protocol Acquisitions {
 
   ///
   /// - Throws: 
@@ -233,11 +233,11 @@ public protocol Acquistions {
 
 }
 
-open class AcquistionsClient : TClient /* , Acquistions */ {
+open class AcquisitionsClient : TClient /* , Acquisitions */ {
 
 }
 
-public protocol AcquistionsAsync {
+public protocol AcquisitionsAsync {
 
   ///
   ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
@@ -253,25 +253,25 @@ public protocol AcquistionsAsync {
 
 }
 
-open class AcquistionsProcessor /* Acquistions */ {
+open class AcquisitionsProcessor /* Acquisitions */ {
 
-  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Acquistions) throws -> Void]
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Acquisitions) throws -> Void]
 
-  public var service: Acquistions
+  public var service: Acquisitions
 
-  public required init(service: Acquistions) {
+  public required init(service: Acquisitions) {
     self.service = service
   }
 
 }
 
-open class AcquistionsProcessorAsync /* Acquistions */ {
+open class AcquisitionsProcessorAsync /* Acquisitions */ {
 
-  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, AcquistionsAsync) throws -> Void]
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, AcquisitionsAsync) throws -> Void]
 
-  public var service: AcquistionsAsync
+  public var service: AcquisitionsAsync
 
-  public required init(service: AcquistionsAsync) {
+  public required init(service: AcquisitionsAsync) {
     self.service = service
   }
 
@@ -449,6 +449,6 @@ open class GalleryProcessorAsync /* Gallery */ {
 
 }
 
-public let BRIDGET_VERSION : String = "0.59.0"
+public let BRIDGET_VERSION : String = "0.60.0"
 
 

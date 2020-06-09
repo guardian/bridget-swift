@@ -999,32 +999,32 @@ extension CommercialProcessorAsync : TProcessor {
   }
 }
 
-fileprivate final class Acquistions_launchFrictionScreen_args {
+fileprivate final class Acquisitions_launchFrictionScreen_args {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Acquistions_launchFrictionScreen_args, rhs: Acquistions_launchFrictionScreen_args) -> Bool {
+fileprivate func ==(lhs: Acquisitions_launchFrictionScreen_args, rhs: Acquisitions_launchFrictionScreen_args) -> Bool {
   return true
 }
 
-extension Acquistions_launchFrictionScreen_args : Hashable {
+extension Acquisitions_launchFrictionScreen_args : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
 
-extension Acquistions_launchFrictionScreen_args : TStruct {
+extension Acquisitions_launchFrictionScreen_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Acquistions_launchFrictionScreen_args" }
+  fileprivate static var structName: String { return "Acquisitions_launchFrictionScreen_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Acquistions_launchFrictionScreen_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Acquisitions_launchFrictionScreen_args {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -1041,39 +1041,39 @@ extension Acquistions_launchFrictionScreen_args : TStruct {
 
     try proto.readStructEnd()
 
-    return Acquistions_launchFrictionScreen_args()
+    return Acquisitions_launchFrictionScreen_args()
   }
 
 }
 
 
 
-fileprivate final class Acquistions_launchFrictionScreen_result {
+fileprivate final class Acquisitions_launchFrictionScreen_result {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Acquistions_launchFrictionScreen_result, rhs: Acquistions_launchFrictionScreen_result) -> Bool {
+fileprivate func ==(lhs: Acquisitions_launchFrictionScreen_result, rhs: Acquisitions_launchFrictionScreen_result) -> Bool {
   return true
 }
 
-extension Acquistions_launchFrictionScreen_result : Hashable {
+extension Acquisitions_launchFrictionScreen_result : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
 
-extension Acquistions_launchFrictionScreen_result : TStruct {
+extension Acquisitions_launchFrictionScreen_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Acquistions_launchFrictionScreen_result" }
+  fileprivate static var structName: String { return "Acquisitions_launchFrictionScreen_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Acquistions_launchFrictionScreen_result {
+  fileprivate static func read(from proto: TProtocol) throws -> Acquisitions_launchFrictionScreen_result {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -1090,39 +1090,39 @@ extension Acquistions_launchFrictionScreen_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Acquistions_launchFrictionScreen_result()
+    return Acquisitions_launchFrictionScreen_result()
   }
 
 }
 
 
 
-fileprivate final class Acquistions_getEpics_args {
+fileprivate final class Acquisitions_getEpics_args {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Acquistions_getEpics_args, rhs: Acquistions_getEpics_args) -> Bool {
+fileprivate func ==(lhs: Acquisitions_getEpics_args, rhs: Acquisitions_getEpics_args) -> Bool {
   return true
 }
 
-extension Acquistions_getEpics_args : Hashable {
+extension Acquisitions_getEpics_args : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
 
-extension Acquistions_getEpics_args : TStruct {
+extension Acquisitions_getEpics_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Acquistions_getEpics_args" }
+  fileprivate static var structName: String { return "Acquisitions_getEpics_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Acquistions_getEpics_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Acquisitions_getEpics_args {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -1139,14 +1139,14 @@ extension Acquistions_getEpics_args : TStruct {
 
     try proto.readStructEnd()
 
-    return Acquistions_getEpics_args()
+    return Acquisitions_getEpics_args()
   }
 
 }
 
 
 
-fileprivate final class Acquistions_getEpics_result {
+fileprivate final class Acquisitions_getEpics_result {
 
   fileprivate var success: MaybeEpic?
 
@@ -1158,12 +1158,12 @@ fileprivate final class Acquistions_getEpics_result {
 
 }
 
-fileprivate func ==(lhs: Acquistions_getEpics_result, rhs: Acquistions_getEpics_result) -> Bool {
+fileprivate func ==(lhs: Acquisitions_getEpics_result, rhs: Acquisitions_getEpics_result) -> Bool {
   return
     (lhs.success == rhs.success)
 }
 
-extension Acquistions_getEpics_result : Hashable {
+extension Acquisitions_getEpics_result : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
     hasher.combine(success)
@@ -1171,15 +1171,15 @@ extension Acquistions_getEpics_result : Hashable {
 
 }
 
-extension Acquistions_getEpics_result : TStruct {
+extension Acquisitions_getEpics_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return ["success": 0, ]
   }
 
-  fileprivate static var structName: String { return "Acquistions_getEpics_result" }
+  fileprivate static var structName: String { return "Acquisitions_getEpics_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Acquistions_getEpics_result {
+  fileprivate static func read(from proto: TProtocol) throws -> Acquisitions_getEpics_result {
     _ = try proto.readStructBegin()
     var success: MaybeEpic?
 
@@ -1198,39 +1198,39 @@ extension Acquistions_getEpics_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Acquistions_getEpics_result(success: success)
+    return Acquisitions_getEpics_result(success: success)
   }
 
 }
 
 
 
-fileprivate final class Acquistions_epicSeen_args {
+fileprivate final class Acquisitions_epicSeen_args {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Acquistions_epicSeen_args, rhs: Acquistions_epicSeen_args) -> Bool {
+fileprivate func ==(lhs: Acquisitions_epicSeen_args, rhs: Acquisitions_epicSeen_args) -> Bool {
   return true
 }
 
-extension Acquistions_epicSeen_args : Hashable {
+extension Acquisitions_epicSeen_args : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
 
-extension Acquistions_epicSeen_args : TStruct {
+extension Acquisitions_epicSeen_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Acquistions_epicSeen_args" }
+  fileprivate static var structName: String { return "Acquisitions_epicSeen_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Acquistions_epicSeen_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Acquisitions_epicSeen_args {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -1247,39 +1247,39 @@ extension Acquistions_epicSeen_args : TStruct {
 
     try proto.readStructEnd()
 
-    return Acquistions_epicSeen_args()
+    return Acquisitions_epicSeen_args()
   }
 
 }
 
 
 
-fileprivate final class Acquistions_epicSeen_result {
+fileprivate final class Acquisitions_epicSeen_result {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Acquistions_epicSeen_result, rhs: Acquistions_epicSeen_result) -> Bool {
+fileprivate func ==(lhs: Acquisitions_epicSeen_result, rhs: Acquisitions_epicSeen_result) -> Bool {
   return true
 }
 
-extension Acquistions_epicSeen_result : Hashable {
+extension Acquisitions_epicSeen_result : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
 
-extension Acquistions_epicSeen_result : TStruct {
+extension Acquisitions_epicSeen_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Acquistions_epicSeen_result" }
+  fileprivate static var structName: String { return "Acquisitions_epicSeen_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Acquistions_epicSeen_result {
+  fileprivate static func read(from proto: TProtocol) throws -> Acquisitions_epicSeen_result {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -1296,25 +1296,25 @@ extension Acquistions_epicSeen_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Acquistions_epicSeen_result()
+    return Acquisitions_epicSeen_result()
   }
 
 }
 
 
 
-extension AcquistionsClient : Acquistions {
+extension AcquisitionsClient : Acquisitions {
 
   private func send_launchFrictionScreen() throws {
     try outProtocol.writeMessageBegin(name: "launchFrictionScreen", type: .call, sequenceID: 0)
-    let args = Acquistions_launchFrictionScreen_args()
+    let args = Acquisitions_launchFrictionScreen_args()
     try args.write(to: outProtocol)
     try outProtocol.writeMessageEnd()
   }
 
   private func recv_launchFrictionScreen() throws {
     try inProtocol.readResultMessageBegin() 
-    _ = try Acquistions_launchFrictionScreen_result.read(from: inProtocol)
+    _ = try Acquisitions_launchFrictionScreen_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
 
   }
@@ -1327,14 +1327,14 @@ extension AcquistionsClient : Acquistions {
 
   private func send_getEpics() throws {
     try outProtocol.writeMessageBegin(name: "getEpics", type: .call, sequenceID: 0)
-    let args = Acquistions_getEpics_args()
+    let args = Acquisitions_getEpics_args()
     try args.write(to: outProtocol)
     try outProtocol.writeMessageEnd()
   }
 
   private func recv_getEpics() throws -> MaybeEpic {
     try inProtocol.readResultMessageBegin() 
-    let result = try Acquistions_getEpics_result.read(from: inProtocol)
+    let result = try Acquisitions_getEpics_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
 
     if let success = result.success {
@@ -1351,14 +1351,14 @@ extension AcquistionsClient : Acquistions {
 
   private func send_epicSeen() throws {
     try outProtocol.writeMessageBegin(name: "epicSeen", type: .call, sequenceID: 0)
-    let args = Acquistions_epicSeen_args()
+    let args = Acquisitions_epicSeen_args()
     try args.write(to: outProtocol)
     try outProtocol.writeMessageEnd()
   }
 
   private func recv_epicSeen() throws {
     try inProtocol.readResultMessageBegin() 
-    _ = try Acquistions_epicSeen_result.read(from: inProtocol)
+    _ = try Acquisitions_epicSeen_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
 
   }
@@ -1371,7 +1371,7 @@ extension AcquistionsClient : Acquistions {
 
 }
 
-extension AcquistionsProcessor : TProcessor {
+extension AcquisitionsProcessor : TProcessor {
 
   static let processorHandlers: ProcessorHandlerDictionary = {
 
@@ -1379,11 +1379,11 @@ extension AcquistionsProcessor : TProcessor {
 
     processorHandlers["launchFrictionScreen"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Acquistions_launchFrictionScreen_args.read(from: inProtocol)
+      let args = try Acquisitions_launchFrictionScreen_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
-      var result = Acquistions_launchFrictionScreen_result()
+      var result = Acquisitions_launchFrictionScreen_result()
       do {
         try handler.launchFrictionScreen()
       }
@@ -1395,11 +1395,11 @@ extension AcquistionsProcessor : TProcessor {
     }
     processorHandlers["getEpics"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Acquistions_getEpics_args.read(from: inProtocol)
+      let args = try Acquisitions_getEpics_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
-      var result = Acquistions_getEpics_result()
+      var result = Acquisitions_getEpics_result()
       do {
         result.success = try handler.getEpics()
       }
@@ -1411,11 +1411,11 @@ extension AcquistionsProcessor : TProcessor {
     }
     processorHandlers["epicSeen"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Acquistions_epicSeen_args.read(from: inProtocol)
+      let args = try Acquisitions_epicSeen_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
-      var result = Acquistions_epicSeen_result()
+      var result = Acquisitions_epicSeen_result()
       do {
         try handler.epicSeen()
       }
@@ -1432,7 +1432,7 @@ extension AcquistionsProcessor : TProcessor {
 
     let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
 
-    if let processorHandler = AcquistionsProcessor.processorHandlers[messageName] {
+    if let processorHandler = AcquisitionsProcessor.processorHandlers[messageName] {
       do {
         try processorHandler(sequenceID, inProtocol, outProtocol, service)
       }
@@ -1449,7 +1449,7 @@ extension AcquistionsProcessor : TProcessor {
   }
 }
 
-extension AcquistionsProcessorAsync : TProcessor {
+extension AcquisitionsProcessorAsync : TProcessor {
 
   static let processorHandlers: ProcessorHandlerDictionary = {
 
@@ -1457,12 +1457,12 @@ extension AcquistionsProcessorAsync : TProcessor {
 
     processorHandlers["launchFrictionScreen"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Acquistions_launchFrictionScreen_args.read(from: inProtocol)
+      let args = try Acquisitions_launchFrictionScreen_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
       handler.launchFrictionScreen(completion: { asyncResult in
-        var result = Acquistions_launchFrictionScreen_result()
+        var result = Acquisitions_launchFrictionScreen_result()
         do {
           try asyncResult.get()
         } catch let error as TApplicationError {
@@ -1482,12 +1482,12 @@ extension AcquistionsProcessorAsync : TProcessor {
     }
     processorHandlers["getEpics"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Acquistions_getEpics_args.read(from: inProtocol)
+      let args = try Acquisitions_getEpics_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
       handler.getEpics(completion: { asyncResult in
-        var result = Acquistions_getEpics_result()
+        var result = Acquisitions_getEpics_result()
         do {
           try result.success = asyncResult.get()
         } catch let error as TApplicationError {
@@ -1507,12 +1507,12 @@ extension AcquistionsProcessorAsync : TProcessor {
     }
     processorHandlers["epicSeen"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Acquistions_epicSeen_args.read(from: inProtocol)
+      let args = try Acquisitions_epicSeen_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
       handler.epicSeen(completion: { asyncResult in
-        var result = Acquistions_epicSeen_result()
+        var result = Acquisitions_epicSeen_result()
         do {
           try asyncResult.get()
         } catch let error as TApplicationError {
@@ -1537,7 +1537,7 @@ extension AcquistionsProcessorAsync : TProcessor {
 
     let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
 
-    if let processorHandler = AcquistionsProcessorAsync.processorHandlers[messageName] {
+    if let processorHandler = AcquisitionsProcessorAsync.processorHandlers[messageName] {
       do {
         try processorHandler(sequenceID, inProtocol, outProtocol, service)
       }
