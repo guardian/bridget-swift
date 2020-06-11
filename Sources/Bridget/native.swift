@@ -20,17 +20,20 @@ public final class AdSlot {
 
   public var width: Int32?
 
+  public var targetingParams: TMap<String, String>?
+
 
   public init(x: Int32, y: Int32) {
     self.x = x
     self.y = y
   }
 
-  public init(x: Int32, y: Int32, height: Int32?, width: Int32?) {
+  public init(x: Int32, y: Int32, height: Int32?, width: Int32?, targetingParams: TMap<String, String>?) {
     self.x = x
     self.y = y
     self.height = height
     self.width = width
+    self.targetingParams = targetingParams
   }
 
 }
@@ -449,6 +452,6 @@ open class GalleryProcessorAsync /* Gallery */ {
 
 }
 
-public let BRIDGET_VERSION : String = "0.60.0"
+public let BRIDGET_VERSION : String = "0.61.0"
 
 

@@ -15,7 +15,8 @@ public func ==(lhs: AdSlot, rhs: AdSlot) -> Bool {
     (lhs.x == rhs.x) &&
     (lhs.y == rhs.y) &&
     (lhs.height == rhs.height) &&
-    (lhs.width == rhs.width)
+    (lhs.width == rhs.width) &&
+    (lhs.targetingParams == rhs.targetingParams)
 }
 
 extension AdSlot : CustomStringConvertible {
@@ -25,7 +26,8 @@ extension AdSlot : CustomStringConvertible {
     desc += "x=\(String(describing: self.x)), "
     desc += "y=\(String(describing: self.y)), "
     desc += "height=\(String(describing: self.height)), "
-    desc += "width=\(String(describing: self.width))"
+    desc += "width=\(String(describing: self.width)), "
+    desc += "targetingParams=\(String(describing: self.targetingParams))"
     return desc
   }
 
@@ -38,6 +40,7 @@ extension AdSlot : Hashable {
     hasher.combine(y)
     hasher.combine(height)
     hasher.combine(width)
+    hasher.combine(targetingParams)
   }
 
 }
@@ -45,7 +48,7 @@ extension AdSlot : Hashable {
 extension AdSlot : TStruct {
 
   public static var fieldIds: [String: Int32] {
-    return ["x": 1, "y": 2, "height": 3, "width": 4, ]
+    return ["x": 1, "y": 2, "height": 3, "width": 4, "targetingParams": 5, ]
   }
 
   public static var structName: String { return "AdSlot" }
@@ -56,6 +59,7 @@ extension AdSlot : TStruct {
     var y: Int32!
     var height: Int32?
     var width: Int32?
+    var targetingParams: TMap<String, String>?
 
     fields: while true {
 
@@ -67,6 +71,7 @@ extension AdSlot : TStruct {
         case (2, .i32):             y = try Int32.read(from: proto)
         case (3, .i32):             height = try Int32.read(from: proto)
         case (4, .i32):             width = try Int32.read(from: proto)
+        case (5, .map):             targetingParams = try TMap<String, String>.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -78,7 +83,7 @@ extension AdSlot : TStruct {
     try proto.validateValue(x, named: "x")
     try proto.validateValue(y, named: "y")
 
-    return AdSlot(x: x, y: y, height: height, width: width)
+    return AdSlot(x: x, y: y, height: height, width: width, targetingParams: targetingParams)
   }
 
 }
