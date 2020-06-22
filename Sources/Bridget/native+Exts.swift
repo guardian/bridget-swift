@@ -501,6 +501,208 @@ extension VideoSlot : TStruct {
 
 
 
+public func ==(lhs: MetricPaint, rhs: MetricPaint) -> Bool {
+  return
+    (lhs.time == rhs.time)
+}
+
+extension MetricPaint : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "MetricPaint("
+    desc += "time=\(String(describing: self.time))"
+    return desc
+  }
+
+}
+
+extension MetricPaint : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(time)
+  }
+
+}
+
+extension MetricPaint : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["time": 1, ]
+  }
+
+  public static var structName: String { return "MetricPaint" }
+
+  public static func read(from proto: TProtocol) throws -> MetricPaint {
+    _ = try proto.readStructBegin()
+    var time: Double!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .double):           time = try Double.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(time, named: "time")
+
+    return MetricPaint(time: time)
+  }
+
+}
+
+
+
+public func ==(lhs: MetricFont, rhs: MetricFont) -> Bool {
+  return
+    (lhs.duration == rhs.duration) &&
+    (lhs.size == rhs.size) &&
+    (lhs.name == rhs.name)
+}
+
+extension MetricFont : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "MetricFont("
+    desc += "duration=\(String(describing: self.duration)), "
+    desc += "size=\(String(describing: self.size)), "
+    desc += "name=\(String(describing: self.name))"
+    return desc
+  }
+
+}
+
+extension MetricFont : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(duration)
+    hasher.combine(size)
+    hasher.combine(name)
+  }
+
+}
+
+extension MetricFont : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["duration": 1, "size": 2, "name": 3, ]
+  }
+
+  public static var structName: String { return "MetricFont" }
+
+  public static func read(from proto: TProtocol) throws -> MetricFont {
+    _ = try proto.readStructBegin()
+    var duration: Double!
+    var size: Int32?
+    var name: String?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .double):           duration = try Double.read(from: proto)
+        case (2, .i32):             size = try Int32.read(from: proto)
+        case (3, .string):           name = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(duration, named: "duration")
+
+    return MetricFont(duration: duration, size: size, name: name)
+  }
+
+}
+
+
+
+public func ==(lhs: Metric, rhs: Metric) -> Bool {
+  return {
+    switch (lhs, rhs) {
+    case (.firstPaint(let lval), .firstPaint(let rval)): return lval == rval
+    case (.firstContentfulPaint(let lval), .firstContentfulPaint(let rval)): return lval == rval
+    case (.font(let lval), .font(let rval)): return lval == rval
+    default: return false
+    }
+  }()
+}
+
+extension Metric : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "Metric."
+    switch self {
+    case .firstPaint(let val): desc += "firstPaint(val: \(val))"
+    case .firstContentfulPaint(let val): desc += "firstContentfulPaint(val: \(val))"
+    case .font(let val): desc += "font(val: \(val))"
+    }
+    return desc
+  }
+
+}
+
+extension Metric : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    switch self {
+    case .firstPaint(let val): hasher.combine(val)
+    case .firstContentfulPaint(let val): hasher.combine(val)
+    case .font(let val): hasher.combine(val)
+    }
+
+  }
+
+}
+
+extension Metric : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["firstPaint": 1, "firstContentfulPaint": 2, "font": 3, ]
+  }
+
+  public static var structName: String { return "Metric" }
+
+  public static func read(from proto: TProtocol) throws -> Metric {
+    _ = try proto.readStructBegin()
+    var ret: Metric?
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):                   ret = Metric.firstPaint(val: try MetricPaint.read(from: proto))
+        case (2, .struct):                   ret = Metric.firstContentfulPaint(val: try MetricPaint.read(from: proto))
+        case (3, .struct):                   ret = Metric.font(val: try MetricFont.read(from: proto))
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    if let ret = ret {
+      return ret
+    }
+
+    throw TProtocolError(error: .unknown, message: "Missing required value for type: Metric")  }
+
+}
+
+
+
 fileprivate final class Environment_nativeThriftPackageVersion_args {
 
 
@@ -3188,6 +3390,240 @@ extension VideosProcessorAsync : TProcessor {
     let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
 
     if let processorHandler = VideosProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+fileprivate final class Metrics_sendMetrics_args {
+
+  fileprivate var metrics: TList<Metric>
+
+
+  fileprivate init(metrics: TList<Metric>) {
+    self.metrics = metrics
+  }
+
+}
+
+fileprivate func ==(lhs: Metrics_sendMetrics_args, rhs: Metrics_sendMetrics_args) -> Bool {
+  return
+    (lhs.metrics == rhs.metrics)
+}
+
+extension Metrics_sendMetrics_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(metrics)
+  }
+
+}
+
+extension Metrics_sendMetrics_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["metrics": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Metrics_sendMetrics_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Metrics_sendMetrics_args {
+    _ = try proto.readStructBegin()
+    var metrics: TList<Metric>!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .list):            metrics = try TList<Metric>.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(metrics, named: "metrics")
+
+    return Metrics_sendMetrics_args(metrics: metrics)
+  }
+
+}
+
+
+
+fileprivate final class Metrics_sendMetrics_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Metrics_sendMetrics_result, rhs: Metrics_sendMetrics_result) -> Bool {
+  return true
+}
+
+extension Metrics_sendMetrics_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Metrics_sendMetrics_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Metrics_sendMetrics_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Metrics_sendMetrics_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Metrics_sendMetrics_result()
+  }
+
+}
+
+
+
+extension MetricsClient : Metrics {
+
+  private func send_sendMetrics(metrics: TList<Metric>) throws {
+    try outProtocol.writeMessageBegin(name: "sendMetrics", type: .call, sequenceID: 0)
+    let args = Metrics_sendMetrics_args(metrics: metrics)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_sendMetrics() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Metrics_sendMetrics_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func sendMetrics(metrics: TList<Metric>) throws {
+    try send_sendMetrics(metrics: metrics)
+    try outProtocol.transport.flush()
+    try recv_sendMetrics()
+  }
+
+}
+
+extension MetricsProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["sendMetrics"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Metrics_sendMetrics_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Metrics_sendMetrics_result()
+      do {
+        try handler.sendMetrics(metrics: args.metrics)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "sendMetrics", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = MetricsProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+extension MetricsProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["sendMetrics"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Metrics_sendMetrics_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.sendMetrics(metrics: args.metrics, completion: { asyncResult in
+        var result = Metrics_sendMetrics_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "sendMetrics", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "sendMetrics", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "sendMetrics", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = MetricsProcessorAsync.processorHandlers[messageName] {
       do {
         try processorHandler(sequenceID, inProtocol, outProtocol, service)
       }

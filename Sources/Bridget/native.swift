@@ -144,6 +144,47 @@ public final class VideoSlot {
 
 }
 
+public final class MetricPaint {
+
+  public var time: Double
+
+
+  public init(time: Double) {
+    self.time = time
+  }
+
+}
+
+public final class MetricFont {
+
+  public var duration: Double
+
+  public var size: Int32?
+
+  public var name: String?
+
+
+  public init(duration: Double) {
+    self.duration = duration
+  }
+
+  public init(duration: Double, size: Int32?, name: String?) {
+    self.duration = duration
+    self.size = size
+    self.name = name
+  }
+
+}
+
+public enum Metric {
+
+  case firstPaint(val: MetricPaint)
+
+  case firstContentfulPaint(val: MetricPaint)
+
+  case font(val: MetricFont)
+}
+
 public protocol Environment {
 
   ///
@@ -542,6 +583,54 @@ open class VideosProcessorAsync /* Videos */ {
 
 }
 
-public let BRIDGET_VERSION : String = "0.62.0"
+public protocol Metrics {
+
+  ///
+  /// - Parameters:
+  ///   - metrics: 
+  /// - Throws: 
+  func sendMetrics(metrics: TList<Metric>) throws
+
+}
+
+open class MetricsClient : TClient /* , Metrics */ {
+
+}
+
+public protocol MetricsAsync {
+
+  ///
+  /// - Parameters:
+  ///   - metrics: 
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func sendMetrics(metrics: TList<Metric>, completion: @escaping (Result<Void, Error>) -> Void)
+
+}
+
+open class MetricsProcessor /* Metrics */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Metrics) throws -> Void]
+
+  public var service: Metrics
+
+  public required init(service: Metrics) {
+    self.service = service
+  }
+
+}
+
+open class MetricsProcessorAsync /* Metrics */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, MetricsAsync) throws -> Void]
+
+  public var service: MetricsAsync
+
+  public required init(service: MetricsAsync) {
+    self.service = service
+  }
+
+}
+
+public let BRIDGET_VERSION : String = "0.63.0"
 
 
