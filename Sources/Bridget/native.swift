@@ -10,29 +10,39 @@ import Foundation
 import Thrift
 
 
-public final class AdSlot {
+public final class Rect {
 
   public var x: Int32
 
   public var y: Int32
 
-  public var height: Int32?
+  public var height: Int32
 
-  public var width: Int32?
-
-  public var targetingParams: TMap<String, String>?
+  public var width: Int32
 
 
-  public init(x: Int32, y: Int32) {
-    self.x = x
-    self.y = y
-  }
-
-  public init(x: Int32, y: Int32, height: Int32?, width: Int32?, targetingParams: TMap<String, String>?) {
+  public init(x: Int32, y: Int32, height: Int32, width: Int32) {
     self.x = x
     self.y = y
     self.height = height
     self.width = width
+  }
+
+}
+
+public final class AdSlot {
+
+  public var rect: Rect
+
+  public var targetingParams: TMap<String, String>?
+
+
+  public init(rect: Rect) {
+    self.rect = rect
+  }
+
+  public init(rect: Rect, targetingParams: TMap<String, String>?) {
+    self.rect = rect
     self.targetingParams = targetingParams
   }
 
@@ -110,6 +120,26 @@ public final class MaybeEpic {
   public init() { }
   public init(epic: Epic?) {
     self.epic = epic
+  }
+
+}
+
+public final class VideoSlot {
+
+  public var rect: Rect
+
+  public var videoId: String
+
+  public var posterUrl: String
+
+  public var duration: Int32
+
+
+  public init(rect: Rect, videoId: String, posterUrl: String, duration: Int32) {
+    self.rect = rect
+    self.videoId = videoId
+    self.posterUrl = posterUrl
+    self.duration = duration
   }
 
 }
@@ -452,6 +482,66 @@ open class GalleryProcessorAsync /* Gallery */ {
 
 }
 
-public let BRIDGET_VERSION : String = "0.61.0"
+public protocol Videos {
+
+  ///
+  /// - Parameters:
+  ///   - videoSlots: 
+  /// - Throws: 
+  func insertVideos(videoSlots: TList<VideoSlot>) throws
+
+  ///
+  /// - Parameters:
+  ///   - videoSlots: 
+  /// - Throws: 
+  func updateVideos(videoSlots: TList<VideoSlot>) throws
+
+}
+
+open class VideosClient : TClient /* , Videos */ {
+
+}
+
+public protocol VideosAsync {
+
+  ///
+  /// - Parameters:
+  ///   - videoSlots: 
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func insertVideos(videoSlots: TList<VideoSlot>, completion: @escaping (Result<Void, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - videoSlots: 
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func updateVideos(videoSlots: TList<VideoSlot>, completion: @escaping (Result<Void, Error>) -> Void)
+
+}
+
+open class VideosProcessor /* Videos */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Videos) throws -> Void]
+
+  public var service: Videos
+
+  public required init(service: Videos) {
+    self.service = service
+  }
+
+}
+
+open class VideosProcessorAsync /* Videos */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, VideosAsync) throws -> Void]
+
+  public var service: VideosAsync
+
+  public required init(service: VideosAsync) {
+    self.service = service
+  }
+
+}
+
+public let BRIDGET_VERSION : String = "0.62.0"
 
 

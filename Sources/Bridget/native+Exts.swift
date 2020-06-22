@@ -10,56 +10,52 @@ import Foundation
 import Thrift
 
 
-public func ==(lhs: AdSlot, rhs: AdSlot) -> Bool {
+public func ==(lhs: Rect, rhs: Rect) -> Bool {
   return
     (lhs.x == rhs.x) &&
     (lhs.y == rhs.y) &&
     (lhs.height == rhs.height) &&
-    (lhs.width == rhs.width) &&
-    (lhs.targetingParams == rhs.targetingParams)
+    (lhs.width == rhs.width)
 }
 
-extension AdSlot : CustomStringConvertible {
+extension Rect : CustomStringConvertible {
 
   public var description : String {
-    var desc = "AdSlot("
+    var desc = "Rect("
     desc += "x=\(String(describing: self.x)), "
     desc += "y=\(String(describing: self.y)), "
     desc += "height=\(String(describing: self.height)), "
-    desc += "width=\(String(describing: self.width)), "
-    desc += "targetingParams=\(String(describing: self.targetingParams))"
+    desc += "width=\(String(describing: self.width))"
     return desc
   }
 
 }
 
-extension AdSlot : Hashable {
+extension Rect : Hashable {
 
   public func hash(into hasher: inout Hasher) {
     hasher.combine(x)
     hasher.combine(y)
     hasher.combine(height)
     hasher.combine(width)
-    hasher.combine(targetingParams)
   }
 
 }
 
-extension AdSlot : TStruct {
+extension Rect : TStruct {
 
   public static var fieldIds: [String: Int32] {
-    return ["x": 1, "y": 2, "height": 3, "width": 4, "targetingParams": 5, ]
+    return ["x": 1, "y": 2, "height": 3, "width": 4, ]
   }
 
-  public static var structName: String { return "AdSlot" }
+  public static var structName: String { return "Rect" }
 
-  public static func read(from proto: TProtocol) throws -> AdSlot {
+  public static func read(from proto: TProtocol) throws -> Rect {
     _ = try proto.readStructBegin()
     var x: Int32!
     var y: Int32!
-    var height: Int32?
-    var width: Int32?
-    var targetingParams: TMap<String, String>?
+    var height: Int32!
+    var width: Int32!
 
     fields: while true {
 
@@ -71,7 +67,6 @@ extension AdSlot : TStruct {
         case (2, .i32):             y = try Int32.read(from: proto)
         case (3, .i32):             height = try Int32.read(from: proto)
         case (4, .i32):             width = try Int32.read(from: proto)
-        case (5, .map):             targetingParams = try TMap<String, String>.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -82,8 +77,74 @@ extension AdSlot : TStruct {
     // Required fields
     try proto.validateValue(x, named: "x")
     try proto.validateValue(y, named: "y")
+    try proto.validateValue(height, named: "height")
+    try proto.validateValue(width, named: "width")
 
-    return AdSlot(x: x, y: y, height: height, width: width, targetingParams: targetingParams)
+    return Rect(x: x, y: y, height: height, width: width)
+  }
+
+}
+
+
+
+public func ==(lhs: AdSlot, rhs: AdSlot) -> Bool {
+  return
+    (lhs.rect == rhs.rect) &&
+    (lhs.targetingParams == rhs.targetingParams)
+}
+
+extension AdSlot : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "AdSlot("
+    desc += "rect=\(String(describing: self.rect)), "
+    desc += "targetingParams=\(String(describing: self.targetingParams))"
+    return desc
+  }
+
+}
+
+extension AdSlot : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(rect)
+    hasher.combine(targetingParams)
+  }
+
+}
+
+extension AdSlot : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["rect": 1, "targetingParams": 2, ]
+  }
+
+  public static var structName: String { return "AdSlot" }
+
+  public static func read(from proto: TProtocol) throws -> AdSlot {
+    _ = try proto.readStructBegin()
+    var rect: Rect!
+    var targetingParams: TMap<String, String>?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           rect = try Rect.read(from: proto)
+        case (2, .map):             targetingParams = try TMap<String, String>.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(rect, named: "rect")
+
+    return AdSlot(rect: rect, targetingParams: targetingParams)
   }
 
 }
@@ -357,6 +418,83 @@ extension MaybeEpic : TStruct {
     try proto.readStructEnd()
 
     return MaybeEpic(epic: epic)
+  }
+
+}
+
+
+
+public func ==(lhs: VideoSlot, rhs: VideoSlot) -> Bool {
+  return
+    (lhs.rect == rhs.rect) &&
+    (lhs.videoId == rhs.videoId) &&
+    (lhs.posterUrl == rhs.posterUrl) &&
+    (lhs.duration == rhs.duration)
+}
+
+extension VideoSlot : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "VideoSlot("
+    desc += "rect=\(String(describing: self.rect)), "
+    desc += "videoId=\(String(describing: self.videoId)), "
+    desc += "posterUrl=\(String(describing: self.posterUrl)), "
+    desc += "duration=\(String(describing: self.duration))"
+    return desc
+  }
+
+}
+
+extension VideoSlot : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(rect)
+    hasher.combine(videoId)
+    hasher.combine(posterUrl)
+    hasher.combine(duration)
+  }
+
+}
+
+extension VideoSlot : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["rect": 1, "videoId": 2, "posterUrl": 3, "duration": 4, ]
+  }
+
+  public static var structName: String { return "VideoSlot" }
+
+  public static func read(from proto: TProtocol) throws -> VideoSlot {
+    _ = try proto.readStructBegin()
+    var rect: Rect!
+    var videoId: String!
+    var posterUrl: String!
+    var duration: Int32!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           rect = try Rect.read(from: proto)
+        case (2, .string):           videoId = try String.read(from: proto)
+        case (3, .string):           posterUrl = try String.read(from: proto)
+        case (4, .i32):             duration = try Int32.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(rect, named: "rect")
+    try proto.validateValue(videoId, named: "videoId")
+    try proto.validateValue(posterUrl, named: "posterUrl")
+    try proto.validateValue(duration, named: "duration")
+
+    return VideoSlot(rect: rect, videoId: videoId, posterUrl: posterUrl, duration: duration)
   }
 
 }
@@ -2646,6 +2784,410 @@ extension GalleryProcessorAsync : TProcessor {
     let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
 
     if let processorHandler = GalleryProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+fileprivate final class Videos_insertVideos_args {
+
+  fileprivate var videoSlots: TList<VideoSlot>
+
+
+  fileprivate init(videoSlots: TList<VideoSlot>) {
+    self.videoSlots = videoSlots
+  }
+
+}
+
+fileprivate func ==(lhs: Videos_insertVideos_args, rhs: Videos_insertVideos_args) -> Bool {
+  return
+    (lhs.videoSlots == rhs.videoSlots)
+}
+
+extension Videos_insertVideos_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(videoSlots)
+  }
+
+}
+
+extension Videos_insertVideos_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["videoSlots": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Videos_insertVideos_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_insertVideos_args {
+    _ = try proto.readStructBegin()
+    var videoSlots: TList<VideoSlot>!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .list):            videoSlots = try TList<VideoSlot>.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(videoSlots, named: "videoSlots")
+
+    return Videos_insertVideos_args(videoSlots: videoSlots)
+  }
+
+}
+
+
+
+fileprivate final class Videos_insertVideos_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Videos_insertVideos_result, rhs: Videos_insertVideos_result) -> Bool {
+  return true
+}
+
+extension Videos_insertVideos_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Videos_insertVideos_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Videos_insertVideos_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_insertVideos_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Videos_insertVideos_result()
+  }
+
+}
+
+
+
+fileprivate final class Videos_updateVideos_args {
+
+  fileprivate var videoSlots: TList<VideoSlot>
+
+
+  fileprivate init(videoSlots: TList<VideoSlot>) {
+    self.videoSlots = videoSlots
+  }
+
+}
+
+fileprivate func ==(lhs: Videos_updateVideos_args, rhs: Videos_updateVideos_args) -> Bool {
+  return
+    (lhs.videoSlots == rhs.videoSlots)
+}
+
+extension Videos_updateVideos_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(videoSlots)
+  }
+
+}
+
+extension Videos_updateVideos_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["videoSlots": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Videos_updateVideos_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_updateVideos_args {
+    _ = try proto.readStructBegin()
+    var videoSlots: TList<VideoSlot>!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .list):            videoSlots = try TList<VideoSlot>.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(videoSlots, named: "videoSlots")
+
+    return Videos_updateVideos_args(videoSlots: videoSlots)
+  }
+
+}
+
+
+
+fileprivate final class Videos_updateVideos_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Videos_updateVideos_result, rhs: Videos_updateVideos_result) -> Bool {
+  return true
+}
+
+extension Videos_updateVideos_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Videos_updateVideos_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Videos_updateVideos_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_updateVideos_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Videos_updateVideos_result()
+  }
+
+}
+
+
+
+extension VideosClient : Videos {
+
+  private func send_insertVideos(videoSlots: TList<VideoSlot>) throws {
+    try outProtocol.writeMessageBegin(name: "insertVideos", type: .call, sequenceID: 0)
+    let args = Videos_insertVideos_args(videoSlots: videoSlots)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_insertVideos() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Videos_insertVideos_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func insertVideos(videoSlots: TList<VideoSlot>) throws {
+    try send_insertVideos(videoSlots: videoSlots)
+    try outProtocol.transport.flush()
+    try recv_insertVideos()
+  }
+
+  private func send_updateVideos(videoSlots: TList<VideoSlot>) throws {
+    try outProtocol.writeMessageBegin(name: "updateVideos", type: .call, sequenceID: 0)
+    let args = Videos_updateVideos_args(videoSlots: videoSlots)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_updateVideos() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Videos_updateVideos_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func updateVideos(videoSlots: TList<VideoSlot>) throws {
+    try send_updateVideos(videoSlots: videoSlots)
+    try outProtocol.transport.flush()
+    try recv_updateVideos()
+  }
+
+}
+
+extension VideosProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["insertVideos"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_insertVideos_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Videos_insertVideos_result()
+      do {
+        try handler.insertVideos(videoSlots: args.videoSlots)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "insertVideos", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["updateVideos"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_updateVideos_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Videos_updateVideos_result()
+      do {
+        try handler.updateVideos(videoSlots: args.videoSlots)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "updateVideos", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = VideosProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+extension VideosProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["insertVideos"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_insertVideos_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.insertVideos(videoSlots: args.videoSlots, completion: { asyncResult in
+        var result = Videos_insertVideos_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "insertVideos", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "insertVideos", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "insertVideos", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["updateVideos"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_updateVideos_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.updateVideos(videoSlots: args.videoSlots, completion: { asyncResult in
+        var result = Videos_updateVideos_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "updateVideos", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "updateVideos", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "updateVideos", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = VideosProcessorAsync.processorHandlers[messageName] {
       do {
         try processorHandler(sequenceID, inProtocol, outProtocol, service)
       }
