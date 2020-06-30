@@ -12,16 +12,16 @@ import Thrift
 
 public final class Rect {
 
-  public var x: Int32
+  public var x: Double
 
-  public var y: Int32
+  public var y: Double
 
-  public var height: Int32
+  public var height: Double
 
-  public var width: Int32
+  public var width: Double
 
 
-  public init(x: Int32, y: Int32, height: Int32, width: Int32) {
+  public init(x: Double, y: Double, height: Double, width: Double) {
     self.x = x
     self.y = y
     self.height = height
@@ -631,6 +631,6 @@ open class MetricsProcessorAsync /* Metrics */ {
 
 }
 
-public let BRIDGET_VERSION : String = "0.63.0"
+public let BRIDGET_VERSION : String = "0.64.0"
 
 

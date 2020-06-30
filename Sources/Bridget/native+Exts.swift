@@ -52,10 +52,10 @@ extension Rect : TStruct {
 
   public static func read(from proto: TProtocol) throws -> Rect {
     _ = try proto.readStructBegin()
-    var x: Int32!
-    var y: Int32!
-    var height: Int32!
-    var width: Int32!
+    var x: Double!
+    var y: Double!
+    var height: Double!
+    var width: Double!
 
     fields: while true {
 
@@ -63,10 +63,10 @@ extension Rect : TStruct {
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
-        case (1, .i32):             x = try Int32.read(from: proto)
-        case (2, .i32):             y = try Int32.read(from: proto)
-        case (3, .i32):             height = try Int32.read(from: proto)
-        case (4, .i32):             width = try Int32.read(from: proto)
+        case (1, .double):           x = try Double.read(from: proto)
+        case (2, .double):           y = try Double.read(from: proto)
+        case (3, .double):           height = try Double.read(from: proto)
+        case (4, .double):           width = try Double.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
