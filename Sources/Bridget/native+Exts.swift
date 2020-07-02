@@ -225,6 +225,8 @@ extension Topic : TStruct {
 public func ==(lhs: Image, rhs: Image) -> Bool {
   return
     (lhs.url == rhs.url) &&
+    (lhs.width == rhs.width) &&
+    (lhs.height == rhs.height) &&
     (lhs.caption == rhs.caption) &&
     (lhs.credit == rhs.credit)
 }
@@ -234,6 +236,8 @@ extension Image : CustomStringConvertible {
   public var description : String {
     var desc = "Image("
     desc += "url=\(String(describing: self.url)), "
+    desc += "width=\(String(describing: self.width)), "
+    desc += "height=\(String(describing: self.height)), "
     desc += "caption=\(String(describing: self.caption)), "
     desc += "credit=\(String(describing: self.credit))"
     return desc
@@ -245,6 +249,8 @@ extension Image : Hashable {
 
   public func hash(into hasher: inout Hasher) {
     hasher.combine(url)
+    hasher.combine(width)
+    hasher.combine(height)
     hasher.combine(caption)
     hasher.combine(credit)
   }
@@ -254,7 +260,7 @@ extension Image : Hashable {
 extension Image : TStruct {
 
   public static var fieldIds: [String: Int32] {
-    return ["url": 1, "caption": 2, "credit": 3, ]
+    return ["url": 1, "width": 2, "height": 3, "caption": 4, "credit": 5, ]
   }
 
   public static var structName: String { return "Image" }
@@ -262,6 +268,8 @@ extension Image : TStruct {
   public static func read(from proto: TProtocol) throws -> Image {
     _ = try proto.readStructBegin()
     var url: String!
+    var width: Double!
+    var height: Double!
     var caption: String?
     var credit: String?
 
@@ -272,8 +280,10 @@ extension Image : TStruct {
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
         case (1, .string):           url = try String.read(from: proto)
-        case (2, .string):           caption = try String.read(from: proto)
-        case (3, .string):           credit = try String.read(from: proto)
+        case (2, .double):           width = try Double.read(from: proto)
+        case (3, .double):           height = try Double.read(from: proto)
+        case (4, .string):           caption = try String.read(from: proto)
+        case (5, .string):           credit = try String.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -283,8 +293,10 @@ extension Image : TStruct {
     try proto.readStructEnd()
     // Required fields
     try proto.validateValue(url, named: "url")
+    try proto.validateValue(width, named: "width")
+    try proto.validateValue(height, named: "height")
 
-    return Image(url: url, caption: caption, credit: credit)
+    return Image(url: url, width: width, height: height, caption: caption, credit: credit)
   }
 
 }

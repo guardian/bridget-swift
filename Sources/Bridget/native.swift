@@ -69,17 +69,25 @@ public final class Image {
 
   public var url: String
 
+  public var width: Double
+
+  public var height: Double
+
   public var caption: String?
 
   public var credit: String?
 
 
-  public init(url: String) {
+  public init(url: String, width: Double, height: Double) {
     self.url = url
+    self.width = width
+    self.height = height
   }
 
-  public init(url: String, caption: String?, credit: String?) {
+  public init(url: String, width: Double, height: Double, caption: String?, credit: String?) {
     self.url = url
+    self.width = width
+    self.height = height
     self.caption = caption
     self.credit = credit
   }
@@ -631,6 +639,6 @@ open class MetricsProcessorAsync /* Metrics */ {
 
 }
 
-public let BRIDGET_VERSION : String = "0.64.0"
+public let BRIDGET_VERSION : String = "0.65.0"
 
 
