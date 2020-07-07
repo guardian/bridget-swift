@@ -481,7 +481,7 @@ extension VideoSlot : TStruct {
     var rect: Rect!
     var videoId: String!
     var posterUrl: String!
-    var duration: Int32!
+    var duration: Int32?
 
     fields: while true {
 
@@ -504,7 +504,6 @@ extension VideoSlot : TStruct {
     try proto.validateValue(rect, named: "rect")
     try proto.validateValue(videoId, named: "videoId")
     try proto.validateValue(posterUrl, named: "posterUrl")
-    try proto.validateValue(duration, named: "duration")
 
     return VideoSlot(rect: rect, videoId: videoId, posterUrl: posterUrl, duration: duration)
   }

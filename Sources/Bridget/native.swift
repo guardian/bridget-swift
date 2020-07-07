@@ -140,10 +140,16 @@ public final class VideoSlot {
 
   public var posterUrl: String
 
-  public var duration: Int32
+  public var duration: Int32?
 
 
-  public init(rect: Rect, videoId: String, posterUrl: String, duration: Int32) {
+  public init(rect: Rect, videoId: String, posterUrl: String) {
+    self.rect = rect
+    self.videoId = videoId
+    self.posterUrl = posterUrl
+  }
+
+  public init(rect: Rect, videoId: String, posterUrl: String, duration: Int32?) {
     self.rect = rect
     self.videoId = videoId
     self.posterUrl = posterUrl
@@ -639,6 +645,6 @@ open class MetricsProcessorAsync /* Metrics */ {
 
 }
 
-public let BRIDGET_VERSION : String = "0.65.0"
+public let BRIDGET_VERSION : String = "0.66.0"
 
 
