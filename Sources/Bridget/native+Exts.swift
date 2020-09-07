@@ -2634,6 +2634,125 @@ extension User_isPremium_result : TStruct {
 
 
 
+fileprivate final class User_filterSeenArticles_args {
+
+  fileprivate var articleIds: TList<String>
+
+
+  fileprivate init(articleIds: TList<String>) {
+    self.articleIds = articleIds
+  }
+
+}
+
+fileprivate func ==(lhs: User_filterSeenArticles_args, rhs: User_filterSeenArticles_args) -> Bool {
+  return
+    (lhs.articleIds == rhs.articleIds)
+}
+
+extension User_filterSeenArticles_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(articleIds)
+  }
+
+}
+
+extension User_filterSeenArticles_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["articleIds": 1, ]
+  }
+
+  fileprivate static var structName: String { return "User_filterSeenArticles_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> User_filterSeenArticles_args {
+    _ = try proto.readStructBegin()
+    var articleIds: TList<String>!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .list):            articleIds = try TList<String>.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(articleIds, named: "articleIds")
+
+    return User_filterSeenArticles_args(articleIds: articleIds)
+  }
+
+}
+
+
+
+fileprivate final class User_filterSeenArticles_result {
+
+  fileprivate var success: TList<String>?
+
+
+  fileprivate init() { }
+  fileprivate init(success: TList<String>?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: User_filterSeenArticles_result, rhs: User_filterSeenArticles_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension User_filterSeenArticles_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension User_filterSeenArticles_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "User_filterSeenArticles_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> User_filterSeenArticles_result {
+    _ = try proto.readStructBegin()
+    var success: TList<String>?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .list):            success = try TList<String>.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return User_filterSeenArticles_result(success: success)
+  }
+
+}
+
+
+
 extension UserClient : User {
 
   private func send_isPremium() throws {
@@ -2660,6 +2779,30 @@ extension UserClient : User {
     return try recv_isPremium()
   }
 
+  private func send_filterSeenArticles(articleIds: TList<String>) throws {
+    try outProtocol.writeMessageBegin(name: "filterSeenArticles", type: .call, sequenceID: 0)
+    let args = User_filterSeenArticles_args(articleIds: articleIds)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_filterSeenArticles() throws -> TList<String> {
+    try inProtocol.readResultMessageBegin() 
+    let result = try User_filterSeenArticles_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "filterSeenArticles"))
+  }
+
+  public func filterSeenArticles(articleIds: TList<String>) throws -> TList<String> {
+    try send_filterSeenArticles(articleIds: articleIds)
+    try outProtocol.transport.flush()
+    return try recv_filterSeenArticles()
+  }
+
 }
 
 extension UserProcessor : TProcessor {
@@ -2681,6 +2824,22 @@ extension UserProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "isPremium", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["filterSeenArticles"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try User_filterSeenArticles_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = User_filterSeenArticles_result()
+      do {
+        result.success = try handler.filterSeenArticles(articleIds: args.articleIds)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "filterSeenArticles", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
@@ -2733,6 +2892,31 @@ extension UserProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "isPremium", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["filterSeenArticles"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try User_filterSeenArticles_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.filterSeenArticles(articleIds: args.articleIds, completion: { asyncResult in
+        var result = User_filterSeenArticles_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "filterSeenArticles", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "filterSeenArticles", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "filterSeenArticles", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()

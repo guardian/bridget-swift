@@ -447,6 +447,13 @@ public protocol User {
   /// - Throws: 
   func isPremium() throws -> Bool
 
+  ///
+  /// - Parameters:
+  ///   - articleIds: 
+  /// - Returns: TList<String>
+  /// - Throws: 
+  func filterSeenArticles(articleIds: TList<String>) throws -> TList<String>
+
 }
 
 open class UserClient : TClient /* , User */ {
@@ -458,6 +465,12 @@ public protocol UserAsync {
   ///
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
   func isPremium(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - articleIds: 
+  ///   - completion: Result<TList<String>, Error> wrapping return and following Exceptions: 
+  func filterSeenArticles(articleIds: TList<String>, completion: @escaping (Result<TList<String>, Error>) -> Void)
 
 }
 
@@ -645,6 +658,6 @@ open class MetricsProcessorAsync /* Metrics */ {
 
 }
 
-public let BRIDGET_VERSION : String = "0.66.0"
+public let BRIDGET_VERSION : String = "0.67.0"
 
 
