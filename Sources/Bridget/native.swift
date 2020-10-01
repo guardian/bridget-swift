@@ -454,6 +454,11 @@ public protocol User {
   /// - Throws: 
   func filterSeenArticles(articleIds: TList<String>) throws -> TList<String>
 
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func doesCcpaApply() throws -> Bool
+
 }
 
 open class UserClient : TClient /* , User */ {
@@ -471,6 +476,10 @@ public protocol UserAsync {
   ///   - articleIds: 
   ///   - completion: Result<TList<String>, Error> wrapping return and following Exceptions: 
   func filterSeenArticles(articleIds: TList<String>, completion: @escaping (Result<TList<String>, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func doesCcpaApply(completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -658,6 +667,6 @@ open class MetricsProcessorAsync /* Metrics */ {
 
 }
 
-public let BRIDGET_VERSION : String = "0.67.0"
+public let BRIDGET_VERSION : String = "0.68.0-beta.1"
 
 

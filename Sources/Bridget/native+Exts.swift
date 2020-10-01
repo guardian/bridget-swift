@@ -2753,6 +2753,114 @@ extension User_filterSeenArticles_result : TStruct {
 
 
 
+fileprivate final class User_doesCcpaApply_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: User_doesCcpaApply_args, rhs: User_doesCcpaApply_args) -> Bool {
+  return true
+}
+
+extension User_doesCcpaApply_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension User_doesCcpaApply_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "User_doesCcpaApply_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> User_doesCcpaApply_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return User_doesCcpaApply_args()
+  }
+
+}
+
+
+
+fileprivate final class User_doesCcpaApply_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: User_doesCcpaApply_result, rhs: User_doesCcpaApply_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension User_doesCcpaApply_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension User_doesCcpaApply_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "User_doesCcpaApply_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> User_doesCcpaApply_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return User_doesCcpaApply_result(success: success)
+  }
+
+}
+
+
+
 extension UserClient : User {
 
   private func send_isPremium() throws {
@@ -2803,6 +2911,30 @@ extension UserClient : User {
     return try recv_filterSeenArticles()
   }
 
+  private func send_doesCcpaApply() throws {
+    try outProtocol.writeMessageBegin(name: "doesCcpaApply", type: .call, sequenceID: 0)
+    let args = User_doesCcpaApply_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_doesCcpaApply() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try User_doesCcpaApply_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "doesCcpaApply"))
+  }
+
+  public func doesCcpaApply() throws -> Bool {
+    try send_doesCcpaApply()
+    try outProtocol.transport.flush()
+    return try recv_doesCcpaApply()
+  }
+
 }
 
 extension UserProcessor : TProcessor {
@@ -2840,6 +2972,22 @@ extension UserProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "filterSeenArticles", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["doesCcpaApply"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try User_doesCcpaApply_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = User_doesCcpaApply_result()
+      do {
+        result.success = try handler.doesCcpaApply()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "doesCcpaApply", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
@@ -2917,6 +3065,31 @@ extension UserProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "filterSeenArticles", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["doesCcpaApply"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try User_doesCcpaApply_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.doesCcpaApply(completion: { asyncResult in
+        var result = User_doesCcpaApply_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "doesCcpaApply", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "doesCcpaApply", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "doesCcpaApply", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
