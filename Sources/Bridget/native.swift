@@ -459,10 +459,6 @@ public protocol User {
   /// - Throws: 
   func doesCcpaApply() throws -> Bool
 
-  ///
-  /// - Throws: 
-  func testFunction() throws
-
 }
 
 open class UserClient : TClient /* , User */ {
@@ -484,10 +480,6 @@ public protocol UserAsync {
   ///
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
   func doesCcpaApply(completion: @escaping (Result<Bool, Error>) -> Void)
-
-  ///
-  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
-  func testFunction(completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 
@@ -675,6 +667,6 @@ open class MetricsProcessorAsync /* Metrics */ {
 
 }
 
-public let BRIDGET_VERSION : String = "1.0.0"
+public let BRIDGET_VERSION : String = "1.1.0"
 
 

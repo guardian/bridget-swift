@@ -2861,104 +2861,6 @@ extension User_doesCcpaApply_result : TStruct {
 
 
 
-fileprivate final class User_testFunction_args {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: User_testFunction_args, rhs: User_testFunction_args) -> Bool {
-  return true
-}
-
-extension User_testFunction_args : Hashable {
-
-  fileprivate func hash(into hasher: inout Hasher) {
-  }
-
-}
-
-extension User_testFunction_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "User_testFunction_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> User_testFunction_args {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return User_testFunction_args()
-  }
-
-}
-
-
-
-fileprivate final class User_testFunction_result {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: User_testFunction_result, rhs: User_testFunction_result) -> Bool {
-  return true
-}
-
-extension User_testFunction_result : Hashable {
-
-  fileprivate func hash(into hasher: inout Hasher) {
-  }
-
-}
-
-extension User_testFunction_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "User_testFunction_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> User_testFunction_result {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return User_testFunction_result()
-  }
-
-}
-
-
-
 extension UserClient : User {
 
   private func send_isPremium() throws {
@@ -3033,26 +2935,6 @@ extension UserClient : User {
     return try recv_doesCcpaApply()
   }
 
-  private func send_testFunction() throws {
-    try outProtocol.writeMessageBegin(name: "testFunction", type: .call, sequenceID: 0)
-    let args = User_testFunction_args()
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_testFunction() throws {
-    try inProtocol.readResultMessageBegin() 
-    _ = try User_testFunction_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-  }
-
-  public func testFunction() throws {
-    try send_testFunction()
-    try outProtocol.transport.flush()
-    try recv_testFunction()
-  }
-
 }
 
 extension UserProcessor : TProcessor {
@@ -3106,22 +2988,6 @@ extension UserProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "doesCcpaApply", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-    }
-    processorHandlers["testFunction"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try User_testFunction_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = User_testFunction_result()
-      do {
-        try handler.testFunction()
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "testFunction", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
@@ -3224,31 +3090,6 @@ extension UserProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "doesCcpaApply", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
-    processorHandlers["testFunction"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try User_testFunction_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.testFunction(completion: { asyncResult in
-        var result = User_testFunction_result()
-        do {
-          try asyncResult.get()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "testFunction", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "testFunction", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "testFunction", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
