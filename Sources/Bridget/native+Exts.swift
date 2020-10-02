@@ -2912,25 +2912,17 @@ extension User_testFunction_args : TStruct {
 
 fileprivate final class User_testFunction_result {
 
-  fileprivate var success: Bool?
-
 
   fileprivate init() { }
-  fileprivate init(success: Bool?) {
-    self.success = success
-  }
-
 }
 
 fileprivate func ==(lhs: User_testFunction_result, rhs: User_testFunction_result) -> Bool {
-  return
-    (lhs.success == rhs.success)
+  return true
 }
 
 extension User_testFunction_result : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
-    hasher.combine(success)
   }
 
 }
@@ -2938,14 +2930,13 @@ extension User_testFunction_result : Hashable {
 extension User_testFunction_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
-    return ["success": 0, ]
+    return [:]
   }
 
   fileprivate static var structName: String { return "User_testFunction_result" }
 
   fileprivate static func read(from proto: TProtocol) throws -> User_testFunction_result {
     _ = try proto.readStructBegin()
-    var success: Bool?
 
     fields: while true {
 
@@ -2953,7 +2944,6 @@ extension User_testFunction_result : TStruct {
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
-        case (0, .bool):            success = try Bool.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -2962,7 +2952,7 @@ extension User_testFunction_result : TStruct {
 
     try proto.readStructEnd()
 
-    return User_testFunction_result(success: success)
+    return User_testFunction_result()
   }
 
 }
@@ -3050,21 +3040,17 @@ extension UserClient : User {
     try outProtocol.writeMessageEnd()
   }
 
-  private func recv_testFunction() throws -> Bool {
+  private func recv_testFunction() throws {
     try inProtocol.readResultMessageBegin() 
-    let result = try User_testFunction_result.read(from: inProtocol)
+    _ = try User_testFunction_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
 
-    if let success = result.success {
-      return success
-    }
-    throw TApplicationError(error: .missingResult(methodName: "testFunction"))
   }
 
-  public func testFunction() throws -> Bool {
+  public func testFunction() throws {
     try send_testFunction()
     try outProtocol.transport.flush()
-    return try recv_testFunction()
+    try recv_testFunction()
   }
 
 }
@@ -3131,7 +3117,7 @@ extension UserProcessor : TProcessor {
 
       var result = User_testFunction_result()
       do {
-        result.success = try handler.testFunction()
+        try handler.testFunction()
       }
       catch let error { throw error }
 
@@ -3253,7 +3239,7 @@ extension UserProcessorAsync : TProcessor {
       handler.testFunction(completion: { asyncResult in
         var result = User_testFunction_result()
         do {
-          try result.success = asyncResult.get()
+          try asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "testFunction", sequenceID: sequenceID, ex: error)
           return

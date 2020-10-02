@@ -460,9 +460,8 @@ public protocol User {
   func doesCcpaApply() throws -> Bool
 
   ///
-  /// - Returns: Bool
   /// - Throws: 
-  func testFunction() throws -> Bool
+  func testFunction() throws
 
 }
 
@@ -487,8 +486,8 @@ public protocol UserAsync {
   func doesCcpaApply(completion: @escaping (Result<Bool, Error>) -> Void)
 
   ///
-  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
-  func testFunction(completion: @escaping (Result<Bool, Error>) -> Void)
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func testFunction(completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 
@@ -676,6 +675,6 @@ open class MetricsProcessorAsync /* Metrics */ {
 
 }
 
-public let BRIDGET_VERSION : String = "0.68.0-beta.1"
+public let BRIDGET_VERSION : String = "1.0.0"
 
 
