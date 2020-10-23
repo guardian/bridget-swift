@@ -199,6 +199,32 @@ public enum Metric {
   case font(val: MetricFont)
 }
 
+public final class CommentResponse {
+
+  public var status: String
+
+  public var statusCode: Int32
+
+  public var message: String
+
+  public var errorCode: String?
+
+
+  public init(status: String, statusCode: Int32, message: String) {
+    self.status = status
+    self.statusCode = statusCode
+    self.message = message
+  }
+
+  public init(status: String, statusCode: Int32, message: String, errorCode: String?) {
+    self.status = status
+    self.statusCode = statusCode
+    self.message = message
+    self.errorCode = errorCode
+  }
+
+}
+
 public protocol Environment {
 
   ///
@@ -455,6 +481,11 @@ public protocol User {
   func filterSeenArticles(articleIds: TList<String>) throws -> TList<String>
 
   ///
+  /// - Returns: String
+  /// - Throws: 
+  func discussionId() throws -> String
+
+  ///
   /// - Returns: Bool
   /// - Throws: 
   func doesCcpaApply() throws -> Bool
@@ -476,6 +507,10 @@ public protocol UserAsync {
   ///   - articleIds: 
   ///   - completion: Result<TList<String>, Error> wrapping return and following Exceptions: 
   func filterSeenArticles(articleIds: TList<String>, completion: @escaping (Result<TList<String>, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<String, Error> wrapping return and following Exceptions: 
+  func discussionId(completion: @escaping (Result<String, Error>) -> Void)
 
   ///
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
@@ -667,6 +702,109 @@ open class MetricsProcessorAsync /* Metrics */ {
 
 }
 
-public let BRIDGET_VERSION : String = "1.1.0"
+public protocol Discussion {
+
+  ///
+  /// - Parameters:
+  ///   - body: 
+  /// - Returns: String
+  /// - Throws: 
+  func preview(body: String) throws -> String
+
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isDiscussionEnabled() throws -> Bool
+
+  ///
+  /// - Parameters:
+  ///   - commentId: 
+  /// - Returns: Bool
+  /// - Throws: 
+  func recommend(commentId: Int32) throws -> Bool
+
+  ///
+  /// - Parameters:
+  ///   - shortUrl: 
+  ///   - body: 
+  /// - Returns: CommentResponse
+  /// - Throws: 
+  func comment(shortUrl: String, body: String) throws -> CommentResponse
+
+  ///
+  /// - Parameters:
+  ///   - shortUrl: 
+  ///   - body: 
+  ///   - parentCommentId: 
+  /// - Returns: CommentResponse
+  /// - Throws: 
+  func reply(shortUrl: String, body: String, parentCommentId: String) throws -> CommentResponse
+
+}
+
+open class DiscussionClient : TClient /* , Discussion */ {
+
+}
+
+public protocol DiscussionAsync {
+
+  ///
+  /// - Parameters:
+  ///   - body: 
+  ///   - completion: Result<String, Error> wrapping return and following Exceptions: 
+  func preview(body: String, completion: @escaping (Result<String, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isDiscussionEnabled(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - commentId: 
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func recommend(commentId: Int32, completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - shortUrl: 
+  ///   - body: 
+  ///   - completion: Result<CommentResponse, Error> wrapping return and following Exceptions: 
+  func comment(shortUrl: String, body: String, completion: @escaping (Result<CommentResponse, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - shortUrl: 
+  ///   - body: 
+  ///   - parentCommentId: 
+  ///   - completion: Result<CommentResponse, Error> wrapping return and following Exceptions: 
+  func reply(shortUrl: String, body: String, parentCommentId: String, completion: @escaping (Result<CommentResponse, Error>) -> Void)
+
+}
+
+open class DiscussionProcessor /* Discussion */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Discussion) throws -> Void]
+
+  public var service: Discussion
+
+  public required init(service: Discussion) {
+    self.service = service
+  }
+
+}
+
+open class DiscussionProcessorAsync /* Discussion */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, DiscussionAsync) throws -> Void]
+
+  public var service: DiscussionAsync
+
+  public required init(service: DiscussionAsync) {
+    self.service = service
+  }
+
+}
+
+public let BRIDGET_VERSION : String = "1.5.0"
 
 
