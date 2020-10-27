@@ -4736,10 +4736,10 @@ fileprivate final class Discussion_reply_args {
 
   fileprivate var body: String
 
-  fileprivate var parentCommentId: String
+  fileprivate var parentCommentId: Int32
 
 
-  fileprivate init(shortUrl: String, body: String, parentCommentId: String) {
+  fileprivate init(shortUrl: String, body: String, parentCommentId: Int32) {
     self.shortUrl = shortUrl
     self.body = body
     self.parentCommentId = parentCommentId
@@ -4776,7 +4776,7 @@ extension Discussion_reply_args : TStruct {
     _ = try proto.readStructBegin()
     var shortUrl: String!
     var body: String!
-    var parentCommentId: String!
+    var parentCommentId: Int32!
 
     fields: while true {
 
@@ -4786,7 +4786,7 @@ extension Discussion_reply_args : TStruct {
         case (_, .stop):            break fields
         case (1, .string):           shortUrl = try String.read(from: proto)
         case (2, .string):           body = try String.read(from: proto)
-        case (3, .string):           parentCommentId = try String.read(from: proto)
+        case (3, .i32):             parentCommentId = try Int32.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -4963,7 +4963,7 @@ extension DiscussionClient : Discussion {
     return try recv_comment()
   }
 
-  private func send_reply(shortUrl: String, body: String, parentCommentId: String) throws {
+  private func send_reply(shortUrl: String, body: String, parentCommentId: Int32) throws {
     try outProtocol.writeMessageBegin(name: "reply", type: .call, sequenceID: 0)
     let args = Discussion_reply_args(shortUrl: shortUrl, body: body, parentCommentId: parentCommentId)
     try args.write(to: outProtocol)
@@ -4981,7 +4981,7 @@ extension DiscussionClient : Discussion {
     throw TApplicationError(error: .missingResult(methodName: "reply"))
   }
 
-  public func reply(shortUrl: String, body: String, parentCommentId: String) throws -> CommentResponse {
+  public func reply(shortUrl: String, body: String, parentCommentId: Int32) throws -> CommentResponse {
     try send_reply(shortUrl: shortUrl, body: body, parentCommentId: parentCommentId)
     try outProtocol.transport.flush()
     return try recv_reply()

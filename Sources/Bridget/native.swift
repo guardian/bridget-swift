@@ -738,7 +738,7 @@ public protocol Discussion {
   ///   - parentCommentId: 
   /// - Returns: CommentResponse
   /// - Throws: 
-  func reply(shortUrl: String, body: String, parentCommentId: String) throws -> CommentResponse
+  func reply(shortUrl: String, body: String, parentCommentId: Int32) throws -> CommentResponse
 
 }
 
@@ -777,7 +777,7 @@ public protocol DiscussionAsync {
   ///   - body: 
   ///   - parentCommentId: 
   ///   - completion: Result<CommentResponse, Error> wrapping return and following Exceptions: 
-  func reply(shortUrl: String, body: String, parentCommentId: String, completion: @escaping (Result<CommentResponse, Error>) -> Void)
+  func reply(shortUrl: String, body: String, parentCommentId: Int32, completion: @escaping (Result<CommentResponse, Error>) -> Void)
 
 }
 
@@ -805,6 +805,6 @@ open class DiscussionProcessorAsync /* Discussion */ {
 
 }
 
-public let BRIDGET_VERSION : String = "1.5.0"
+public let BRIDGET_VERSION : String = "1.6.0"
 
 
