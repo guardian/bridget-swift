@@ -1433,17 +1433,24 @@ extension CommercialProcessorAsync : TProcessor {
 
 fileprivate final class Acquisitions_launchFrictionScreen_args {
 
+  fileprivate var reason: FrictionScreenReason
 
-  fileprivate init() { }
+
+  fileprivate init(reason: FrictionScreenReason) {
+    self.reason = reason
+  }
+
 }
 
 fileprivate func ==(lhs: Acquisitions_launchFrictionScreen_args, rhs: Acquisitions_launchFrictionScreen_args) -> Bool {
-  return true
+  return
+    (lhs.reason == rhs.reason)
 }
 
 extension Acquisitions_launchFrictionScreen_args : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(reason)
   }
 
 }
@@ -1451,13 +1458,14 @@ extension Acquisitions_launchFrictionScreen_args : Hashable {
 extension Acquisitions_launchFrictionScreen_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
-    return [:]
+    return ["reason": 1, ]
   }
 
   fileprivate static var structName: String { return "Acquisitions_launchFrictionScreen_args" }
 
   fileprivate static func read(from proto: TProtocol) throws -> Acquisitions_launchFrictionScreen_args {
     _ = try proto.readStructBegin()
+    var reason: FrictionScreenReason!
 
     fields: while true {
 
@@ -1465,6 +1473,7 @@ extension Acquisitions_launchFrictionScreen_args : TStruct {
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
+        case (1, .i32):             reason = try FrictionScreenReason.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -1472,8 +1481,10 @@ extension Acquisitions_launchFrictionScreen_args : TStruct {
     }
 
     try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(reason, named: "reason")
 
-    return Acquisitions_launchFrictionScreen_args()
+    return Acquisitions_launchFrictionScreen_args(reason: reason)
   }
 
 }
@@ -1737,9 +1748,9 @@ extension Acquisitions_epicSeen_result : TStruct {
 
 extension AcquisitionsClient : Acquisitions {
 
-  private func send_launchFrictionScreen() throws {
+  private func send_launchFrictionScreen(reason: FrictionScreenReason) throws {
     try outProtocol.writeMessageBegin(name: "launchFrictionScreen", type: .call, sequenceID: 0)
-    let args = Acquisitions_launchFrictionScreen_args()
+    let args = Acquisitions_launchFrictionScreen_args(reason: reason)
     try args.write(to: outProtocol)
     try outProtocol.writeMessageEnd()
   }
@@ -1751,8 +1762,8 @@ extension AcquisitionsClient : Acquisitions {
 
   }
 
-  public func launchFrictionScreen() throws {
-    try send_launchFrictionScreen()
+  public func launchFrictionScreen(reason: FrictionScreenReason) throws {
+    try send_launchFrictionScreen(reason: reason)
     try outProtocol.transport.flush()
     try recv_launchFrictionScreen()
   }
@@ -1817,7 +1828,7 @@ extension AcquisitionsProcessor : TProcessor {
 
       var result = Acquisitions_launchFrictionScreen_result()
       do {
-        try handler.launchFrictionScreen()
+        try handler.launchFrictionScreen(reason: args.reason)
       }
       catch let error { throw error }
 
@@ -1893,7 +1904,7 @@ extension AcquisitionsProcessorAsync : TProcessor {
 
       try inProtocol.readMessageEnd()
 
-      handler.launchFrictionScreen(completion: { asyncResult in
+      handler.launchFrictionScreen(reason: args.reason, completion: { asyncResult in
         var result = Acquisitions_launchFrictionScreen_result()
         do {
           try asyncResult.get()
