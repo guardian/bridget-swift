@@ -1431,23 +1431,23 @@ extension CommercialProcessorAsync : TProcessor {
   }
 }
 
-fileprivate final class Acquisitions_launchFrictionScreen_args {
+fileprivate final class Acquisitions_launchPurchaseScreen_args {
 
-  fileprivate var reason: FrictionScreenReason
+  fileprivate var reason: PurchaseScreenReason
 
 
-  fileprivate init(reason: FrictionScreenReason) {
+  fileprivate init(reason: PurchaseScreenReason) {
     self.reason = reason
   }
 
 }
 
-fileprivate func ==(lhs: Acquisitions_launchFrictionScreen_args, rhs: Acquisitions_launchFrictionScreen_args) -> Bool {
+fileprivate func ==(lhs: Acquisitions_launchPurchaseScreen_args, rhs: Acquisitions_launchPurchaseScreen_args) -> Bool {
   return
     (lhs.reason == rhs.reason)
 }
 
-extension Acquisitions_launchFrictionScreen_args : Hashable {
+extension Acquisitions_launchPurchaseScreen_args : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
     hasher.combine(reason)
@@ -1455,17 +1455,17 @@ extension Acquisitions_launchFrictionScreen_args : Hashable {
 
 }
 
-extension Acquisitions_launchFrictionScreen_args : TStruct {
+extension Acquisitions_launchPurchaseScreen_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return ["reason": 1, ]
   }
 
-  fileprivate static var structName: String { return "Acquisitions_launchFrictionScreen_args" }
+  fileprivate static var structName: String { return "Acquisitions_launchPurchaseScreen_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Acquisitions_launchFrictionScreen_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Acquisitions_launchPurchaseScreen_args {
     _ = try proto.readStructBegin()
-    var reason: FrictionScreenReason!
+    var reason: PurchaseScreenReason!
 
     fields: while true {
 
@@ -1473,7 +1473,7 @@ extension Acquisitions_launchFrictionScreen_args : TStruct {
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
-        case (1, .i32):             reason = try FrictionScreenReason.read(from: proto)
+        case (1, .i32):             reason = try PurchaseScreenReason.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -1484,39 +1484,39 @@ extension Acquisitions_launchFrictionScreen_args : TStruct {
     // Required fields
     try proto.validateValue(reason, named: "reason")
 
-    return Acquisitions_launchFrictionScreen_args(reason: reason)
+    return Acquisitions_launchPurchaseScreen_args(reason: reason)
   }
 
 }
 
 
 
-fileprivate final class Acquisitions_launchFrictionScreen_result {
+fileprivate final class Acquisitions_launchPurchaseScreen_result {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Acquisitions_launchFrictionScreen_result, rhs: Acquisitions_launchFrictionScreen_result) -> Bool {
+fileprivate func ==(lhs: Acquisitions_launchPurchaseScreen_result, rhs: Acquisitions_launchPurchaseScreen_result) -> Bool {
   return true
 }
 
-extension Acquisitions_launchFrictionScreen_result : Hashable {
+extension Acquisitions_launchPurchaseScreen_result : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
 
-extension Acquisitions_launchFrictionScreen_result : TStruct {
+extension Acquisitions_launchPurchaseScreen_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Acquisitions_launchFrictionScreen_result" }
+  fileprivate static var structName: String { return "Acquisitions_launchPurchaseScreen_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Acquisitions_launchFrictionScreen_result {
+  fileprivate static func read(from proto: TProtocol) throws -> Acquisitions_launchPurchaseScreen_result {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -1533,7 +1533,7 @@ extension Acquisitions_launchFrictionScreen_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Acquisitions_launchFrictionScreen_result()
+    return Acquisitions_launchPurchaseScreen_result()
   }
 
 }
@@ -1748,24 +1748,24 @@ extension Acquisitions_epicSeen_result : TStruct {
 
 extension AcquisitionsClient : Acquisitions {
 
-  private func send_launchFrictionScreen(reason: FrictionScreenReason) throws {
-    try outProtocol.writeMessageBegin(name: "launchFrictionScreen", type: .call, sequenceID: 0)
-    let args = Acquisitions_launchFrictionScreen_args(reason: reason)
+  private func send_launchPurchaseScreen(reason: PurchaseScreenReason) throws {
+    try outProtocol.writeMessageBegin(name: "launchPurchaseScreen", type: .call, sequenceID: 0)
+    let args = Acquisitions_launchPurchaseScreen_args(reason: reason)
     try args.write(to: outProtocol)
     try outProtocol.writeMessageEnd()
   }
 
-  private func recv_launchFrictionScreen() throws {
+  private func recv_launchPurchaseScreen() throws {
     try inProtocol.readResultMessageBegin() 
-    _ = try Acquisitions_launchFrictionScreen_result.read(from: inProtocol)
+    _ = try Acquisitions_launchPurchaseScreen_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
 
   }
 
-  public func launchFrictionScreen(reason: FrictionScreenReason) throws {
-    try send_launchFrictionScreen(reason: reason)
+  public func launchPurchaseScreen(reason: PurchaseScreenReason) throws {
+    try send_launchPurchaseScreen(reason: reason)
     try outProtocol.transport.flush()
-    try recv_launchFrictionScreen()
+    try recv_launchPurchaseScreen()
   }
 
   private func send_getEpics() throws {
@@ -1820,19 +1820,19 @@ extension AcquisitionsProcessor : TProcessor {
 
     var processorHandlers = ProcessorHandlerDictionary()
 
-    processorHandlers["launchFrictionScreen"] = { sequenceID, inProtocol, outProtocol, handler in
+    processorHandlers["launchPurchaseScreen"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Acquisitions_launchFrictionScreen_args.read(from: inProtocol)
+      let args = try Acquisitions_launchPurchaseScreen_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
-      var result = Acquisitions_launchFrictionScreen_result()
+      var result = Acquisitions_launchPurchaseScreen_result()
       do {
-        try handler.launchFrictionScreen(reason: args.reason)
+        try handler.launchPurchaseScreen(reason: args.reason)
       }
       catch let error { throw error }
 
-      try outProtocol.writeMessageBegin(name: "launchFrictionScreen", type: .reply, sequenceID: sequenceID)
+      try outProtocol.writeMessageBegin(name: "launchPurchaseScreen", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
@@ -1898,25 +1898,25 @@ extension AcquisitionsProcessorAsync : TProcessor {
 
     var processorHandlers = ProcessorHandlerDictionary()
 
-    processorHandlers["launchFrictionScreen"] = { sequenceID, inProtocol, outProtocol, handler in
+    processorHandlers["launchPurchaseScreen"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Acquisitions_launchFrictionScreen_args.read(from: inProtocol)
+      let args = try Acquisitions_launchPurchaseScreen_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
-      handler.launchFrictionScreen(reason: args.reason, completion: { asyncResult in
-        var result = Acquisitions_launchFrictionScreen_result()
+      handler.launchPurchaseScreen(reason: args.reason, completion: { asyncResult in
+        var result = Acquisitions_launchPurchaseScreen_result()
         do {
           try asyncResult.get()
         } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "launchFrictionScreen", sequenceID: sequenceID, ex: error)
+          _ = try? outProtocol.writeException(messageName: "launchPurchaseScreen", sequenceID: sequenceID, ex: error)
           return
         } catch let error {
-          _ = try? outProtocol.writeException(messageName: "launchFrictionScreen", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          _ = try? outProtocol.writeException(messageName: "launchPurchaseScreen", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
           return
         }
         do {
-          try outProtocol.writeMessageBegin(name: "launchFrictionScreen", type: .reply, sequenceID: sequenceID)
+          try outProtocol.writeMessageBegin(name: "launchPurchaseScreen", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()

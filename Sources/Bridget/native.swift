@@ -10,18 +10,18 @@ import Foundation
 import Thrift
 
 
-public enum FrictionScreenReason : TEnum {
+public enum PurchaseScreenReason : TEnum {
   case hideads
   case epic
 
-  public static func read(from proto: TProtocol) throws -> FrictionScreenReason {
+  public static func read(from proto: TProtocol) throws -> PurchaseScreenReason {
     let raw: Int32 = try proto.read()
-    let new = FrictionScreenReason(rawValue: raw)
+    let new = PurchaseScreenReason(rawValue: raw)
     if let unwrapped = new {
       return unwrapped
     } else {
       throw TProtocolError(error: .invalidData,
-                           message: "Invalid enum value (\(raw)) for \(FrictionScreenReason.self)")
+                           message: "Invalid enum value (\(raw)) for \(PurchaseScreenReason.self)")
     }
   }
 
@@ -371,7 +371,7 @@ public protocol Acquisitions {
   /// - Parameters:
   ///   - reason: 
   /// - Throws: 
-  func launchFrictionScreen(reason: FrictionScreenReason) throws
+  func launchPurchaseScreen(reason: PurchaseScreenReason) throws
 
   ///
   /// - Returns: MaybeEpic
@@ -394,7 +394,7 @@ public protocol AcquisitionsAsync {
   /// - Parameters:
   ///   - reason: 
   ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
-  func launchFrictionScreen(reason: FrictionScreenReason, completion: @escaping (Result<Void, Error>) -> Void)
+  func launchPurchaseScreen(reason: PurchaseScreenReason, completion: @escaping (Result<Void, Error>) -> Void)
 
   ///
   ///   - completion: Result<MaybeEpic, Error> wrapping return and following Exceptions: 
@@ -844,6 +844,6 @@ open class DiscussionProcessorAsync /* Discussion */ {
 
 }
 
-public let BRIDGET_VERSION : String = "1.7.0"
+public let BRIDGET_VERSION : String = "1.8.0"
 
 
