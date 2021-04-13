@@ -5265,3 +5265,237 @@ extension DiscussionProcessorAsync : TProcessor {
   }
 }
 
+fileprivate final class Analytics_sendTargetingParams_args {
+
+  fileprivate var targetingParams: TMap<String, String>
+
+
+  fileprivate init(targetingParams: TMap<String, String>) {
+    self.targetingParams = targetingParams
+  }
+
+}
+
+fileprivate func ==(lhs: Analytics_sendTargetingParams_args, rhs: Analytics_sendTargetingParams_args) -> Bool {
+  return
+    (lhs.targetingParams == rhs.targetingParams)
+}
+
+extension Analytics_sendTargetingParams_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(targetingParams)
+  }
+
+}
+
+extension Analytics_sendTargetingParams_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["targetingParams": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Analytics_sendTargetingParams_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Analytics_sendTargetingParams_args {
+    _ = try proto.readStructBegin()
+    var targetingParams: TMap<String, String>!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .map):             targetingParams = try TMap<String, String>.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(targetingParams, named: "targetingParams")
+
+    return Analytics_sendTargetingParams_args(targetingParams: targetingParams)
+  }
+
+}
+
+
+
+fileprivate final class Analytics_sendTargetingParams_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Analytics_sendTargetingParams_result, rhs: Analytics_sendTargetingParams_result) -> Bool {
+  return true
+}
+
+extension Analytics_sendTargetingParams_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Analytics_sendTargetingParams_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Analytics_sendTargetingParams_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Analytics_sendTargetingParams_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Analytics_sendTargetingParams_result()
+  }
+
+}
+
+
+
+extension AnalyticsClient : Analytics {
+
+  private func send_sendTargetingParams(targetingParams: TMap<String, String>) throws {
+    try outProtocol.writeMessageBegin(name: "sendTargetingParams", type: .call, sequenceID: 0)
+    let args = Analytics_sendTargetingParams_args(targetingParams: targetingParams)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_sendTargetingParams() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Analytics_sendTargetingParams_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func sendTargetingParams(targetingParams: TMap<String, String>) throws {
+    try send_sendTargetingParams(targetingParams: targetingParams)
+    try outProtocol.transport.flush()
+    try recv_sendTargetingParams()
+  }
+
+}
+
+extension AnalyticsProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["sendTargetingParams"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Analytics_sendTargetingParams_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Analytics_sendTargetingParams_result()
+      do {
+        try handler.sendTargetingParams(targetingParams: args.targetingParams)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "sendTargetingParams", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = AnalyticsProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+extension AnalyticsProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["sendTargetingParams"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Analytics_sendTargetingParams_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.sendTargetingParams(targetingParams: args.targetingParams, completion: { asyncResult in
+        var result = Analytics_sendTargetingParams_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "sendTargetingParams", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "sendTargetingParams", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "sendTargetingParams", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = AnalyticsProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+

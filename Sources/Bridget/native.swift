@@ -844,6 +844,54 @@ open class DiscussionProcessorAsync /* Discussion */ {
 
 }
 
-public let BRIDGET_VERSION : String = "1.8.0"
+public protocol Analytics {
+
+  ///
+  /// - Parameters:
+  ///   - targetingParams: 
+  /// - Throws: 
+  func sendTargetingParams(targetingParams: TMap<String, String>) throws
+
+}
+
+open class AnalyticsClient : TClient /* , Analytics */ {
+
+}
+
+public protocol AnalyticsAsync {
+
+  ///
+  /// - Parameters:
+  ///   - targetingParams: 
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func sendTargetingParams(targetingParams: TMap<String, String>, completion: @escaping (Result<Void, Error>) -> Void)
+
+}
+
+open class AnalyticsProcessor /* Analytics */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Analytics) throws -> Void]
+
+  public var service: Analytics
+
+  public required init(service: Analytics) {
+    self.service = service
+  }
+
+}
+
+open class AnalyticsProcessorAsync /* Analytics */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, AnalyticsAsync) throws -> Void]
+
+  public var service: AnalyticsAsync
+
+  public required init(service: AnalyticsAsync) {
+    self.service = service
+  }
+
+}
+
+public let BRIDGET_VERSION : String = "1.9.0"
 
 
