@@ -5499,3 +5499,385 @@ extension AnalyticsProcessorAsync : TProcessor {
   }
 }
 
+fileprivate final class Navigation_openPrivacySettings_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Navigation_openPrivacySettings_args, rhs: Navigation_openPrivacySettings_args) -> Bool {
+  return true
+}
+
+extension Navigation_openPrivacySettings_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Navigation_openPrivacySettings_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Navigation_openPrivacySettings_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Navigation_openPrivacySettings_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Navigation_openPrivacySettings_args()
+  }
+
+}
+
+
+
+fileprivate final class Navigation_openPrivacySettings_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Navigation_openPrivacySettings_result, rhs: Navigation_openPrivacySettings_result) -> Bool {
+  return true
+}
+
+extension Navigation_openPrivacySettings_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Navigation_openPrivacySettings_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Navigation_openPrivacySettings_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Navigation_openPrivacySettings_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Navigation_openPrivacySettings_result()
+  }
+
+}
+
+
+
+fileprivate final class Navigation_openPrivacyPolicy_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Navigation_openPrivacyPolicy_args, rhs: Navigation_openPrivacyPolicy_args) -> Bool {
+  return true
+}
+
+extension Navigation_openPrivacyPolicy_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Navigation_openPrivacyPolicy_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Navigation_openPrivacyPolicy_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Navigation_openPrivacyPolicy_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Navigation_openPrivacyPolicy_args()
+  }
+
+}
+
+
+
+fileprivate final class Navigation_openPrivacyPolicy_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Navigation_openPrivacyPolicy_result, rhs: Navigation_openPrivacyPolicy_result) -> Bool {
+  return true
+}
+
+extension Navigation_openPrivacyPolicy_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Navigation_openPrivacyPolicy_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Navigation_openPrivacyPolicy_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Navigation_openPrivacyPolicy_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Navigation_openPrivacyPolicy_result()
+  }
+
+}
+
+
+
+extension NavigationClient : Navigation {
+
+  private func send_openPrivacySettings() throws {
+    try outProtocol.writeMessageBegin(name: "openPrivacySettings", type: .call, sequenceID: 0)
+    let args = Navigation_openPrivacySettings_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_openPrivacySettings() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Navigation_openPrivacySettings_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func openPrivacySettings() throws {
+    try send_openPrivacySettings()
+    try outProtocol.transport.flush()
+    try recv_openPrivacySettings()
+  }
+
+  private func send_openPrivacyPolicy() throws {
+    try outProtocol.writeMessageBegin(name: "openPrivacyPolicy", type: .call, sequenceID: 0)
+    let args = Navigation_openPrivacyPolicy_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_openPrivacyPolicy() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Navigation_openPrivacyPolicy_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func openPrivacyPolicy() throws {
+    try send_openPrivacyPolicy()
+    try outProtocol.transport.flush()
+    try recv_openPrivacyPolicy()
+  }
+
+}
+
+extension NavigationProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["openPrivacySettings"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Navigation_openPrivacySettings_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Navigation_openPrivacySettings_result()
+      do {
+        try handler.openPrivacySettings()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "openPrivacySettings", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["openPrivacyPolicy"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Navigation_openPrivacyPolicy_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Navigation_openPrivacyPolicy_result()
+      do {
+        try handler.openPrivacyPolicy()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "openPrivacyPolicy", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = NavigationProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+extension NavigationProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["openPrivacySettings"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Navigation_openPrivacySettings_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.openPrivacySettings(completion: { asyncResult in
+        var result = Navigation_openPrivacySettings_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "openPrivacySettings", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "openPrivacySettings", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "openPrivacySettings", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["openPrivacyPolicy"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Navigation_openPrivacyPolicy_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.openPrivacyPolicy(completion: { asyncResult in
+        var result = Navigation_openPrivacyPolicy_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "openPrivacyPolicy", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "openPrivacyPolicy", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "openPrivacyPolicy", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = NavigationProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+

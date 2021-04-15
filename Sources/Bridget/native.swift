@@ -892,6 +892,58 @@ open class AnalyticsProcessorAsync /* Analytics */ {
 
 }
 
-public let BRIDGET_VERSION : String = "1.9.0"
+public protocol Navigation {
+
+  ///
+  /// - Throws: 
+  func openPrivacySettings() throws
+
+  ///
+  /// - Throws: 
+  func openPrivacyPolicy() throws
+
+}
+
+open class NavigationClient : TClient /* , Navigation */ {
+
+}
+
+public protocol NavigationAsync {
+
+  ///
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func openPrivacySettings(completion: @escaping (Result<Void, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func openPrivacyPolicy(completion: @escaping (Result<Void, Error>) -> Void)
+
+}
+
+open class NavigationProcessor /* Navigation */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Navigation) throws -> Void]
+
+  public var service: Navigation
+
+  public required init(service: Navigation) {
+    self.service = service
+  }
+
+}
+
+open class NavigationProcessorAsync /* Navigation */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, NavigationAsync) throws -> Void]
+
+  public var service: NavigationAsync
+
+  public required init(service: NavigationAsync) {
+    self.service = service
+  }
+
+}
+
+public let BRIDGET_VERSION : String = "1.10.0"
 
 
