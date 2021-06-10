@@ -90,7 +90,8 @@ extension Rect : TStruct {
 public func ==(lhs: AdSlot, rhs: AdSlot) -> Bool {
   return
     (lhs.rect == rhs.rect) &&
-    (lhs.targetingParams == rhs.targetingParams)
+    (lhs.targetingParams == rhs.targetingParams) &&
+    (lhs.isSquare == rhs.isSquare)
 }
 
 extension AdSlot : CustomStringConvertible {
@@ -98,7 +99,8 @@ extension AdSlot : CustomStringConvertible {
   public var description : String {
     var desc = "AdSlot("
     desc += "rect=\(String(describing: self.rect)), "
-    desc += "targetingParams=\(String(describing: self.targetingParams))"
+    desc += "targetingParams=\(String(describing: self.targetingParams)), "
+    desc += "isSquare=\(String(describing: self.isSquare))"
     return desc
   }
 
@@ -109,6 +111,7 @@ extension AdSlot : Hashable {
   public func hash(into hasher: inout Hasher) {
     hasher.combine(rect)
     hasher.combine(targetingParams)
+    hasher.combine(isSquare)
   }
 
 }
@@ -116,7 +119,7 @@ extension AdSlot : Hashable {
 extension AdSlot : TStruct {
 
   public static var fieldIds: [String: Int32] {
-    return ["rect": 1, "targetingParams": 2, ]
+    return ["rect": 1, "targetingParams": 2, "isSquare": 3, ]
   }
 
   public static var structName: String { return "AdSlot" }
@@ -125,6 +128,7 @@ extension AdSlot : TStruct {
     _ = try proto.readStructBegin()
     var rect: Rect!
     var targetingParams: TMap<String, String>?
+    var isSquare: Bool!
 
     fields: while true {
 
@@ -134,6 +138,7 @@ extension AdSlot : TStruct {
         case (_, .stop):            break fields
         case (1, .struct):           rect = try Rect.read(from: proto)
         case (2, .map):             targetingParams = try TMap<String, String>.read(from: proto)
+        case (3, .bool):            isSquare = try Bool.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -143,8 +148,9 @@ extension AdSlot : TStruct {
     try proto.readStructEnd()
     // Required fields
     try proto.validateValue(rect, named: "rect")
+    try proto.validateValue(isSquare, named: "isSquare")
 
-    return AdSlot(rect: rect, targetingParams: targetingParams)
+    return AdSlot(rect: rect, targetingParams: targetingParams, isSquare: isSquare)
   }
 
 }

@@ -71,14 +71,18 @@ public final class AdSlot {
 
   public var targetingParams: TMap<String, String>?
 
+  public var isSquare: Bool
 
-  public init(rect: Rect) {
+
+  public init(rect: Rect, isSquare: Bool) {
     self.rect = rect
+    self.isSquare = isSquare
   }
 
-  public init(rect: Rect, targetingParams: TMap<String, String>?) {
+  public init(rect: Rect, targetingParams: TMap<String, String>?, isSquare: Bool) {
     self.rect = rect
     self.targetingParams = targetingParams
+    self.isSquare = isSquare
   }
 
 }
@@ -944,6 +948,6 @@ open class NavigationProcessorAsync /* Navigation */ {
 
 }
 
-public let BRIDGET_VERSION : String = "1.10.0"
+public let BRIDGET_VERSION : String = "1.11.0"
 
 
