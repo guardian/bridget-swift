@@ -948,6 +948,6 @@ open class NavigationProcessorAsync /* Navigation */ {
 
 }
 
-public let BRIDGET_VERSION : String = "1.11.1"
+public let BRIDGET_VERSION : String = "1.11.2"
 
 
