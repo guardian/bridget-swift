@@ -796,6 +796,65 @@ extension CommentResponse : TStruct {
 
 
 
+public func ==(lhs: NewsletterSignUpResponse, rhs: NewsletterSignUpResponse) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension NewsletterSignUpResponse : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "NewsletterSignUpResponse("
+    desc += "success=\(String(describing: self.success))"
+    return desc
+  }
+
+}
+
+extension NewsletterSignUpResponse : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension NewsletterSignUpResponse : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["success": 1, ]
+  }
+
+  public static var structName: String { return "NewsletterSignUpResponse" }
+
+  public static func read(from proto: TProtocol) throws -> NewsletterSignUpResponse {
+    _ = try proto.readStructBegin()
+    var success: Bool!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(success, named: "success")
+
+    return NewsletterSignUpResponse(success: success)
+  }
+
+}
+
+
+
 fileprivate final class Environment_nativeThriftPackageVersion_args {
 
 
@@ -5871,6 +5930,262 @@ extension NavigationProcessorAsync : TProcessor {
     let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
 
     if let processorHandler = NavigationProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+fileprivate final class Newsletters_requestSignUp_args {
+
+  fileprivate var emailAddress: String
+
+  fileprivate var newsletterIdentityName: String
+
+
+  fileprivate init(emailAddress: String, newsletterIdentityName: String) {
+    self.emailAddress = emailAddress
+    self.newsletterIdentityName = newsletterIdentityName
+  }
+
+}
+
+fileprivate func ==(lhs: Newsletters_requestSignUp_args, rhs: Newsletters_requestSignUp_args) -> Bool {
+  return
+    (lhs.emailAddress == rhs.emailAddress) &&
+    (lhs.newsletterIdentityName == rhs.newsletterIdentityName)
+}
+
+extension Newsletters_requestSignUp_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(emailAddress)
+    hasher.combine(newsletterIdentityName)
+  }
+
+}
+
+extension Newsletters_requestSignUp_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["emailAddress": 1, "newsletterIdentityName": 2, ]
+  }
+
+  fileprivate static var structName: String { return "Newsletters_requestSignUp_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Newsletters_requestSignUp_args {
+    _ = try proto.readStructBegin()
+    var emailAddress: String!
+    var newsletterIdentityName: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           emailAddress = try String.read(from: proto)
+        case (2, .string):           newsletterIdentityName = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(emailAddress, named: "emailAddress")
+    try proto.validateValue(newsletterIdentityName, named: "newsletterIdentityName")
+
+    return Newsletters_requestSignUp_args(emailAddress: emailAddress, newsletterIdentityName: newsletterIdentityName)
+  }
+
+}
+
+
+
+fileprivate final class Newsletters_requestSignUp_result {
+
+  fileprivate var success: NewsletterSignUpResponse?
+
+
+  fileprivate init() { }
+  fileprivate init(success: NewsletterSignUpResponse?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Newsletters_requestSignUp_result, rhs: Newsletters_requestSignUp_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Newsletters_requestSignUp_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Newsletters_requestSignUp_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Newsletters_requestSignUp_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Newsletters_requestSignUp_result {
+    _ = try proto.readStructBegin()
+    var success: NewsletterSignUpResponse?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .struct):           success = try NewsletterSignUpResponse.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Newsletters_requestSignUp_result(success: success)
+  }
+
+}
+
+
+
+extension NewslettersClient : Newsletters {
+
+  private func send_requestSignUp(emailAddress: String, newsletterIdentityName: String) throws {
+    try outProtocol.writeMessageBegin(name: "requestSignUp", type: .call, sequenceID: 0)
+    let args = Newsletters_requestSignUp_args(emailAddress: emailAddress, newsletterIdentityName: newsletterIdentityName)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_requestSignUp() throws -> NewsletterSignUpResponse {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Newsletters_requestSignUp_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "requestSignUp"))
+  }
+
+  public func requestSignUp(emailAddress: String, newsletterIdentityName: String) throws -> NewsletterSignUpResponse {
+    try send_requestSignUp(emailAddress: emailAddress, newsletterIdentityName: newsletterIdentityName)
+    try outProtocol.transport.flush()
+    return try recv_requestSignUp()
+  }
+
+}
+
+extension NewslettersProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["requestSignUp"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Newsletters_requestSignUp_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Newsletters_requestSignUp_result()
+      do {
+        result.success = try handler.requestSignUp(emailAddress: args.emailAddress, newsletterIdentityName: args.newsletterIdentityName)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "requestSignUp", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = NewslettersProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+extension NewslettersProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["requestSignUp"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Newsletters_requestSignUp_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.requestSignUp(emailAddress: args.emailAddress, newsletterIdentityName: args.newsletterIdentityName, completion: { asyncResult in
+        var result = Newsletters_requestSignUp_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "requestSignUp", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "requestSignUp", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "requestSignUp", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = NewslettersProcessorAsync.processorHandlers[messageName] {
       do {
         try processorHandler(sequenceID, inProtocol, outProtocol, service)
       }

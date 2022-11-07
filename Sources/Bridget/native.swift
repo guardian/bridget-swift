@@ -264,6 +264,17 @@ public final class CommentResponse {
 
 }
 
+public final class NewsletterSignUpResponse {
+
+  public var success: Bool
+
+
+  public init(success: Bool) {
+    self.success = success
+  }
+
+}
+
 public protocol Environment {
 
   ///
@@ -948,6 +959,65 @@ open class NavigationProcessorAsync /* Navigation */ {
 
 }
 
-public let BRIDGET_VERSION : String = "1.12.0"
+/// Service to manage requests from the weblayer related to newsletter subscriptions.
+/// added  version 1.13.0
+/// methods:
+///  - requestSignUp: request to sign up to a newsletter using an email address entered by the user.
+public protocol Newsletters {
+
+  ///
+  /// - Parameters:
+  ///   - emailAddress: 
+  ///   - newsletterIdentityName: 
+  /// - Returns: NewsletterSignUpResponse
+  /// - Throws: 
+  func requestSignUp(emailAddress: String, newsletterIdentityName: String) throws -> NewsletterSignUpResponse
+
+}
+
+open class NewslettersClient : TClient /* , Newsletters */ {
+
+}
+
+/// Service to manage requests from the weblayer related to newsletter subscriptions.
+/// added  version 1.13.0
+/// methods:
+///  - requestSignUp: request to sign up to a newsletter using an email address entered by the user.
+public protocol NewslettersAsync {
+
+  ///
+  /// - Parameters:
+  ///   - emailAddress: 
+  ///   - newsletterIdentityName: 
+  ///   - completion: Result<NewsletterSignUpResponse, Error> wrapping return and following Exceptions: 
+  func requestSignUp(emailAddress: String, newsletterIdentityName: String, completion: @escaping (Result<NewsletterSignUpResponse, Error>) -> Void)
+
+}
+
+open class NewslettersProcessor /* Newsletters */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Newsletters) throws -> Void]
+
+  public var service: Newsletters
+
+  public required init(service: Newsletters) {
+    self.service = service
+  }
+
+}
+
+open class NewslettersProcessorAsync /* Newsletters */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, NewslettersAsync) throws -> Void]
+
+  public var service: NewslettersAsync
+
+  public required init(service: NewslettersAsync) {
+    self.service = service
+  }
+
+}
+
+public let BRIDGET_VERSION : String = "1.13.0"
 
 
