@@ -264,17 +264,6 @@ public final class CommentResponse {
 
 }
 
-public final class NewsletterSignUpResponse {
-
-  public var success: Bool
-
-
-  public init(success: Bool) {
-    self.success = success
-  }
-
-}
-
 public protocol Environment {
 
   ///
@@ -960,18 +949,18 @@ open class NavigationProcessorAsync /* Navigation */ {
 }
 
 /// Service to manage requests from the weblayer related to newsletter subscriptions.
-/// added  version 1.13.0
+/// added  version 2.0.0
 /// methods:
-///  - requestSignUp: request to sign up to a newsletter using an email address entered by the user.
+///  - requestSignUp: request to sign up to a newsletter using an email address entered by the user. Returns `true` if the request was successful, `false` if it failed for any reason. Exceptions thrown will be discarded.
 public protocol Newsletters {
 
   ///
   /// - Parameters:
   ///   - emailAddress: 
   ///   - newsletterIdentityName: 
-  /// - Returns: NewsletterSignUpResponse
+  /// - Returns: Bool
   /// - Throws: 
-  func requestSignUp(emailAddress: String, newsletterIdentityName: String) throws -> NewsletterSignUpResponse
+  func requestSignUp(emailAddress: String, newsletterIdentityName: String) throws -> Bool
 
 }
 
@@ -980,17 +969,17 @@ open class NewslettersClient : TClient /* , Newsletters */ {
 }
 
 /// Service to manage requests from the weblayer related to newsletter subscriptions.
-/// added  version 1.13.0
+/// added  version 2.0.0
 /// methods:
-///  - requestSignUp: request to sign up to a newsletter using an email address entered by the user.
+///  - requestSignUp: request to sign up to a newsletter using an email address entered by the user. Returns `true` if the request was successful, `false` if it failed for any reason. Exceptions thrown will be discarded.
 public protocol NewslettersAsync {
 
   ///
   /// - Parameters:
   ///   - emailAddress: 
   ///   - newsletterIdentityName: 
-  ///   - completion: Result<NewsletterSignUpResponse, Error> wrapping return and following Exceptions: 
-  func requestSignUp(emailAddress: String, newsletterIdentityName: String, completion: @escaping (Result<NewsletterSignUpResponse, Error>) -> Void)
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func requestSignUp(emailAddress: String, newsletterIdentityName: String, completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -1018,6 +1007,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "1.13.0"
+public let BRIDGET_VERSION : String = "2.0.0"
 
 

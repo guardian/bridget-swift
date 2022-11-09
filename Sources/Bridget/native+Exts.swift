@@ -796,65 +796,6 @@ extension CommentResponse : TStruct {
 
 
 
-public func ==(lhs: NewsletterSignUpResponse, rhs: NewsletterSignUpResponse) -> Bool {
-  return
-    (lhs.success == rhs.success)
-}
-
-extension NewsletterSignUpResponse : CustomStringConvertible {
-
-  public var description : String {
-    var desc = "NewsletterSignUpResponse("
-    desc += "success=\(String(describing: self.success))"
-    return desc
-  }
-
-}
-
-extension NewsletterSignUpResponse : Hashable {
-
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(success)
-  }
-
-}
-
-extension NewsletterSignUpResponse : TStruct {
-
-  public static var fieldIds: [String: Int32] {
-    return ["success": 1, ]
-  }
-
-  public static var structName: String { return "NewsletterSignUpResponse" }
-
-  public static func read(from proto: TProtocol) throws -> NewsletterSignUpResponse {
-    _ = try proto.readStructBegin()
-    var success: Bool!
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (1, .bool):            success = try Bool.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-    // Required fields
-    try proto.validateValue(success, named: "success")
-
-    return NewsletterSignUpResponse(success: success)
-  }
-
-}
-
-
-
 fileprivate final class Environment_nativeThriftPackageVersion_args {
 
 
@@ -6016,11 +5957,11 @@ extension Newsletters_requestSignUp_args : TStruct {
 
 fileprivate final class Newsletters_requestSignUp_result {
 
-  fileprivate var success: NewsletterSignUpResponse?
+  fileprivate var success: Bool?
 
 
   fileprivate init() { }
-  fileprivate init(success: NewsletterSignUpResponse?) {
+  fileprivate init(success: Bool?) {
     self.success = success
   }
 
@@ -6049,7 +5990,7 @@ extension Newsletters_requestSignUp_result : TStruct {
 
   fileprivate static func read(from proto: TProtocol) throws -> Newsletters_requestSignUp_result {
     _ = try proto.readStructBegin()
-    var success: NewsletterSignUpResponse?
+    var success: Bool?
 
     fields: while true {
 
@@ -6057,7 +5998,7 @@ extension Newsletters_requestSignUp_result : TStruct {
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
-        case (0, .struct):           success = try NewsletterSignUpResponse.read(from: proto)
+        case (0, .bool):            success = try Bool.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -6082,7 +6023,7 @@ extension NewslettersClient : Newsletters {
     try outProtocol.writeMessageEnd()
   }
 
-  private func recv_requestSignUp() throws -> NewsletterSignUpResponse {
+  private func recv_requestSignUp() throws -> Bool {
     try inProtocol.readResultMessageBegin() 
     let result = try Newsletters_requestSignUp_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
@@ -6093,7 +6034,7 @@ extension NewslettersClient : Newsletters {
     throw TApplicationError(error: .missingResult(methodName: "requestSignUp"))
   }
 
-  public func requestSignUp(emailAddress: String, newsletterIdentityName: String) throws -> NewsletterSignUpResponse {
+  public func requestSignUp(emailAddress: String, newsletterIdentityName: String) throws -> Bool {
     try send_requestSignUp(emailAddress: emailAddress, newsletterIdentityName: newsletterIdentityName)
     try outProtocol.transport.flush()
     return try recv_requestSignUp()
