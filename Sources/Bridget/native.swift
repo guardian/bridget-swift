@@ -271,6 +271,11 @@ public protocol Environment {
   /// - Throws: 
   func nativeThriftPackageVersion() throws -> String
 
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isMyGuardianEnabled() throws -> Bool
+
 }
 
 open class EnvironmentClient : TClient /* , Environment */ {
@@ -282,6 +287,10 @@ public protocol EnvironmentAsync {
   ///
   ///   - completion: Result<String, Error> wrapping return and following Exceptions: 
   func nativeThriftPackageVersion(completion: @escaping (Result<String, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isMyGuardianEnabled(completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -429,6 +438,81 @@ open class AcquisitionsProcessorAsync /* Acquisitions */ {
   public var service: AcquisitionsAsync
 
   public required init(service: AcquisitionsAsync) {
+    self.service = service
+  }
+
+}
+
+public protocol Tag {
+
+  ///
+  /// - Parameters:
+  ///   - topic: 
+  /// - Returns: Bool
+  /// - Throws: 
+  func follow(topic: Topic) throws -> Bool
+
+  ///
+  /// - Parameters:
+  ///   - topic: 
+  /// - Returns: Bool
+  /// - Throws: 
+  func unfollow(topic: Topic) throws -> Bool
+
+  ///
+  /// - Parameters:
+  ///   - topic: 
+  /// - Returns: Bool
+  /// - Throws: 
+  func isFollowing(topic: Topic) throws -> Bool
+
+}
+
+open class TagClient : TClient /* , Tag */ {
+
+}
+
+public protocol TagAsync {
+
+  ///
+  /// - Parameters:
+  ///   - topic: 
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func follow(topic: Topic, completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - topic: 
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func unfollow(topic: Topic, completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - topic: 
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isFollowing(topic: Topic, completion: @escaping (Result<Bool, Error>) -> Void)
+
+}
+
+open class TagProcessor /* Tag */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Tag) throws -> Void]
+
+  public var service: Tag
+
+  public required init(service: Tag) {
+    self.service = service
+  }
+
+}
+
+open class TagProcessorAsync /* Tag */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, TagAsync) throws -> Void]
+
+  public var service: TagAsync
+
+  public required init(service: TagAsync) {
     self.service = service
   }
 
@@ -951,7 +1035,9 @@ open class NavigationProcessorAsync /* Navigation */ {
 /// Service to manage requests from the weblayer related to newsletter subscriptions.
 /// added  version 2.0.0
 /// methods:
-///  - requestSignUp: request to sign up to a newsletter using an email address entered by the user. Returns `true` if the request was successful, `false` if it failed for any reason. Exceptions thrown will be discarded.
+///  - requestSignUp: request to sign up to a newsletter using an email address entered by the user.
+/// Returns `true` if the request was successful, `false` if it failed for any reason. Exceptions
+/// thrown will be discarded.
 public protocol Newsletters {
 
   ///
@@ -971,7 +1057,9 @@ open class NewslettersClient : TClient /* , Newsletters */ {
 /// Service to manage requests from the weblayer related to newsletter subscriptions.
 /// added  version 2.0.0
 /// methods:
-///  - requestSignUp: request to sign up to a newsletter using an email address entered by the user. Returns `true` if the request was successful, `false` if it failed for any reason. Exceptions thrown will be discarded.
+///  - requestSignUp: request to sign up to a newsletter using an email address entered by the user.
+/// Returns `true` if the request was successful, `false` if it failed for any reason. Exceptions
+/// thrown will be discarded.
 public protocol NewslettersAsync {
 
   ///
@@ -1007,6 +1095,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "2.0.0"
+public let BRIDGET_VERSION : String = "2.5.0"
 
 

@@ -904,6 +904,114 @@ extension Environment_nativeThriftPackageVersion_result : TStruct {
 
 
 
+fileprivate final class Environment_isMyGuardianEnabled_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Environment_isMyGuardianEnabled_args, rhs: Environment_isMyGuardianEnabled_args) -> Bool {
+  return true
+}
+
+extension Environment_isMyGuardianEnabled_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Environment_isMyGuardianEnabled_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Environment_isMyGuardianEnabled_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Environment_isMyGuardianEnabled_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Environment_isMyGuardianEnabled_args()
+  }
+
+}
+
+
+
+fileprivate final class Environment_isMyGuardianEnabled_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Environment_isMyGuardianEnabled_result, rhs: Environment_isMyGuardianEnabled_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Environment_isMyGuardianEnabled_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Environment_isMyGuardianEnabled_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Environment_isMyGuardianEnabled_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Environment_isMyGuardianEnabled_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Environment_isMyGuardianEnabled_result(success: success)
+  }
+
+}
+
+
+
 extension EnvironmentClient : Environment {
 
   private func send_nativeThriftPackageVersion() throws {
@@ -930,6 +1038,30 @@ extension EnvironmentClient : Environment {
     return try recv_nativeThriftPackageVersion()
   }
 
+  private func send_isMyGuardianEnabled() throws {
+    try outProtocol.writeMessageBegin(name: "isMyGuardianEnabled", type: .call, sequenceID: 0)
+    let args = Environment_isMyGuardianEnabled_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isMyGuardianEnabled() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Environment_isMyGuardianEnabled_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isMyGuardianEnabled"))
+  }
+
+  public func isMyGuardianEnabled() throws -> Bool {
+    try send_isMyGuardianEnabled()
+    try outProtocol.transport.flush()
+    return try recv_isMyGuardianEnabled()
+  }
+
 }
 
 extension EnvironmentProcessor : TProcessor {
@@ -951,6 +1083,22 @@ extension EnvironmentProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["isMyGuardianEnabled"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Environment_isMyGuardianEnabled_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Environment_isMyGuardianEnabled_result()
+      do {
+        result.success = try handler.isMyGuardianEnabled()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isMyGuardianEnabled", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
@@ -1003,6 +1151,31 @@ extension EnvironmentProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["isMyGuardianEnabled"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Environment_isMyGuardianEnabled_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isMyGuardianEnabled(completion: { asyncResult in
+        var result = Environment_isMyGuardianEnabled_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isMyGuardianEnabled", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isMyGuardianEnabled", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isMyGuardianEnabled", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
@@ -1987,6 +2160,622 @@ extension AcquisitionsProcessorAsync : TProcessor {
     let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
 
     if let processorHandler = AcquisitionsProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+fileprivate final class Tag_follow_args {
+
+  fileprivate var topic: Topic
+
+
+  fileprivate init(topic: Topic) {
+    self.topic = topic
+  }
+
+}
+
+fileprivate func ==(lhs: Tag_follow_args, rhs: Tag_follow_args) -> Bool {
+  return
+    (lhs.topic == rhs.topic)
+}
+
+extension Tag_follow_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(topic)
+  }
+
+}
+
+extension Tag_follow_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["topic": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Tag_follow_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Tag_follow_args {
+    _ = try proto.readStructBegin()
+    var topic: Topic!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           topic = try Topic.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(topic, named: "topic")
+
+    return Tag_follow_args(topic: topic)
+  }
+
+}
+
+
+
+fileprivate final class Tag_follow_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Tag_follow_result, rhs: Tag_follow_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Tag_follow_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Tag_follow_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Tag_follow_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Tag_follow_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Tag_follow_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class Tag_unfollow_args {
+
+  fileprivate var topic: Topic
+
+
+  fileprivate init(topic: Topic) {
+    self.topic = topic
+  }
+
+}
+
+fileprivate func ==(lhs: Tag_unfollow_args, rhs: Tag_unfollow_args) -> Bool {
+  return
+    (lhs.topic == rhs.topic)
+}
+
+extension Tag_unfollow_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(topic)
+  }
+
+}
+
+extension Tag_unfollow_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["topic": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Tag_unfollow_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Tag_unfollow_args {
+    _ = try proto.readStructBegin()
+    var topic: Topic!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           topic = try Topic.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(topic, named: "topic")
+
+    return Tag_unfollow_args(topic: topic)
+  }
+
+}
+
+
+
+fileprivate final class Tag_unfollow_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Tag_unfollow_result, rhs: Tag_unfollow_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Tag_unfollow_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Tag_unfollow_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Tag_unfollow_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Tag_unfollow_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Tag_unfollow_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class Tag_isFollowing_args {
+
+  fileprivate var topic: Topic
+
+
+  fileprivate init(topic: Topic) {
+    self.topic = topic
+  }
+
+}
+
+fileprivate func ==(lhs: Tag_isFollowing_args, rhs: Tag_isFollowing_args) -> Bool {
+  return
+    (lhs.topic == rhs.topic)
+}
+
+extension Tag_isFollowing_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(topic)
+  }
+
+}
+
+extension Tag_isFollowing_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["topic": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Tag_isFollowing_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Tag_isFollowing_args {
+    _ = try proto.readStructBegin()
+    var topic: Topic!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           topic = try Topic.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(topic, named: "topic")
+
+    return Tag_isFollowing_args(topic: topic)
+  }
+
+}
+
+
+
+fileprivate final class Tag_isFollowing_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Tag_isFollowing_result, rhs: Tag_isFollowing_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Tag_isFollowing_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Tag_isFollowing_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Tag_isFollowing_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Tag_isFollowing_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Tag_isFollowing_result(success: success)
+  }
+
+}
+
+
+
+extension TagClient : Tag {
+
+  private func send_follow(topic: Topic) throws {
+    try outProtocol.writeMessageBegin(name: "follow", type: .call, sequenceID: 0)
+    let args = Tag_follow_args(topic: topic)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_follow() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Tag_follow_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "follow"))
+  }
+
+  public func follow(topic: Topic) throws -> Bool {
+    try send_follow(topic: topic)
+    try outProtocol.transport.flush()
+    return try recv_follow()
+  }
+
+  private func send_unfollow(topic: Topic) throws {
+    try outProtocol.writeMessageBegin(name: "unfollow", type: .call, sequenceID: 0)
+    let args = Tag_unfollow_args(topic: topic)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_unfollow() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Tag_unfollow_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "unfollow"))
+  }
+
+  public func unfollow(topic: Topic) throws -> Bool {
+    try send_unfollow(topic: topic)
+    try outProtocol.transport.flush()
+    return try recv_unfollow()
+  }
+
+  private func send_isFollowing(topic: Topic) throws {
+    try outProtocol.writeMessageBegin(name: "isFollowing", type: .call, sequenceID: 0)
+    let args = Tag_isFollowing_args(topic: topic)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isFollowing() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Tag_isFollowing_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isFollowing"))
+  }
+
+  public func isFollowing(topic: Topic) throws -> Bool {
+    try send_isFollowing(topic: topic)
+    try outProtocol.transport.flush()
+    return try recv_isFollowing()
+  }
+
+}
+
+extension TagProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["follow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Tag_follow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Tag_follow_result()
+      do {
+        result.success = try handler.follow(topic: args.topic)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "follow", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["unfollow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Tag_unfollow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Tag_unfollow_result()
+      do {
+        result.success = try handler.unfollow(topic: args.topic)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "unfollow", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["isFollowing"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Tag_isFollowing_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Tag_isFollowing_result()
+      do {
+        result.success = try handler.isFollowing(topic: args.topic)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isFollowing", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = TagProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+extension TagProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["follow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Tag_follow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.follow(topic: args.topic, completion: { asyncResult in
+        var result = Tag_follow_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "follow", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "follow", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "follow", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["unfollow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Tag_unfollow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.unfollow(topic: args.topic, completion: { asyncResult in
+        var result = Tag_unfollow_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "unfollow", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "unfollow", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "unfollow", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["isFollowing"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Tag_isFollowing_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isFollowing(topic: args.topic, completion: { asyncResult in
+        var result = Tag_isFollowing_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isFollowing", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isFollowing", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isFollowing", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = TagProcessorAsync.processorHandlers[messageName] {
       do {
         try processorHandler(sequenceID, inProtocol, outProtocol, service)
       }
