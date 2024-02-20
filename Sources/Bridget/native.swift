@@ -1095,6 +1095,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "2.5.0"
+public let BRIDGET_VERSION : String = "2.7.0"
 
 
