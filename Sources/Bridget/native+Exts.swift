@@ -6932,3 +6932,240 @@ extension NewslettersProcessorAsync : TProcessor {
   }
 }
 
+fileprivate final class GeorgeService_sayHello_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: GeorgeService_sayHello_args, rhs: GeorgeService_sayHello_args) -> Bool {
+  return true
+}
+
+extension GeorgeService_sayHello_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension GeorgeService_sayHello_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "GeorgeService_sayHello_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> GeorgeService_sayHello_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return GeorgeService_sayHello_args()
+  }
+
+}
+
+
+
+fileprivate final class GeorgeService_sayHello_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: GeorgeService_sayHello_result, rhs: GeorgeService_sayHello_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension GeorgeService_sayHello_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension GeorgeService_sayHello_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "GeorgeService_sayHello_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> GeorgeService_sayHello_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return GeorgeService_sayHello_result(success: success)
+  }
+
+}
+
+
+
+extension GeorgeServiceClient : GeorgeService {
+
+  private func send_sayHello() throws {
+    try outProtocol.writeMessageBegin(name: "sayHello", type: .call, sequenceID: 0)
+    let args = GeorgeService_sayHello_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_sayHello() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try GeorgeService_sayHello_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "sayHello"))
+  }
+
+  public func sayHello() throws -> Bool {
+    try send_sayHello()
+    try outProtocol.transport.flush()
+    return try recv_sayHello()
+  }
+
+}
+
+extension GeorgeServiceProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["sayHello"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try GeorgeService_sayHello_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = GeorgeService_sayHello_result()
+      do {
+        result.success = try handler.sayHello()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "sayHello", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = GeorgeServiceProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+extension GeorgeServiceProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["sayHello"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try GeorgeService_sayHello_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.sayHello(completion: { asyncResult in
+        var result = GeorgeService_sayHello_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "sayHello", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "sayHello", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "sayHello", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = GeorgeServiceProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+

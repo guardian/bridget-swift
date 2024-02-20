@@ -1095,6 +1095,51 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "2.5.0"
+public protocol GeorgeService {
+
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func sayHello() throws -> Bool
+
+}
+
+open class GeorgeServiceClient : TClient /* , GeorgeService */ {
+
+}
+
+public protocol GeorgeServiceAsync {
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func sayHello(completion: @escaping (Result<Bool, Error>) -> Void)
+
+}
+
+open class GeorgeServiceProcessor /* GeorgeService */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, GeorgeService) throws -> Void]
+
+  public var service: GeorgeService
+
+  public required init(service: GeorgeService) {
+    self.service = service
+  }
+
+}
+
+open class GeorgeServiceProcessorAsync /* GeorgeService */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, GeorgeServiceAsync) throws -> Void]
+
+  public var service: GeorgeServiceAsync
+
+  public required init(service: GeorgeServiceAsync) {
+    self.service = service
+  }
+
+}
+
+public let BRIDGET_VERSION : String = "v0.0.0-2024-02-20-DEMO-TEST"
 
 
