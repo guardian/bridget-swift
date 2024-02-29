@@ -617,6 +617,15 @@ public protocol User {
   /// - Throws: 
   func doesCcpaApply() throws -> Bool
 
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isSignedIn() throws -> Bool
+
+  ///
+  /// - Throws: 
+  func signIn() throws
+
 }
 
 open class UserClient : TClient /* , User */ {
@@ -642,6 +651,14 @@ public protocol UserAsync {
   ///
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
   func doesCcpaApply(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isSignedIn(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func signIn(completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 
@@ -1095,6 +1112,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "2.5.0"
+public let BRIDGET_VERSION : String = "v.0.0.0-2024-02-29-SNAPSHOT-SIGNIN"
 
 
