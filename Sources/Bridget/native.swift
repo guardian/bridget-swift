@@ -45,6 +45,47 @@ public enum PurchaseScreenReason : TEnum {
   }
 }
 
+public enum SignInReason : TEnum {
+  case postcomment
+  case recommendcomment
+  case replytocomment
+  case reportcomment
+
+  public static func read(from proto: TProtocol) throws -> SignInReason {
+    let raw: Int32 = try proto.read()
+    let new = SignInReason(rawValue: raw)
+    if let unwrapped = new {
+      return unwrapped
+    } else {
+      throw TProtocolError(error: .invalidData,
+                           message: "Invalid enum value (\(raw)) for \(SignInReason.self)")
+    }
+  }
+
+  public init() {
+    self = .postcomment
+  }
+
+  public var rawValue: Int32 {
+    switch self {
+    case .postcomment: return 0
+    case .recommendcomment: return 1
+    case .replytocomment: return 2
+    case .reportcomment: return 3
+    }
+  }
+
+  public init?(rawValue: Int32) {
+    switch rawValue {
+    case 0: self = .postcomment
+    case 1: self = .recommendcomment
+    case 2: self = .replytocomment
+    case 3: self = .reportcomment
+    default: return nil
+    }
+  }
+}
+
 public final class Rect {
 
   public var x: Double
@@ -617,6 +658,17 @@ public protocol User {
   /// - Throws: 
   func doesCcpaApply() throws -> Bool
 
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isSignedIn() throws -> Bool
+
+  ///
+  /// - Parameters:
+  ///   - reason: 
+  /// - Throws: 
+  func signIn(reason: SignInReason) throws
+
 }
 
 open class UserClient : TClient /* , User */ {
@@ -642,6 +694,16 @@ public protocol UserAsync {
   ///
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
   func doesCcpaApply(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isSignedIn(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - reason: 
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func signIn(reason: SignInReason, completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 
@@ -1095,6 +1157,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "2.5.0"
+public let BRIDGET_VERSION : String = "v0.0.0-2024-03-05-SNAPSHOT-AUTHENTICATE"
 
 
