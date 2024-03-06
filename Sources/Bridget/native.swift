@@ -45,6 +45,77 @@ public enum PurchaseScreenReason : TEnum {
   }
 }
 
+public enum SignInScreenReason : TEnum {
+  case saveforlater
+  case postcomment
+  case recommendcomment
+  case replytocomment
+  case reportcomment
+  case personalisehome
+  case profile
+  case premiumtier
+  case passwordchanged
+  case metereduser
+  case signorregisteronthankyou
+  case followcontributortag
+  case signinonadjustdeeplink
+  case mandatorysignin
+
+  public static func read(from proto: TProtocol) throws -> SignInScreenReason {
+    let raw: Int32 = try proto.read()
+    let new = SignInScreenReason(rawValue: raw)
+    if let unwrapped = new {
+      return unwrapped
+    } else {
+      throw TProtocolError(error: .invalidData,
+                           message: "Invalid enum value (\(raw)) for \(SignInScreenReason.self)")
+    }
+  }
+
+  public init() {
+    self = .saveforlater
+  }
+
+  public var rawValue: Int32 {
+    switch self {
+    case .saveforlater: return 0
+    case .postcomment: return 1
+    case .recommendcomment: return 2
+    case .replytocomment: return 3
+    case .reportcomment: return 4
+    case .personalisehome: return 5
+    case .profile: return 6
+    case .premiumtier: return 7
+    case .passwordchanged: return 8
+    case .metereduser: return 9
+    case .signorregisteronthankyou: return 10
+    case .followcontributortag: return 11
+    case .signinonadjustdeeplink: return 12
+    case .mandatorysignin: return 13
+    }
+  }
+
+  public init?(rawValue: Int32) {
+    switch rawValue {
+    case 0: self = .saveforlater
+    case 1: self = .postcomment
+    case 2: self = .recommendcomment
+    case 3: self = .replytocomment
+    case 4: self = .reportcomment
+    case 5: self = .personalisehome
+    case 6: self = .profile
+    case 7: self = .premiumtier
+    case 8: self = .passwordchanged
+    case 9: self = .metereduser
+    case 10: self = .signorregisteronthankyou
+    case 11: self = .followcontributortag
+    case 12: self = .signinonadjustdeeplink
+    case 13: self = .mandatorysignin
+    default: return nil
+    }
+  }
+}
+
 public final class Rect {
 
   public var x: Double
@@ -617,6 +688,17 @@ public protocol User {
   /// - Throws: 
   func doesCcpaApply() throws -> Bool
 
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isSignedIn() throws -> Bool
+
+  ///
+  /// - Parameters:
+  ///   - reason: 
+  /// - Throws: 
+  func signIn(reason: SignInScreenReason) throws
+
 }
 
 open class UserClient : TClient /* , User */ {
@@ -642,6 +724,16 @@ public protocol UserAsync {
   ///
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
   func doesCcpaApply(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isSignedIn(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - reason: 
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func signIn(reason: SignInScreenReason, completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 
@@ -1095,6 +1187,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "2.5.0"
+public let BRIDGET_VERSION : String = "v0.0.0-2024-03-06-SNAPSHOT-SIGNIN"
 
 

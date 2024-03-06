@@ -3851,6 +3851,223 @@ extension User_doesCcpaApply_result : TStruct {
 
 
 
+fileprivate final class User_isSignedIn_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: User_isSignedIn_args, rhs: User_isSignedIn_args) -> Bool {
+  return true
+}
+
+extension User_isSignedIn_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension User_isSignedIn_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "User_isSignedIn_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> User_isSignedIn_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return User_isSignedIn_args()
+  }
+
+}
+
+
+
+fileprivate final class User_isSignedIn_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: User_isSignedIn_result, rhs: User_isSignedIn_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension User_isSignedIn_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension User_isSignedIn_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "User_isSignedIn_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> User_isSignedIn_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return User_isSignedIn_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class User_signIn_args {
+
+  fileprivate var reason: SignInScreenReason
+
+
+  fileprivate init(reason: SignInScreenReason) {
+    self.reason = reason
+  }
+
+}
+
+fileprivate func ==(lhs: User_signIn_args, rhs: User_signIn_args) -> Bool {
+  return
+    (lhs.reason == rhs.reason)
+}
+
+extension User_signIn_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(reason)
+  }
+
+}
+
+extension User_signIn_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["reason": 1, ]
+  }
+
+  fileprivate static var structName: String { return "User_signIn_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> User_signIn_args {
+    _ = try proto.readStructBegin()
+    var reason: SignInScreenReason!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .i32):             reason = try SignInScreenReason.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(reason, named: "reason")
+
+    return User_signIn_args(reason: reason)
+  }
+
+}
+
+
+
+fileprivate final class User_signIn_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: User_signIn_result, rhs: User_signIn_result) -> Bool {
+  return true
+}
+
+extension User_signIn_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension User_signIn_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "User_signIn_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> User_signIn_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return User_signIn_result()
+  }
+
+}
+
+
+
 extension UserClient : User {
 
   private func send_isPremium() throws {
@@ -3949,6 +4166,50 @@ extension UserClient : User {
     return try recv_doesCcpaApply()
   }
 
+  private func send_isSignedIn() throws {
+    try outProtocol.writeMessageBegin(name: "isSignedIn", type: .call, sequenceID: 0)
+    let args = User_isSignedIn_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isSignedIn() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try User_isSignedIn_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isSignedIn"))
+  }
+
+  public func isSignedIn() throws -> Bool {
+    try send_isSignedIn()
+    try outProtocol.transport.flush()
+    return try recv_isSignedIn()
+  }
+
+  private func send_signIn(reason: SignInScreenReason) throws {
+    try outProtocol.writeMessageBegin(name: "signIn", type: .call, sequenceID: 0)
+    let args = User_signIn_args(reason: reason)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_signIn() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try User_signIn_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func signIn(reason: SignInScreenReason) throws {
+    try send_signIn(reason: reason)
+    try outProtocol.transport.flush()
+    try recv_signIn()
+  }
+
 }
 
 extension UserProcessor : TProcessor {
@@ -4018,6 +4279,38 @@ extension UserProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "doesCcpaApply", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["isSignedIn"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try User_isSignedIn_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = User_isSignedIn_result()
+      do {
+        result.success = try handler.isSignedIn()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isSignedIn", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+    }
+    processorHandlers["signIn"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try User_signIn_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = User_signIn_result()
+      do {
+        try handler.signIn(reason: args.reason)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "signIn", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
     }
@@ -4145,6 +4438,56 @@ extension UserProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "doesCcpaApply", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["isSignedIn"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try User_isSignedIn_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isSignedIn(completion: { asyncResult in
+        var result = User_isSignedIn_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isSignedIn", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isSignedIn", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isSignedIn", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["signIn"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try User_signIn_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.signIn(reason: args.reason, completion: { asyncResult in
+        var result = User_signIn_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "signIn", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "signIn", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "signIn", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
