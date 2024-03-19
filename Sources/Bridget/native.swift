@@ -45,6 +45,94 @@ public enum PurchaseScreenReason : TEnum {
   }
 }
 
+public enum SignInScreenReason : TEnum {
+  case accessdiscussion
+  case postcomment
+  case recommendcomment
+  case replytocomment
+  case reportcomment
+
+  public static func read(from proto: TProtocol) throws -> SignInScreenReason {
+    let raw: Int32 = try proto.read()
+    let new = SignInScreenReason(rawValue: raw)
+    if let unwrapped = new {
+      return unwrapped
+    } else {
+      throw TProtocolError(error: .invalidData,
+                           message: "Invalid enum value (\(raw)) for \(SignInScreenReason.self)")
+    }
+  }
+
+  public init() {
+    self = .accessdiscussion
+  }
+
+  public var rawValue: Int32 {
+    switch self {
+    case .accessdiscussion: return 0
+    case .postcomment: return 1
+    case .recommendcomment: return 2
+    case .replytocomment: return 3
+    case .reportcomment: return 4
+    }
+  }
+
+  public init?(rawValue: Int32) {
+    switch rawValue {
+    case 0: self = .accessdiscussion
+    case 1: self = .postcomment
+    case 2: self = .recommendcomment
+    case 3: self = .replytocomment
+    case 4: self = .reportcomment
+    default: return nil
+    }
+  }
+}
+
+public enum SignInScreenReferrer : TEnum {
+  case accessdiscussion
+  case postcomment
+  case recommendcomment
+  case replytocomment
+  case reportcomment
+
+  public static func read(from proto: TProtocol) throws -> SignInScreenReferrer {
+    let raw: Int32 = try proto.read()
+    let new = SignInScreenReferrer(rawValue: raw)
+    if let unwrapped = new {
+      return unwrapped
+    } else {
+      throw TProtocolError(error: .invalidData,
+                           message: "Invalid enum value (\(raw)) for \(SignInScreenReferrer.self)")
+    }
+  }
+
+  public init() {
+    self = .accessdiscussion
+  }
+
+  public var rawValue: Int32 {
+    switch self {
+    case .accessdiscussion: return 0
+    case .postcomment: return 1
+    case .recommendcomment: return 2
+    case .replytocomment: return 3
+    case .reportcomment: return 4
+    }
+  }
+
+  public init?(rawValue: Int32) {
+    switch rawValue {
+    case 0: self = .accessdiscussion
+    case 1: self = .postcomment
+    case 2: self = .recommendcomment
+    case 3: self = .replytocomment
+    case 4: self = .reportcomment
+    default: return nil
+    }
+  }
+}
+
 public final class Rect {
 
   public var x: Double
@@ -617,6 +705,18 @@ public protocol User {
   /// - Throws: 
   func doesCcpaApply() throws -> Bool
 
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isSignedIn() throws -> Bool
+
+  ///
+  /// - Parameters:
+  ///   - reason: 
+  ///   - referrer: 
+  /// - Throws: 
+  func signIn(reason: SignInScreenReason, referrer: SignInScreenReferrer) throws
+
 }
 
 open class UserClient : TClient /* , User */ {
@@ -642,6 +742,17 @@ public protocol UserAsync {
   ///
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
   func doesCcpaApply(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isSignedIn(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - reason: 
+  ///   - referrer: 
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func signIn(reason: SignInScreenReason, referrer: SignInScreenReferrer, completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 
@@ -1095,6 +1206,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "2.8.1"
+public let BRIDGET_VERSION : String = "2.9.0"
 
 
