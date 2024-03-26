@@ -133,6 +133,38 @@ public enum SignInScreenReferrer : TEnum {
   }
 }
 
+public enum DiscussionNativeError : TEnum {
+  case unknown_error
+
+  public static func read(from proto: TProtocol) throws -> DiscussionNativeError {
+    let raw: Int32 = try proto.read()
+    let new = DiscussionNativeError(rawValue: raw)
+    if let unwrapped = new {
+      return unwrapped
+    } else {
+      throw TProtocolError(error: .invalidData,
+                           message: "Invalid enum value (\(raw)) for \(DiscussionNativeError.self)")
+    }
+  }
+
+  public init() {
+    self = .unknown_error
+  }
+
+  public var rawValue: Int32 {
+    switch self {
+    case .unknown_error: return 0
+    }
+  }
+
+  public init?(rawValue: Int32) {
+    switch rawValue {
+    case 0: self = .unknown_error
+    default: return nil
+    }
+  }
+}
+
 public final class Rect {
 
   public var x: Double
@@ -326,7 +358,7 @@ public enum Metric {
   case font(val: MetricFont)
 }
 
-public final class CommentResponse {
+public final class DiscussionApiResponse {
 
   public var status: String
 
@@ -350,6 +382,13 @@ public final class CommentResponse {
     self.errorCode = errorCode
   }
 
+}
+
+public enum DiscussionResponse {
+
+  case response(val: DiscussionApiResponse)
+
+  case error(val: DiscussionNativeError)
 }
 
 public protocol Environment {
@@ -944,39 +983,10 @@ public protocol Discussion {
 
   ///
   /// - Parameters:
-  ///   - body: 
-  /// - Returns: String
-  /// - Throws: 
-  func preview(body: String) throws -> String
-
-  ///
-  /// - Returns: Bool
-  /// - Throws: 
-  func isDiscussionEnabled() throws -> Bool
-
-  ///
-  /// - Parameters:
   ///   - commentId: 
-  /// - Returns: Bool
+  /// - Returns: DiscussionResponse
   /// - Throws: 
-  func recommend(commentId: Int32) throws -> Bool
-
-  ///
-  /// - Parameters:
-  ///   - shortUrl: 
-  ///   - body: 
-  /// - Returns: CommentResponse
-  /// - Throws: 
-  func comment(shortUrl: String, body: String) throws -> CommentResponse
-
-  ///
-  /// - Parameters:
-  ///   - shortUrl: 
-  ///   - body: 
-  ///   - parentCommentId: 
-  /// - Returns: CommentResponse
-  /// - Throws: 
-  func reply(shortUrl: String, body: String, parentCommentId: Int32) throws -> CommentResponse
+  func recommend(commentId: String) throws -> DiscussionResponse
 
 }
 
@@ -988,34 +998,9 @@ public protocol DiscussionAsync {
 
   ///
   /// - Parameters:
-  ///   - body: 
-  ///   - completion: Result<String, Error> wrapping return and following Exceptions: 
-  func preview(body: String, completion: @escaping (Result<String, Error>) -> Void)
-
-  ///
-  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
-  func isDiscussionEnabled(completion: @escaping (Result<Bool, Error>) -> Void)
-
-  ///
-  /// - Parameters:
   ///   - commentId: 
-  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
-  func recommend(commentId: Int32, completion: @escaping (Result<Bool, Error>) -> Void)
-
-  ///
-  /// - Parameters:
-  ///   - shortUrl: 
-  ///   - body: 
-  ///   - completion: Result<CommentResponse, Error> wrapping return and following Exceptions: 
-  func comment(shortUrl: String, body: String, completion: @escaping (Result<CommentResponse, Error>) -> Void)
-
-  ///
-  /// - Parameters:
-  ///   - shortUrl: 
-  ///   - body: 
-  ///   - parentCommentId: 
-  ///   - completion: Result<CommentResponse, Error> wrapping return and following Exceptions: 
-  func reply(shortUrl: String, body: String, parentCommentId: Int32, completion: @escaping (Result<CommentResponse, Error>) -> Void)
+  ///   - completion: Result<DiscussionResponse, Error> wrapping return and following Exceptions: 
+  func recommend(commentId: String, completion: @escaping (Result<DiscussionResponse, Error>) -> Void)
 
 }
 
@@ -1206,6 +1191,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "2.9.0"
+public let BRIDGET_VERSION : String = "v3.0.0"
 
 
