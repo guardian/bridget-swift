@@ -4122,17 +4122,25 @@ extension User_signIn_args : TStruct {
 
 fileprivate final class User_signIn_result {
 
+  fileprivate var success: Bool?
+
 
   fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
 }
 
 fileprivate func ==(lhs: User_signIn_result, rhs: User_signIn_result) -> Bool {
-  return true
+  return
+    (lhs.success == rhs.success)
 }
 
 extension User_signIn_result : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
   }
 
 }
@@ -4140,13 +4148,14 @@ extension User_signIn_result : Hashable {
 extension User_signIn_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
-    return [:]
+    return ["success": 0, ]
   }
 
   fileprivate static var structName: String { return "User_signIn_result" }
 
   fileprivate static func read(from proto: TProtocol) throws -> User_signIn_result {
     _ = try proto.readStructBegin()
+    var success: Bool?
 
     fields: while true {
 
@@ -4154,6 +4163,7 @@ extension User_signIn_result : TStruct {
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -4162,7 +4172,7 @@ extension User_signIn_result : TStruct {
 
     try proto.readStructEnd()
 
-    return User_signIn_result()
+    return User_signIn_result(success: success)
   }
 
 }
@@ -4298,17 +4308,21 @@ extension UserClient : User {
     try outProtocol.writeMessageEnd()
   }
 
-  private func recv_signIn() throws {
+  private func recv_signIn() throws -> Bool {
     try inProtocol.readResultMessageBegin() 
-    _ = try User_signIn_result.read(from: inProtocol)
+    let result = try User_signIn_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
 
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "signIn"))
   }
 
-  public func signIn(reason: SignInScreenReason, referrer: SignInScreenReferrer) throws {
+  public func signIn(reason: SignInScreenReason, referrer: SignInScreenReferrer) throws -> Bool {
     try send_signIn(reason: reason, referrer: referrer)
     try outProtocol.transport.flush()
-    try recv_signIn()
+    return try recv_signIn()
   }
 
 }
@@ -4412,7 +4426,7 @@ extension UserProcessor : TProcessor {
 
       var result = User_signIn_result()
       do {
-        try handler.signIn(reason: args.reason, referrer: args.referrer)
+        result.success = try handler.signIn(reason: args.reason, referrer: args.referrer)
       }
       catch let error { throw error }
 
@@ -4587,7 +4601,7 @@ extension UserProcessorAsync : TProcessor {
       handler.signIn(reason: args.reason, referrer: args.referrer, completion: { asyncResult in
         var result = User_signIn_result()
         do {
-          try asyncResult.get()
+          try result.success = asyncResult.get()
         } catch let error as TApplicationError {
           _ = try? outProtocol.writeException(messageName: "signIn", sequenceID: sequenceID, ex: error)
           return

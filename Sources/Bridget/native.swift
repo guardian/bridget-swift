@@ -753,8 +753,9 @@ public protocol User {
   /// - Parameters:
   ///   - reason: 
   ///   - referrer: 
+  /// - Returns: Bool
   /// - Throws: 
-  func signIn(reason: SignInScreenReason, referrer: SignInScreenReferrer) throws
+  func signIn(reason: SignInScreenReason, referrer: SignInScreenReferrer) throws -> Bool
 
 }
 
@@ -790,8 +791,8 @@ public protocol UserAsync {
   /// - Parameters:
   ///   - reason: 
   ///   - referrer: 
-  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
-  func signIn(reason: SignInScreenReason, referrer: SignInScreenReferrer, completion: @escaping (Result<Void, Error>) -> Void)
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func signIn(reason: SignInScreenReason, referrer: SignInScreenReferrer, completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -1191,6 +1192,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v3.0.0"
+public let BRIDGET_VERSION : String = "v4.0.0"
 
 
