@@ -720,6 +720,178 @@ extension Metric : TStruct {
 
 
 
+public func ==(lhs: DiscussionBadge, rhs: DiscussionBadge) -> Bool {
+  return
+    (lhs.name == rhs.name)
+}
+
+extension DiscussionBadge : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "DiscussionBadge("
+    desc += "name=\(String(describing: self.name))"
+    return desc
+  }
+
+}
+
+extension DiscussionBadge : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(name)
+  }
+
+}
+
+extension DiscussionBadge : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["name": 1, ]
+  }
+
+  public static var structName: String { return "DiscussionBadge" }
+
+  public static func read(from proto: TProtocol) throws -> DiscussionBadge {
+    _ = try proto.readStructBegin()
+    var name: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           name = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(name, named: "name")
+
+    return DiscussionBadge(name: name)
+  }
+
+}
+
+
+
+public func ==(lhs: DiscussionUserProfile, rhs: DiscussionUserProfile) -> Bool {
+  return
+    (lhs.userId == rhs.userId) &&
+    (lhs.displayName == rhs.displayName) &&
+    (lhs.webUrl == rhs.webUrl) &&
+    (lhs.apiUrl == rhs.apiUrl) &&
+    (lhs.avatar == rhs.avatar) &&
+    (lhs.secureAvatarUrl == rhs.secureAvatarUrl) &&
+    (lhs.badge == rhs.badge) &&
+    (lhs.canPostComment == rhs.canPostComment) &&
+    (lhs.isPremoderated == rhs.isPremoderated) &&
+    (lhs.hasCommented == rhs.hasCommented)
+}
+
+extension DiscussionUserProfile : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "DiscussionUserProfile("
+    desc += "userId=\(String(describing: self.userId)), "
+    desc += "displayName=\(String(describing: self.displayName)), "
+    desc += "webUrl=\(String(describing: self.webUrl)), "
+    desc += "apiUrl=\(String(describing: self.apiUrl)), "
+    desc += "avatar=\(String(describing: self.avatar)), "
+    desc += "secureAvatarUrl=\(String(describing: self.secureAvatarUrl)), "
+    desc += "badge=\(String(describing: self.badge)), "
+    desc += "canPostComment=\(String(describing: self.canPostComment)), "
+    desc += "isPremoderated=\(String(describing: self.isPremoderated)), "
+    desc += "hasCommented=\(String(describing: self.hasCommented))"
+    return desc
+  }
+
+}
+
+extension DiscussionUserProfile : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(userId)
+    hasher.combine(displayName)
+    hasher.combine(webUrl)
+    hasher.combine(apiUrl)
+    hasher.combine(avatar)
+    hasher.combine(secureAvatarUrl)
+    hasher.combine(badge)
+    hasher.combine(canPostComment)
+    hasher.combine(isPremoderated)
+    hasher.combine(hasCommented)
+  }
+
+}
+
+extension DiscussionUserProfile : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["userId": 1, "displayName": 2, "webUrl": 3, "apiUrl": 4, "avatar": 5, "secureAvatarUrl": 6, "badge": 7, "canPostComment": 8, "isPremoderated": 9, "hasCommented": 10, ]
+  }
+
+  public static var structName: String { return "DiscussionUserProfile" }
+
+  public static func read(from proto: TProtocol) throws -> DiscussionUserProfile {
+    _ = try proto.readStructBegin()
+    var userId: String!
+    var displayName: String!
+    var webUrl: String!
+    var apiUrl: String!
+    var avatar: String!
+    var secureAvatarUrl: String!
+    var badge: TList<DiscussionBadge>!
+    var canPostComment: Bool!
+    var isPremoderated: Bool!
+    var hasCommented: Bool!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           userId = try String.read(from: proto)
+        case (2, .string):           displayName = try String.read(from: proto)
+        case (3, .string):           webUrl = try String.read(from: proto)
+        case (4, .string):           apiUrl = try String.read(from: proto)
+        case (5, .string):           avatar = try String.read(from: proto)
+        case (6, .string):           secureAvatarUrl = try String.read(from: proto)
+        case (7, .list):            badge = try TList<DiscussionBadge>.read(from: proto)
+        case (8, .bool):            canPostComment = try Bool.read(from: proto)
+        case (9, .bool):            isPremoderated = try Bool.read(from: proto)
+        case (10, .bool):            hasCommented = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(userId, named: "userId")
+    try proto.validateValue(displayName, named: "displayName")
+    try proto.validateValue(webUrl, named: "webUrl")
+    try proto.validateValue(apiUrl, named: "apiUrl")
+    try proto.validateValue(avatar, named: "avatar")
+    try proto.validateValue(secureAvatarUrl, named: "secureAvatarUrl")
+    try proto.validateValue(badge, named: "badge")
+    try proto.validateValue(canPostComment, named: "canPostComment")
+    try proto.validateValue(isPremoderated, named: "isPremoderated")
+    try proto.validateValue(hasCommented, named: "hasCommented")
+
+    return DiscussionUserProfile(userId: userId, displayName: displayName, webUrl: webUrl, apiUrl: apiUrl, avatar: avatar, secureAvatarUrl: secureAvatarUrl, badge: badge, canPostComment: canPostComment, isPremoderated: isPremoderated, hasCommented: hasCommented)
+  }
+
+}
+
+
+
 public func ==(lhs: DiscussionApiResponse, rhs: DiscussionApiResponse) -> Bool {
   return
     (lhs.status == rhs.status) &&
@@ -790,6 +962,151 @@ extension DiscussionApiResponse : TStruct {
     try proto.validateValue(message, named: "message")
 
     return DiscussionApiResponse(status: status, statusCode: statusCode, message: message, errorCode: errorCode)
+  }
+
+}
+
+
+
+public func ==(lhs: GetUserProfileResponse, rhs: GetUserProfileResponse) -> Bool {
+  return {
+    switch (lhs, rhs) {
+    case (.profile(let lval), .profile(let rval)): return lval == rval
+    case (.error(let lval), .error(let rval)): return lval == rval
+    default: return false
+    }
+  }()
+}
+
+extension GetUserProfileResponse : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "GetUserProfileResponse."
+    switch self {
+    case .profile(let val): desc += "profile(val: \(val))"
+    case .error(let val): desc += "error(val: \(val))"
+    }
+    return desc
+  }
+
+}
+
+extension GetUserProfileResponse : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    switch self {
+    case .profile(let val): hasher.combine(val)
+    case .error(let val): hasher.combine(val)
+    }
+
+  }
+
+}
+
+extension GetUserProfileResponse : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["profile": 1, "error": 2, ]
+  }
+
+  public static var structName: String { return "GetUserProfileResponse" }
+
+  public static func read(from proto: TProtocol) throws -> GetUserProfileResponse {
+    _ = try proto.readStructBegin()
+    var ret: GetUserProfileResponse?
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):                   ret = GetUserProfileResponse.profile(val: try DiscussionUserProfile.read(from: proto))
+        case (2, .i32):                     ret = GetUserProfileResponse.error(val: try DiscussionNativeError.read(from: proto))
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    if let ret = ret {
+      return ret
+    }
+
+    throw TProtocolError(error: .unknown, message: "Missing required value for type: GetUserProfileResponse")  }
+
+}
+
+
+
+public func ==(lhs: ReportAbuseParameters, rhs: ReportAbuseParameters) -> Bool {
+  return
+    (lhs.commentId == rhs.commentId) &&
+    (lhs.categoryId == rhs.categoryId) &&
+    (lhs.reason == rhs.reason) &&
+    (lhs.email == rhs.email)
+}
+
+extension ReportAbuseParameters : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "ReportAbuseParameters("
+    desc += "commentId=\(String(describing: self.commentId)), "
+    desc += "categoryId=\(String(describing: self.categoryId)), "
+    desc += "reason=\(String(describing: self.reason)), "
+    desc += "email=\(String(describing: self.email))"
+    return desc
+  }
+
+}
+
+extension ReportAbuseParameters : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(commentId)
+    hasher.combine(categoryId)
+    hasher.combine(reason)
+    hasher.combine(email)
+  }
+
+}
+
+extension ReportAbuseParameters : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["commentId": 1, "categoryId": 2, "reason": 3, "email": 4, ]
+  }
+
+  public static var structName: String { return "ReportAbuseParameters" }
+
+  public static func read(from proto: TProtocol) throws -> ReportAbuseParameters {
+    _ = try proto.readStructBegin()
+    var commentId: String!
+    var categoryId: String!
+    var reason: String?
+    var email: String?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           commentId = try String.read(from: proto)
+        case (2, .string):           categoryId = try String.read(from: proto)
+        case (3, .string):           reason = try String.read(from: proto)
+        case (4, .string):           email = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(commentId, named: "commentId")
+    try proto.validateValue(categoryId, named: "categoryId")
+
+    return ReportAbuseParameters(commentId: commentId, categoryId: categoryId, reason: reason, email: email)
   }
 
 }
@@ -5658,6 +5975,614 @@ extension Discussion_recommend_result : TStruct {
 
 
 
+fileprivate final class Discussion_comment_args {
+
+  fileprivate var shortUrl: String
+
+  fileprivate var body: String
+
+
+  fileprivate init(shortUrl: String, body: String) {
+    self.shortUrl = shortUrl
+    self.body = body
+  }
+
+}
+
+fileprivate func ==(lhs: Discussion_comment_args, rhs: Discussion_comment_args) -> Bool {
+  return
+    (lhs.shortUrl == rhs.shortUrl) &&
+    (lhs.body == rhs.body)
+}
+
+extension Discussion_comment_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(shortUrl)
+    hasher.combine(body)
+  }
+
+}
+
+extension Discussion_comment_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["shortUrl": 1, "body": 2, ]
+  }
+
+  fileprivate static var structName: String { return "Discussion_comment_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Discussion_comment_args {
+    _ = try proto.readStructBegin()
+    var shortUrl: String!
+    var body: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           shortUrl = try String.read(from: proto)
+        case (2, .string):           body = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(shortUrl, named: "shortUrl")
+    try proto.validateValue(body, named: "body")
+
+    return Discussion_comment_args(shortUrl: shortUrl, body: body)
+  }
+
+}
+
+
+
+fileprivate final class Discussion_comment_result {
+
+  fileprivate var success: DiscussionResponse?
+
+
+  fileprivate init() { }
+  fileprivate init(success: DiscussionResponse?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Discussion_comment_result, rhs: Discussion_comment_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Discussion_comment_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Discussion_comment_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Discussion_comment_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Discussion_comment_result {
+    _ = try proto.readStructBegin()
+    var success: DiscussionResponse?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .struct):           success = try DiscussionResponse.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Discussion_comment_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class Discussion_preview_args {
+
+  fileprivate var body: String
+
+
+  fileprivate init(body: String) {
+    self.body = body
+  }
+
+}
+
+fileprivate func ==(lhs: Discussion_preview_args, rhs: Discussion_preview_args) -> Bool {
+  return
+    (lhs.body == rhs.body)
+}
+
+extension Discussion_preview_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(body)
+  }
+
+}
+
+extension Discussion_preview_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["body": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Discussion_preview_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Discussion_preview_args {
+    _ = try proto.readStructBegin()
+    var body: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           body = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(body, named: "body")
+
+    return Discussion_preview_args(body: body)
+  }
+
+}
+
+
+
+fileprivate final class Discussion_preview_result {
+
+  fileprivate var success: DiscussionResponse?
+
+
+  fileprivate init() { }
+  fileprivate init(success: DiscussionResponse?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Discussion_preview_result, rhs: Discussion_preview_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Discussion_preview_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Discussion_preview_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Discussion_preview_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Discussion_preview_result {
+    _ = try proto.readStructBegin()
+    var success: DiscussionResponse?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .struct):           success = try DiscussionResponse.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Discussion_preview_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class Discussion_reply_args {
+
+  fileprivate var shortUrl: String
+
+  fileprivate var body: String
+
+  fileprivate var parentCommentId: String
+
+
+  fileprivate init(shortUrl: String, body: String, parentCommentId: String) {
+    self.shortUrl = shortUrl
+    self.body = body
+    self.parentCommentId = parentCommentId
+  }
+
+}
+
+fileprivate func ==(lhs: Discussion_reply_args, rhs: Discussion_reply_args) -> Bool {
+  return
+    (lhs.shortUrl == rhs.shortUrl) &&
+    (lhs.body == rhs.body) &&
+    (lhs.parentCommentId == rhs.parentCommentId)
+}
+
+extension Discussion_reply_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(shortUrl)
+    hasher.combine(body)
+    hasher.combine(parentCommentId)
+  }
+
+}
+
+extension Discussion_reply_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["shortUrl": 1, "body": 2, "parentCommentId": 3, ]
+  }
+
+  fileprivate static var structName: String { return "Discussion_reply_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Discussion_reply_args {
+    _ = try proto.readStructBegin()
+    var shortUrl: String!
+    var body: String!
+    var parentCommentId: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           shortUrl = try String.read(from: proto)
+        case (2, .string):           body = try String.read(from: proto)
+        case (3, .string):           parentCommentId = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(shortUrl, named: "shortUrl")
+    try proto.validateValue(body, named: "body")
+    try proto.validateValue(parentCommentId, named: "parentCommentId")
+
+    return Discussion_reply_args(shortUrl: shortUrl, body: body, parentCommentId: parentCommentId)
+  }
+
+}
+
+
+
+fileprivate final class Discussion_reply_result {
+
+  fileprivate var success: DiscussionResponse?
+
+
+  fileprivate init() { }
+  fileprivate init(success: DiscussionResponse?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Discussion_reply_result, rhs: Discussion_reply_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Discussion_reply_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Discussion_reply_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Discussion_reply_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Discussion_reply_result {
+    _ = try proto.readStructBegin()
+    var success: DiscussionResponse?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .struct):           success = try DiscussionResponse.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Discussion_reply_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class Discussion_reportAbuse_args {
+
+  fileprivate var parameters: ReportAbuseParameters
+
+
+  fileprivate init(parameters: ReportAbuseParameters) {
+    self.parameters = parameters
+  }
+
+}
+
+fileprivate func ==(lhs: Discussion_reportAbuse_args, rhs: Discussion_reportAbuse_args) -> Bool {
+  return
+    (lhs.parameters == rhs.parameters)
+}
+
+extension Discussion_reportAbuse_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(parameters)
+  }
+
+}
+
+extension Discussion_reportAbuse_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["parameters": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Discussion_reportAbuse_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Discussion_reportAbuse_args {
+    _ = try proto.readStructBegin()
+    var parameters: ReportAbuseParameters!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           parameters = try ReportAbuseParameters.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(parameters, named: "parameters")
+
+    return Discussion_reportAbuse_args(parameters: parameters)
+  }
+
+}
+
+
+
+fileprivate final class Discussion_reportAbuse_result {
+
+  fileprivate var success: DiscussionResponse?
+
+
+  fileprivate init() { }
+  fileprivate init(success: DiscussionResponse?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Discussion_reportAbuse_result, rhs: Discussion_reportAbuse_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Discussion_reportAbuse_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Discussion_reportAbuse_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Discussion_reportAbuse_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Discussion_reportAbuse_result {
+    _ = try proto.readStructBegin()
+    var success: DiscussionResponse?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .struct):           success = try DiscussionResponse.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Discussion_reportAbuse_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class Discussion_getUserProfile_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Discussion_getUserProfile_args, rhs: Discussion_getUserProfile_args) -> Bool {
+  return true
+}
+
+extension Discussion_getUserProfile_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Discussion_getUserProfile_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Discussion_getUserProfile_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Discussion_getUserProfile_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Discussion_getUserProfile_args()
+  }
+
+}
+
+
+
+fileprivate final class Discussion_getUserProfile_result {
+
+  fileprivate var success: GetUserProfileResponse?
+
+
+  fileprivate init() { }
+  fileprivate init(success: GetUserProfileResponse?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Discussion_getUserProfile_result, rhs: Discussion_getUserProfile_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Discussion_getUserProfile_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Discussion_getUserProfile_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Discussion_getUserProfile_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Discussion_getUserProfile_result {
+    _ = try proto.readStructBegin()
+    var success: GetUserProfileResponse?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .struct):           success = try GetUserProfileResponse.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Discussion_getUserProfile_result(success: success)
+  }
+
+}
+
+
+
 extension DiscussionClient : Discussion {
 
   private func send_recommend(commentId: String) throws {
@@ -5684,6 +6609,126 @@ extension DiscussionClient : Discussion {
     return try recv_recommend()
   }
 
+  private func send_comment(shortUrl: String, body: String) throws {
+    try outProtocol.writeMessageBegin(name: "comment", type: .call, sequenceID: 0)
+    let args = Discussion_comment_args(shortUrl: shortUrl, body: body)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_comment() throws -> DiscussionResponse {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Discussion_comment_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "comment"))
+  }
+
+  public func comment(shortUrl: String, body: String) throws -> DiscussionResponse {
+    try send_comment(shortUrl: shortUrl, body: body)
+    try outProtocol.transport.flush()
+    return try recv_comment()
+  }
+
+  private func send_preview(body: String) throws {
+    try outProtocol.writeMessageBegin(name: "preview", type: .call, sequenceID: 0)
+    let args = Discussion_preview_args(body: body)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_preview() throws -> DiscussionResponse {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Discussion_preview_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "preview"))
+  }
+
+  public func preview(body: String) throws -> DiscussionResponse {
+    try send_preview(body: body)
+    try outProtocol.transport.flush()
+    return try recv_preview()
+  }
+
+  private func send_reply(shortUrl: String, body: String, parentCommentId: String) throws {
+    try outProtocol.writeMessageBegin(name: "reply", type: .call, sequenceID: 0)
+    let args = Discussion_reply_args(shortUrl: shortUrl, body: body, parentCommentId: parentCommentId)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_reply() throws -> DiscussionResponse {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Discussion_reply_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "reply"))
+  }
+
+  public func reply(shortUrl: String, body: String, parentCommentId: String) throws -> DiscussionResponse {
+    try send_reply(shortUrl: shortUrl, body: body, parentCommentId: parentCommentId)
+    try outProtocol.transport.flush()
+    return try recv_reply()
+  }
+
+  private func send_reportAbuse(parameters: ReportAbuseParameters) throws {
+    try outProtocol.writeMessageBegin(name: "reportAbuse", type: .call, sequenceID: 0)
+    let args = Discussion_reportAbuse_args(parameters: parameters)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_reportAbuse() throws -> DiscussionResponse {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Discussion_reportAbuse_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "reportAbuse"))
+  }
+
+  public func reportAbuse(parameters: ReportAbuseParameters) throws -> DiscussionResponse {
+    try send_reportAbuse(parameters: parameters)
+    try outProtocol.transport.flush()
+    return try recv_reportAbuse()
+  }
+
+  private func send_getUserProfile() throws {
+    try outProtocol.writeMessageBegin(name: "getUserProfile", type: .call, sequenceID: 0)
+    let args = Discussion_getUserProfile_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_getUserProfile() throws -> GetUserProfileResponse {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Discussion_getUserProfile_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "getUserProfile"))
+  }
+
+  public func getUserProfile() throws -> GetUserProfileResponse {
+    try send_getUserProfile()
+    try outProtocol.transport.flush()
+    return try recv_getUserProfile()
+  }
+
 }
 
 extension DiscussionProcessor : TProcessor {
@@ -5705,6 +6750,91 @@ extension DiscussionProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "recommend", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["comment"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Discussion_comment_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Discussion_comment_result()
+      do {
+        result.success = try handler.comment(shortUrl: args.shortUrl, body: args.body)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "comment", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["preview"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Discussion_preview_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Discussion_preview_result()
+      do {
+        result.success = try handler.preview(body: args.body)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "preview", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["reply"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Discussion_reply_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Discussion_reply_result()
+      do {
+        result.success = try handler.reply(shortUrl: args.shortUrl, body: args.body, parentCommentId: args.parentCommentId)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "reply", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["reportAbuse"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Discussion_reportAbuse_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Discussion_reportAbuse_result()
+      do {
+        result.success = try handler.reportAbuse(parameters: args.parameters)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "reportAbuse", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["getUserProfile"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Discussion_getUserProfile_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Discussion_getUserProfile_result()
+      do {
+        result.success = try handler.getUserProfile()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "getUserProfile", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
       try outProtocol.transport.flush()
@@ -5760,6 +6890,131 @@ extension DiscussionProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "recommend", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["comment"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Discussion_comment_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.comment(shortUrl: args.shortUrl, body: args.body, completion: { asyncResult in
+        var result = Discussion_comment_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "comment", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "comment", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "comment", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["preview"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Discussion_preview_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.preview(body: args.body, completion: { asyncResult in
+        var result = Discussion_preview_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "preview", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "preview", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "preview", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["reply"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Discussion_reply_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.reply(shortUrl: args.shortUrl, body: args.body, parentCommentId: args.parentCommentId, completion: { asyncResult in
+        var result = Discussion_reply_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "reply", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "reply", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "reply", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["reportAbuse"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Discussion_reportAbuse_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.reportAbuse(parameters: args.parameters, completion: { asyncResult in
+        var result = Discussion_reportAbuse_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "reportAbuse", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "reportAbuse", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "reportAbuse", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["getUserProfile"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Discussion_getUserProfile_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.getUserProfile(completion: { asyncResult in
+        var result = Discussion_getUserProfile_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "getUserProfile", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "getUserProfile", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "getUserProfile", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
