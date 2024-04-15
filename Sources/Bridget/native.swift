@@ -358,6 +358,55 @@ public enum Metric {
   case font(val: MetricFont)
 }
 
+public final class DiscussionBadge {
+
+  public var name: String
+
+
+  public init(name: String) {
+    self.name = name
+  }
+
+}
+
+public final class DiscussionUserProfile {
+
+  public var userId: String
+
+  public var displayName: String
+
+  public var webUrl: String
+
+  public var apiUrl: String
+
+  public var avatar: String
+
+  public var secureAvatarUrl: String
+
+  public var badge: TList<DiscussionBadge>
+
+  public var canPostComment: Bool
+
+  public var isPremoderated: Bool
+
+  public var hasCommented: Bool
+
+
+  public init(userId: String, displayName: String, webUrl: String, apiUrl: String, avatar: String, secureAvatarUrl: String, badge: TList<DiscussionBadge>, canPostComment: Bool, isPremoderated: Bool, hasCommented: Bool) {
+    self.userId = userId
+    self.displayName = displayName
+    self.webUrl = webUrl
+    self.apiUrl = apiUrl
+    self.avatar = avatar
+    self.secureAvatarUrl = secureAvatarUrl
+    self.badge = badge
+    self.canPostComment = canPostComment
+    self.isPremoderated = isPremoderated
+    self.hasCommented = hasCommented
+  }
+
+}
+
 public final class DiscussionApiResponse {
 
   public var status: String
@@ -382,6 +431,13 @@ public final class DiscussionApiResponse {
     self.errorCode = errorCode
   }
 
+}
+
+public enum GetUserProfileResponse {
+
+  case profile(val: DiscussionUserProfile)
+
+  case error(val: DiscussionNativeError)
 }
 
 public enum DiscussionResponse {
@@ -989,6 +1045,28 @@ public protocol Discussion {
   /// - Throws: 
   func recommend(commentId: String) throws -> DiscussionResponse
 
+  ///
+  /// - Parameters:
+  ///   - shortUrl: 
+  ///   - body: 
+  /// - Returns: DiscussionResponse
+  /// - Throws: 
+  func comment(shortUrl: String, body: String) throws -> DiscussionResponse
+
+  ///
+  /// - Parameters:
+  ///   - shortUrl: 
+  ///   - body: 
+  ///   - parentCommentId: 
+  /// - Returns: DiscussionResponse
+  /// - Throws: 
+  func reply(shortUrl: String, body: String, parentCommentId: String) throws -> DiscussionResponse
+
+  ///
+  /// - Returns: GetUserProfileResponse
+  /// - Throws: 
+  func getUserProfile() throws -> GetUserProfileResponse
+
 }
 
 open class DiscussionClient : TClient /* , Discussion */ {
@@ -1002,6 +1080,25 @@ public protocol DiscussionAsync {
   ///   - commentId: 
   ///   - completion: Result<DiscussionResponse, Error> wrapping return and following Exceptions: 
   func recommend(commentId: String, completion: @escaping (Result<DiscussionResponse, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - shortUrl: 
+  ///   - body: 
+  ///   - completion: Result<DiscussionResponse, Error> wrapping return and following Exceptions: 
+  func comment(shortUrl: String, body: String, completion: @escaping (Result<DiscussionResponse, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - shortUrl: 
+  ///   - body: 
+  ///   - parentCommentId: 
+  ///   - completion: Result<DiscussionResponse, Error> wrapping return and following Exceptions: 
+  func reply(shortUrl: String, body: String, parentCommentId: String, completion: @escaping (Result<DiscussionResponse, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<GetUserProfileResponse, Error> wrapping return and following Exceptions: 
+  func getUserProfile(completion: @escaping (Result<GetUserProfileResponse, Error>) -> Void)
 
 }
 
@@ -1192,6 +1289,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v4.0.0"
+public let BRIDGET_VERSION : String = "v5.0.0"
 
 
