@@ -720,325 +720,7 @@ extension Metric : TStruct {
 
 
 
-public func ==(lhs: DiscussionBadge, rhs: DiscussionBadge) -> Bool {
-  return
-    (lhs.name == rhs.name)
-}
-
-extension DiscussionBadge : CustomStringConvertible {
-
-  public var description : String {
-    var desc = "DiscussionBadge("
-    desc += "name=\(String(describing: self.name))"
-    return desc
-  }
-
-}
-
-extension DiscussionBadge : Hashable {
-
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(name)
-  }
-
-}
-
-extension DiscussionBadge : TStruct {
-
-  public static var fieldIds: [String: Int32] {
-    return ["name": 1, ]
-  }
-
-  public static var structName: String { return "DiscussionBadge" }
-
-  public static func read(from proto: TProtocol) throws -> DiscussionBadge {
-    _ = try proto.readStructBegin()
-    var name: String!
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (1, .string):           name = try String.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-    // Required fields
-    try proto.validateValue(name, named: "name")
-
-    return DiscussionBadge(name: name)
-  }
-
-}
-
-
-
-public func ==(lhs: DiscussionUserProfile, rhs: DiscussionUserProfile) -> Bool {
-  return
-    (lhs.userId == rhs.userId) &&
-    (lhs.displayName == rhs.displayName) &&
-    (lhs.webUrl == rhs.webUrl) &&
-    (lhs.apiUrl == rhs.apiUrl) &&
-    (lhs.avatar == rhs.avatar) &&
-    (lhs.secureAvatarUrl == rhs.secureAvatarUrl) &&
-    (lhs.badge == rhs.badge) &&
-    (lhs.canPostComment == rhs.canPostComment) &&
-    (lhs.isPremoderated == rhs.isPremoderated) &&
-    (lhs.hasCommented == rhs.hasCommented)
-}
-
-extension DiscussionUserProfile : CustomStringConvertible {
-
-  public var description : String {
-    var desc = "DiscussionUserProfile("
-    desc += "userId=\(String(describing: self.userId)), "
-    desc += "displayName=\(String(describing: self.displayName)), "
-    desc += "webUrl=\(String(describing: self.webUrl)), "
-    desc += "apiUrl=\(String(describing: self.apiUrl)), "
-    desc += "avatar=\(String(describing: self.avatar)), "
-    desc += "secureAvatarUrl=\(String(describing: self.secureAvatarUrl)), "
-    desc += "badge=\(String(describing: self.badge)), "
-    desc += "canPostComment=\(String(describing: self.canPostComment)), "
-    desc += "isPremoderated=\(String(describing: self.isPremoderated)), "
-    desc += "hasCommented=\(String(describing: self.hasCommented))"
-    return desc
-  }
-
-}
-
-extension DiscussionUserProfile : Hashable {
-
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(userId)
-    hasher.combine(displayName)
-    hasher.combine(webUrl)
-    hasher.combine(apiUrl)
-    hasher.combine(avatar)
-    hasher.combine(secureAvatarUrl)
-    hasher.combine(badge)
-    hasher.combine(canPostComment)
-    hasher.combine(isPremoderated)
-    hasher.combine(hasCommented)
-  }
-
-}
-
-extension DiscussionUserProfile : TStruct {
-
-  public static var fieldIds: [String: Int32] {
-    return ["userId": 1, "displayName": 2, "webUrl": 3, "apiUrl": 4, "avatar": 5, "secureAvatarUrl": 6, "badge": 7, "canPostComment": 8, "isPremoderated": 9, "hasCommented": 10, ]
-  }
-
-  public static var structName: String { return "DiscussionUserProfile" }
-
-  public static func read(from proto: TProtocol) throws -> DiscussionUserProfile {
-    _ = try proto.readStructBegin()
-    var userId: String!
-    var displayName: String!
-    var webUrl: String!
-    var apiUrl: String!
-    var avatar: String!
-    var secureAvatarUrl: String!
-    var badge: TList<DiscussionBadge>!
-    var canPostComment: Bool!
-    var isPremoderated: Bool!
-    var hasCommented: Bool!
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (1, .string):           userId = try String.read(from: proto)
-        case (2, .string):           displayName = try String.read(from: proto)
-        case (3, .string):           webUrl = try String.read(from: proto)
-        case (4, .string):           apiUrl = try String.read(from: proto)
-        case (5, .string):           avatar = try String.read(from: proto)
-        case (6, .string):           secureAvatarUrl = try String.read(from: proto)
-        case (7, .list):            badge = try TList<DiscussionBadge>.read(from: proto)
-        case (8, .bool):            canPostComment = try Bool.read(from: proto)
-        case (9, .bool):            isPremoderated = try Bool.read(from: proto)
-        case (10, .bool):            hasCommented = try Bool.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-    // Required fields
-    try proto.validateValue(userId, named: "userId")
-    try proto.validateValue(displayName, named: "displayName")
-    try proto.validateValue(webUrl, named: "webUrl")
-    try proto.validateValue(apiUrl, named: "apiUrl")
-    try proto.validateValue(avatar, named: "avatar")
-    try proto.validateValue(secureAvatarUrl, named: "secureAvatarUrl")
-    try proto.validateValue(badge, named: "badge")
-    try proto.validateValue(canPostComment, named: "canPostComment")
-    try proto.validateValue(isPremoderated, named: "isPremoderated")
-    try proto.validateValue(hasCommented, named: "hasCommented")
-
-    return DiscussionUserProfile(userId: userId, displayName: displayName, webUrl: webUrl, apiUrl: apiUrl, avatar: avatar, secureAvatarUrl: secureAvatarUrl, badge: badge, canPostComment: canPostComment, isPremoderated: isPremoderated, hasCommented: hasCommented)
-  }
-
-}
-
-
-
-public func ==(lhs: DiscussionApiResponse, rhs: DiscussionApiResponse) -> Bool {
-  return
-    (lhs.status == rhs.status) &&
-    (lhs.statusCode == rhs.statusCode) &&
-    (lhs.message == rhs.message) &&
-    (lhs.errorCode == rhs.errorCode)
-}
-
-extension DiscussionApiResponse : CustomStringConvertible {
-
-  public var description : String {
-    var desc = "DiscussionApiResponse("
-    desc += "status=\(String(describing: self.status)), "
-    desc += "statusCode=\(String(describing: self.statusCode)), "
-    desc += "message=\(String(describing: self.message)), "
-    desc += "errorCode=\(String(describing: self.errorCode))"
-    return desc
-  }
-
-}
-
-extension DiscussionApiResponse : Hashable {
-
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(status)
-    hasher.combine(statusCode)
-    hasher.combine(message)
-    hasher.combine(errorCode)
-  }
-
-}
-
-extension DiscussionApiResponse : TStruct {
-
-  public static var fieldIds: [String: Int32] {
-    return ["status": 1, "statusCode": 2, "message": 3, "errorCode": 4, ]
-  }
-
-  public static var structName: String { return "DiscussionApiResponse" }
-
-  public static func read(from proto: TProtocol) throws -> DiscussionApiResponse {
-    _ = try proto.readStructBegin()
-    var status: String!
-    var statusCode: Int32!
-    var message: String!
-    var errorCode: String?
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (1, .string):           status = try String.read(from: proto)
-        case (2, .i32):             statusCode = try Int32.read(from: proto)
-        case (3, .string):           message = try String.read(from: proto)
-        case (4, .string):           errorCode = try String.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-    // Required fields
-    try proto.validateValue(status, named: "status")
-    try proto.validateValue(statusCode, named: "statusCode")
-    try proto.validateValue(message, named: "message")
-
-    return DiscussionApiResponse(status: status, statusCode: statusCode, message: message, errorCode: errorCode)
-  }
-
-}
-
-
-
-public func ==(lhs: GetUserProfileResponse, rhs: GetUserProfileResponse) -> Bool {
-  return {
-    switch (lhs, rhs) {
-    case (.profile(let lval), .profile(let rval)): return lval == rval
-    case (.error(let lval), .error(let rval)): return lval == rval
-    default: return false
-    }
-  }()
-}
-
-extension GetUserProfileResponse : CustomStringConvertible {
-
-  public var description : String {
-    var desc = "GetUserProfileResponse."
-    switch self {
-    case .profile(let val): desc += "profile(val: \(val))"
-    case .error(let val): desc += "error(val: \(val))"
-    }
-    return desc
-  }
-
-}
-
-extension GetUserProfileResponse : Hashable {
-
-  public func hash(into hasher: inout Hasher) {
-    switch self {
-    case .profile(let val): hasher.combine(val)
-    case .error(let val): hasher.combine(val)
-    }
-
-  }
-
-}
-
-extension GetUserProfileResponse : TStruct {
-
-  public static var fieldIds: [String: Int32] {
-    return ["profile": 1, "error": 2, ]
-  }
-
-  public static var structName: String { return "GetUserProfileResponse" }
-
-  public static func read(from proto: TProtocol) throws -> GetUserProfileResponse {
-    _ = try proto.readStructBegin()
-    var ret: GetUserProfileResponse?
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (1, .struct):                   ret = GetUserProfileResponse.profile(val: try DiscussionUserProfile.read(from: proto))
-        case (2, .i32):                     ret = GetUserProfileResponse.error(val: try DiscussionNativeError.read(from: proto))
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-    if let ret = ret {
-      return ret
-    }
-
-    throw TProtocolError(error: .unknown, message: "Missing required value for type: GetUserProfileResponse")  }
-
-}
-
-
-
-public func ==(lhs: DiscussionResponse, rhs: DiscussionResponse) -> Bool {
+public func ==(lhs: DiscussionServiceResponse, rhs: DiscussionServiceResponse) -> Bool {
   return {
     switch (lhs, rhs) {
     case (.response(let lval), .response(let rval)): return lval == rval
@@ -1048,10 +730,10 @@ public func ==(lhs: DiscussionResponse, rhs: DiscussionResponse) -> Bool {
   }()
 }
 
-extension DiscussionResponse : CustomStringConvertible {
+extension DiscussionServiceResponse : CustomStringConvertible {
 
   public var description : String {
-    var desc = "DiscussionResponse."
+    var desc = "DiscussionServiceResponse."
     switch self {
     case .response(let val): desc += "response(val: \(val))"
     case .error(let val): desc += "error(val: \(val))"
@@ -1061,7 +743,7 @@ extension DiscussionResponse : CustomStringConvertible {
 
 }
 
-extension DiscussionResponse : Hashable {
+extension DiscussionServiceResponse : Hashable {
 
   public func hash(into hasher: inout Hasher) {
     switch self {
@@ -1073,25 +755,25 @@ extension DiscussionResponse : Hashable {
 
 }
 
-extension DiscussionResponse : TStruct {
+extension DiscussionServiceResponse : TStruct {
 
   public static var fieldIds: [String: Int32] {
     return ["response": 1, "error": 2, ]
   }
 
-  public static var structName: String { return "DiscussionResponse" }
+  public static var structName: String { return "DiscussionServiceResponse" }
 
-  public static func read(from proto: TProtocol) throws -> DiscussionResponse {
+  public static func read(from proto: TProtocol) throws -> DiscussionServiceResponse {
     _ = try proto.readStructBegin()
-    var ret: DiscussionResponse?
+    var ret: DiscussionServiceResponse?
     fields: while true {
 
       let (_, fieldType, fieldID) = try proto.readFieldBegin()
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
-        case (1, .struct):                   ret = DiscussionResponse.response(val: try DiscussionApiResponse.read(from: proto))
-        case (2, .i32):                     ret = DiscussionResponse.error(val: try DiscussionNativeError.read(from: proto))
+        case (1, .string):                   ret = DiscussionServiceResponse.response(val: try String.read(from: proto))
+        case (2, .i32):                     ret = DiscussionServiceResponse.error(val: try DiscussionNativeError.read(from: proto))
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
       try proto.readFieldEnd()
@@ -1102,7 +784,7 @@ extension DiscussionResponse : TStruct {
       return ret
     }
 
-    throw TProtocolError(error: .unknown, message: "Missing required value for type: DiscussionResponse")  }
+    throw TProtocolError(error: .unknown, message: "Missing required value for type: DiscussionServiceResponse")  }
 
 }
 
@@ -5843,11 +5525,11 @@ extension Discussion_recommend_args : TStruct {
 
 fileprivate final class Discussion_recommend_result {
 
-  fileprivate var success: DiscussionResponse?
+  fileprivate var success: DiscussionServiceResponse?
 
 
   fileprivate init() { }
-  fileprivate init(success: DiscussionResponse?) {
+  fileprivate init(success: DiscussionServiceResponse?) {
     self.success = success
   }
 
@@ -5876,7 +5558,7 @@ extension Discussion_recommend_result : TStruct {
 
   fileprivate static func read(from proto: TProtocol) throws -> Discussion_recommend_result {
     _ = try proto.readStructBegin()
-    var success: DiscussionResponse?
+    var success: DiscussionServiceResponse?
 
     fields: while true {
 
@@ -5884,7 +5566,7 @@ extension Discussion_recommend_result : TStruct {
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
-        case (0, .struct):           success = try DiscussionResponse.read(from: proto)
+        case (0, .struct):           success = try DiscussionServiceResponse.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -5970,11 +5652,11 @@ extension Discussion_comment_args : TStruct {
 
 fileprivate final class Discussion_comment_result {
 
-  fileprivate var success: DiscussionResponse?
+  fileprivate var success: DiscussionServiceResponse?
 
 
   fileprivate init() { }
-  fileprivate init(success: DiscussionResponse?) {
+  fileprivate init(success: DiscussionServiceResponse?) {
     self.success = success
   }
 
@@ -6003,7 +5685,7 @@ extension Discussion_comment_result : TStruct {
 
   fileprivate static func read(from proto: TProtocol) throws -> Discussion_comment_result {
     _ = try proto.readStructBegin()
-    var success: DiscussionResponse?
+    var success: DiscussionServiceResponse?
 
     fields: while true {
 
@@ -6011,7 +5693,7 @@ extension Discussion_comment_result : TStruct {
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
-        case (0, .struct):           success = try DiscussionResponse.read(from: proto)
+        case (0, .struct):           success = try DiscussionServiceResponse.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -6105,11 +5787,11 @@ extension Discussion_reply_args : TStruct {
 
 fileprivate final class Discussion_reply_result {
 
-  fileprivate var success: DiscussionResponse?
+  fileprivate var success: DiscussionServiceResponse?
 
 
   fileprivate init() { }
-  fileprivate init(success: DiscussionResponse?) {
+  fileprivate init(success: DiscussionServiceResponse?) {
     self.success = success
   }
 
@@ -6138,7 +5820,7 @@ extension Discussion_reply_result : TStruct {
 
   fileprivate static func read(from proto: TProtocol) throws -> Discussion_reply_result {
     _ = try proto.readStructBegin()
-    var success: DiscussionResponse?
+    var success: DiscussionServiceResponse?
 
     fields: while true {
 
@@ -6146,7 +5828,7 @@ extension Discussion_reply_result : TStruct {
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
-        case (0, .struct):           success = try DiscussionResponse.read(from: proto)
+        case (0, .struct):           success = try DiscussionServiceResponse.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -6213,11 +5895,11 @@ extension Discussion_getUserProfile_args : TStruct {
 
 fileprivate final class Discussion_getUserProfile_result {
 
-  fileprivate var success: GetUserProfileResponse?
+  fileprivate var success: DiscussionServiceResponse?
 
 
   fileprivate init() { }
-  fileprivate init(success: GetUserProfileResponse?) {
+  fileprivate init(success: DiscussionServiceResponse?) {
     self.success = success
   }
 
@@ -6246,7 +5928,7 @@ extension Discussion_getUserProfile_result : TStruct {
 
   fileprivate static func read(from proto: TProtocol) throws -> Discussion_getUserProfile_result {
     _ = try proto.readStructBegin()
-    var success: GetUserProfileResponse?
+    var success: DiscussionServiceResponse?
 
     fields: while true {
 
@@ -6254,7 +5936,7 @@ extension Discussion_getUserProfile_result : TStruct {
 
       switch (fieldID, fieldType) {
         case (_, .stop):            break fields
-        case (0, .struct):           success = try GetUserProfileResponse.read(from: proto)
+        case (0, .struct):           success = try DiscussionServiceResponse.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -6279,7 +5961,7 @@ extension DiscussionClient : Discussion {
     try outProtocol.writeMessageEnd()
   }
 
-  private func recv_recommend() throws -> DiscussionResponse {
+  private func recv_recommend() throws -> DiscussionServiceResponse {
     try inProtocol.readResultMessageBegin() 
     let result = try Discussion_recommend_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
@@ -6290,7 +5972,7 @@ extension DiscussionClient : Discussion {
     throw TApplicationError(error: .missingResult(methodName: "recommend"))
   }
 
-  public func recommend(commentId: String) throws -> DiscussionResponse {
+  public func recommend(commentId: String) throws -> DiscussionServiceResponse {
     try send_recommend(commentId: commentId)
     try outProtocol.transport.flush()
     return try recv_recommend()
@@ -6303,7 +5985,7 @@ extension DiscussionClient : Discussion {
     try outProtocol.writeMessageEnd()
   }
 
-  private func recv_comment() throws -> DiscussionResponse {
+  private func recv_comment() throws -> DiscussionServiceResponse {
     try inProtocol.readResultMessageBegin() 
     let result = try Discussion_comment_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
@@ -6314,7 +5996,7 @@ extension DiscussionClient : Discussion {
     throw TApplicationError(error: .missingResult(methodName: "comment"))
   }
 
-  public func comment(shortUrl: String, body: String) throws -> DiscussionResponse {
+  public func comment(shortUrl: String, body: String) throws -> DiscussionServiceResponse {
     try send_comment(shortUrl: shortUrl, body: body)
     try outProtocol.transport.flush()
     return try recv_comment()
@@ -6327,7 +6009,7 @@ extension DiscussionClient : Discussion {
     try outProtocol.writeMessageEnd()
   }
 
-  private func recv_reply() throws -> DiscussionResponse {
+  private func recv_reply() throws -> DiscussionServiceResponse {
     try inProtocol.readResultMessageBegin() 
     let result = try Discussion_reply_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
@@ -6338,7 +6020,7 @@ extension DiscussionClient : Discussion {
     throw TApplicationError(error: .missingResult(methodName: "reply"))
   }
 
-  public func reply(shortUrl: String, body: String, parentCommentId: String) throws -> DiscussionResponse {
+  public func reply(shortUrl: String, body: String, parentCommentId: String) throws -> DiscussionServiceResponse {
     try send_reply(shortUrl: shortUrl, body: body, parentCommentId: parentCommentId)
     try outProtocol.transport.flush()
     return try recv_reply()
@@ -6351,7 +6033,7 @@ extension DiscussionClient : Discussion {
     try outProtocol.writeMessageEnd()
   }
 
-  private func recv_getUserProfile() throws -> GetUserProfileResponse {
+  private func recv_getUserProfile() throws -> DiscussionServiceResponse {
     try inProtocol.readResultMessageBegin() 
     let result = try Discussion_getUserProfile_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
@@ -6362,7 +6044,7 @@ extension DiscussionClient : Discussion {
     throw TApplicationError(error: .missingResult(methodName: "getUserProfile"))
   }
 
-  public func getUserProfile() throws -> GetUserProfileResponse {
+  public func getUserProfile() throws -> DiscussionServiceResponse {
     try send_getUserProfile()
     try outProtocol.transport.flush()
     return try recv_getUserProfile()

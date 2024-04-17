@@ -358,91 +358,10 @@ public enum Metric {
   case font(val: MetricFont)
 }
 
-public final class DiscussionBadge {
+public enum DiscussionServiceResponse {
 
-  public var name: String
-
-
-  public init(name: String) {
-    self.name = name
-  }
-
-}
-
-public final class DiscussionUserProfile {
-
-  public var userId: String
-
-  public var displayName: String
-
-  public var webUrl: String
-
-  public var apiUrl: String
-
-  public var avatar: String
-
-  public var secureAvatarUrl: String
-
-  public var badge: TList<DiscussionBadge>
-
-  public var canPostComment: Bool
-
-  public var isPremoderated: Bool
-
-  public var hasCommented: Bool
-
-
-  public init(userId: String, displayName: String, webUrl: String, apiUrl: String, avatar: String, secureAvatarUrl: String, badge: TList<DiscussionBadge>, canPostComment: Bool, isPremoderated: Bool, hasCommented: Bool) {
-    self.userId = userId
-    self.displayName = displayName
-    self.webUrl = webUrl
-    self.apiUrl = apiUrl
-    self.avatar = avatar
-    self.secureAvatarUrl = secureAvatarUrl
-    self.badge = badge
-    self.canPostComment = canPostComment
-    self.isPremoderated = isPremoderated
-    self.hasCommented = hasCommented
-  }
-
-}
-
-public final class DiscussionApiResponse {
-
-  public var status: String
-
-  public var statusCode: Int32
-
-  public var message: String
-
-  public var errorCode: String?
-
-
-  public init(status: String, statusCode: Int32, message: String) {
-    self.status = status
-    self.statusCode = statusCode
-    self.message = message
-  }
-
-  public init(status: String, statusCode: Int32, message: String, errorCode: String?) {
-    self.status = status
-    self.statusCode = statusCode
-    self.message = message
-    self.errorCode = errorCode
-  }
-
-}
-
-public enum GetUserProfileResponse {
-
-  case profile(val: DiscussionUserProfile)
-
-  case error(val: DiscussionNativeError)
-}
-
-public enum DiscussionResponse {
-
-  case response(val: DiscussionApiResponse)
+  /// the JSON parsing will be done in DCR
+  case response(val: String)
 
   case error(val: DiscussionNativeError)
 }
@@ -1041,31 +960,31 @@ public protocol Discussion {
   ///
   /// - Parameters:
   ///   - commentId: 
-  /// - Returns: DiscussionResponse
+  /// - Returns: DiscussionServiceResponse
   /// - Throws: 
-  func recommend(commentId: String) throws -> DiscussionResponse
+  func recommend(commentId: String) throws -> DiscussionServiceResponse
 
   ///
   /// - Parameters:
   ///   - shortUrl: 
   ///   - body: 
-  /// - Returns: DiscussionResponse
+  /// - Returns: DiscussionServiceResponse
   /// - Throws: 
-  func comment(shortUrl: String, body: String) throws -> DiscussionResponse
+  func comment(shortUrl: String, body: String) throws -> DiscussionServiceResponse
 
   ///
   /// - Parameters:
   ///   - shortUrl: 
   ///   - body: 
   ///   - parentCommentId: 
-  /// - Returns: DiscussionResponse
+  /// - Returns: DiscussionServiceResponse
   /// - Throws: 
-  func reply(shortUrl: String, body: String, parentCommentId: String) throws -> DiscussionResponse
+  func reply(shortUrl: String, body: String, parentCommentId: String) throws -> DiscussionServiceResponse
 
   ///
-  /// - Returns: GetUserProfileResponse
+  /// - Returns: DiscussionServiceResponse
   /// - Throws: 
-  func getUserProfile() throws -> GetUserProfileResponse
+  func getUserProfile() throws -> DiscussionServiceResponse
 
 }
 
@@ -1078,27 +997,27 @@ public protocol DiscussionAsync {
   ///
   /// - Parameters:
   ///   - commentId: 
-  ///   - completion: Result<DiscussionResponse, Error> wrapping return and following Exceptions: 
-  func recommend(commentId: String, completion: @escaping (Result<DiscussionResponse, Error>) -> Void)
+  ///   - completion: Result<DiscussionServiceResponse, Error> wrapping return and following Exceptions: 
+  func recommend(commentId: String, completion: @escaping (Result<DiscussionServiceResponse, Error>) -> Void)
 
   ///
   /// - Parameters:
   ///   - shortUrl: 
   ///   - body: 
-  ///   - completion: Result<DiscussionResponse, Error> wrapping return and following Exceptions: 
-  func comment(shortUrl: String, body: String, completion: @escaping (Result<DiscussionResponse, Error>) -> Void)
+  ///   - completion: Result<DiscussionServiceResponse, Error> wrapping return and following Exceptions: 
+  func comment(shortUrl: String, body: String, completion: @escaping (Result<DiscussionServiceResponse, Error>) -> Void)
 
   ///
   /// - Parameters:
   ///   - shortUrl: 
   ///   - body: 
   ///   - parentCommentId: 
-  ///   - completion: Result<DiscussionResponse, Error> wrapping return and following Exceptions: 
-  func reply(shortUrl: String, body: String, parentCommentId: String, completion: @escaping (Result<DiscussionResponse, Error>) -> Void)
+  ///   - completion: Result<DiscussionServiceResponse, Error> wrapping return and following Exceptions: 
+  func reply(shortUrl: String, body: String, parentCommentId: String, completion: @escaping (Result<DiscussionServiceResponse, Error>) -> Void)
 
   ///
-  ///   - completion: Result<GetUserProfileResponse, Error> wrapping return and following Exceptions: 
-  func getUserProfile(completion: @escaping (Result<GetUserProfileResponse, Error>) -> Void)
+  ///   - completion: Result<DiscussionServiceResponse, Error> wrapping return and following Exceptions: 
+  func getUserProfile(completion: @escaping (Result<DiscussionServiceResponse, Error>) -> Void)
 
 }
 
@@ -1289,6 +1208,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v5.0.0"
+public let BRIDGET_VERSION : String = "v6.0.0"
 
 
