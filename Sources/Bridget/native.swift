@@ -10,6 +10,56 @@ import Foundation
 import Thrift
 
 
+public enum MediaEvent : TEnum {
+  case request
+  case ready
+  case play
+  case percent25
+  case percent50
+  case percent75
+  case end
+
+  public static func read(from proto: TProtocol) throws -> MediaEvent {
+    let raw: Int32 = try proto.read()
+    let new = MediaEvent(rawValue: raw)
+    if let unwrapped = new {
+      return unwrapped
+    } else {
+      throw TProtocolError(error: .invalidData,
+                           message: "Invalid enum value (\(raw)) for \(MediaEvent.self)")
+    }
+  }
+
+  public init() {
+    self = .request
+  }
+
+  public var rawValue: Int32 {
+    switch self {
+    case .request: return 0
+    case .ready: return 1
+    case .play: return 2
+    case .percent25: return 3
+    case .percent50: return 4
+    case .percent75: return 5
+    case .end: return 6
+    }
+  }
+
+  public init?(rawValue: Int32) {
+    switch rawValue {
+    case 0: self = .request
+    case 1: self = .ready
+    case 2: self = .play
+    case 3: self = .percent25
+    case 4: self = .percent50
+    case 5: self = .percent75
+    case 6: self = .end
+    default: return nil
+    }
+  }
+}
+
 public enum PurchaseScreenReason : TEnum {
   case hideads
   case epic
@@ -356,6 +406,20 @@ public enum Metric {
   case firstContentfulPaint(val: MetricPaint)
 
   case font(val: MetricFont)
+}
+
+public final class VideoEvent {
+
+  public var videoId: String
+
+  public var event: MediaEvent
+
+
+  public init(videoId: String, event: MediaEvent) {
+    self.videoId = videoId
+    self.event = event
+  }
+
 }
 
 public enum DiscussionServiceResponse {
@@ -861,6 +925,16 @@ public protocol Videos {
   /// - Throws: 
   func updateVideos(videoSlots: TList<VideoSlot>) throws
 
+  ///
+  /// - Parameters:
+  ///   - videoEvent: 
+  /// - Throws: 
+  func sendVideoEvent(videoEvent: VideoEvent) throws
+
+  ///
+  /// - Throws: 
+  func fullscreen() throws
+
 }
 
 open class VideosClient : TClient /* , Videos */ {
@@ -880,6 +954,16 @@ public protocol VideosAsync {
   ///   - videoSlots: 
   ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
   func updateVideos(videoSlots: TList<VideoSlot>, completion: @escaping (Result<Void, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - videoEvent: 
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func sendVideoEvent(videoEvent: VideoEvent, completion: @escaping (Result<Void, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func fullscreen(completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 
@@ -955,6 +1039,7 @@ open class MetricsProcessorAsync /* Metrics */ {
 
 }
 
+/// only available for signed in user, see https://github.com/guardian/bridget/issues/149
 public protocol Discussion {
 
   ///
@@ -992,6 +1077,7 @@ open class DiscussionClient : TClient /* , Discussion */ {
 
 }
 
+/// only available for signed in user, see https://github.com/guardian/bridget/issues/149
 public protocol DiscussionAsync {
 
   ///
@@ -1208,6 +1294,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v6.0.0"
+public let BRIDGET_VERSION : String = "v0.0.0-2024-08-15-snapshot-1"
 
 

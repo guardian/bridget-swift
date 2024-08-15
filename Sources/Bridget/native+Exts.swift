@@ -720,6 +720,71 @@ extension Metric : TStruct {
 
 
 
+public func ==(lhs: VideoEvent, rhs: VideoEvent) -> Bool {
+  return
+    (lhs.videoId == rhs.videoId) &&
+    (lhs.event == rhs.event)
+}
+
+extension VideoEvent : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "VideoEvent("
+    desc += "videoId=\(String(describing: self.videoId)), "
+    desc += "event=\(String(describing: self.event))"
+    return desc
+  }
+
+}
+
+extension VideoEvent : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(videoId)
+    hasher.combine(event)
+  }
+
+}
+
+extension VideoEvent : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["videoId": 1, "event": 2, ]
+  }
+
+  public static var structName: String { return "VideoEvent" }
+
+  public static func read(from proto: TProtocol) throws -> VideoEvent {
+    _ = try proto.readStructBegin()
+    var videoId: String!
+    var event: MediaEvent!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           videoId = try String.read(from: proto)
+        case (2, .i32):             event = try MediaEvent.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(videoId, named: "videoId")
+    try proto.validateValue(event, named: "event")
+
+    return VideoEvent(videoId: videoId, event: event)
+  }
+
+}
+
+
+
 public func ==(lhs: DiscussionServiceResponse, rhs: DiscussionServiceResponse) -> Bool {
   return {
     switch (lhs, rhs) {
@@ -5036,6 +5101,213 @@ extension Videos_updateVideos_result : TStruct {
 
 
 
+fileprivate final class Videos_sendVideoEvent_args {
+
+  fileprivate var videoEvent: VideoEvent
+
+
+  fileprivate init(videoEvent: VideoEvent) {
+    self.videoEvent = videoEvent
+  }
+
+}
+
+fileprivate func ==(lhs: Videos_sendVideoEvent_args, rhs: Videos_sendVideoEvent_args) -> Bool {
+  return
+    (lhs.videoEvent == rhs.videoEvent)
+}
+
+extension Videos_sendVideoEvent_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(videoEvent)
+  }
+
+}
+
+extension Videos_sendVideoEvent_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["videoEvent": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Videos_sendVideoEvent_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_sendVideoEvent_args {
+    _ = try proto.readStructBegin()
+    var videoEvent: VideoEvent!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           videoEvent = try VideoEvent.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(videoEvent, named: "videoEvent")
+
+    return Videos_sendVideoEvent_args(videoEvent: videoEvent)
+  }
+
+}
+
+
+
+fileprivate final class Videos_sendVideoEvent_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Videos_sendVideoEvent_result, rhs: Videos_sendVideoEvent_result) -> Bool {
+  return true
+}
+
+extension Videos_sendVideoEvent_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Videos_sendVideoEvent_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Videos_sendVideoEvent_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_sendVideoEvent_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Videos_sendVideoEvent_result()
+  }
+
+}
+
+
+
+fileprivate final class Videos_fullscreen_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Videos_fullscreen_args, rhs: Videos_fullscreen_args) -> Bool {
+  return true
+}
+
+extension Videos_fullscreen_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Videos_fullscreen_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Videos_fullscreen_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_fullscreen_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Videos_fullscreen_args()
+  }
+
+}
+
+
+
+fileprivate final class Videos_fullscreen_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Videos_fullscreen_result, rhs: Videos_fullscreen_result) -> Bool {
+  return true
+}
+
+extension Videos_fullscreen_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Videos_fullscreen_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Videos_fullscreen_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_fullscreen_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Videos_fullscreen_result()
+  }
+
+}
+
+
+
 extension VideosClient : Videos {
 
   private func send_insertVideos(videoSlots: TList<VideoSlot>) throws {
@@ -5078,6 +5350,46 @@ extension VideosClient : Videos {
     try recv_updateVideos()
   }
 
+  private func send_sendVideoEvent(videoEvent: VideoEvent) throws {
+    try outProtocol.writeMessageBegin(name: "sendVideoEvent", type: .call, sequenceID: 0)
+    let args = Videos_sendVideoEvent_args(videoEvent: videoEvent)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_sendVideoEvent() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Videos_sendVideoEvent_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func sendVideoEvent(videoEvent: VideoEvent) throws {
+    try send_sendVideoEvent(videoEvent: videoEvent)
+    try outProtocol.transport.flush()
+    try recv_sendVideoEvent()
+  }
+
+  private func send_fullscreen() throws {
+    try outProtocol.writeMessageBegin(name: "fullscreen", type: .call, sequenceID: 0)
+    let args = Videos_fullscreen_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_fullscreen() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Videos_fullscreen_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func fullscreen() throws {
+    try send_fullscreen()
+    try outProtocol.transport.flush()
+    try recv_fullscreen()
+  }
+
 }
 
 extension VideosProcessor : TProcessor {
@@ -5116,6 +5428,40 @@ extension VideosProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "updateVideos", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["sendVideoEvent"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_sendVideoEvent_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Videos_sendVideoEvent_result()
+      do {
+        try handler.sendVideoEvent(videoEvent: args.videoEvent)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "sendVideoEvent", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["fullscreen"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_fullscreen_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Videos_fullscreen_result()
+      do {
+        try handler.fullscreen()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "fullscreen", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
       try outProtocol.transport.flush()
@@ -5196,6 +5542,56 @@ extension VideosProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "updateVideos", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["sendVideoEvent"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_sendVideoEvent_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.sendVideoEvent(videoEvent: args.videoEvent, completion: { asyncResult in
+        var result = Videos_sendVideoEvent_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "sendVideoEvent", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "sendVideoEvent", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "sendVideoEvent", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["fullscreen"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_fullscreen_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.fullscreen(completion: { asyncResult in
+        var result = Videos_fullscreen_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "fullscreen", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "fullscreen", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "fullscreen", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
