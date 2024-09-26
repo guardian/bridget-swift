@@ -934,8 +934,16 @@ public protocol Videos {
 
   /// Android only
   ///
+  /// - Parameters:
+  ///   - isFullscreen: 
   /// - Throws: 
-  func fullscreen() throws
+  func setFullscreen(isFullscreen: Bool) throws
+
+  /// Android requires the web layer to resize and style the player for fullscreen
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func webFullscreen() throws -> Bool
 
 }
 
@@ -965,8 +973,15 @@ public protocol VideosAsync {
 
   /// Android only
   ///
+  /// - Parameters:
+  ///   - isFullscreen: 
   ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
-  func fullscreen(completion: @escaping (Result<Void, Error>) -> Void)
+  func setFullscreen(isFullscreen: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+
+  /// Android requires the web layer to resize and style the player for fullscreen
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func webFullscreen(completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -1297,6 +1312,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v7.0.0"
+public let BRIDGET_VERSION : String = "v0.0.0-2024-09-26-snapshot-1"
 
 

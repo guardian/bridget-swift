@@ -5210,32 +5210,92 @@ extension Videos_sendVideoEvent_result : TStruct {
 
 
 
-fileprivate final class Videos_fullscreen_args {
+fileprivate final class Videos_setFullscreen_args {
+
+  fileprivate var isFullscreen: Bool
+
+
+  fileprivate init(isFullscreen: Bool) {
+    self.isFullscreen = isFullscreen
+  }
+
+}
+
+fileprivate func ==(lhs: Videos_setFullscreen_args, rhs: Videos_setFullscreen_args) -> Bool {
+  return
+    (lhs.isFullscreen == rhs.isFullscreen)
+}
+
+extension Videos_setFullscreen_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(isFullscreen)
+  }
+
+}
+
+extension Videos_setFullscreen_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["isFullscreen": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Videos_setFullscreen_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_setFullscreen_args {
+    _ = try proto.readStructBegin()
+    var isFullscreen: Bool!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .bool):            isFullscreen = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(isFullscreen, named: "isFullscreen")
+
+    return Videos_setFullscreen_args(isFullscreen: isFullscreen)
+  }
+
+}
+
+
+
+fileprivate final class Videos_setFullscreen_result {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Videos_fullscreen_args, rhs: Videos_fullscreen_args) -> Bool {
+fileprivate func ==(lhs: Videos_setFullscreen_result, rhs: Videos_setFullscreen_result) -> Bool {
   return true
 }
 
-extension Videos_fullscreen_args : Hashable {
+extension Videos_setFullscreen_result : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
 
-extension Videos_fullscreen_args : TStruct {
+extension Videos_setFullscreen_result : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Videos_fullscreen_args" }
+  fileprivate static var structName: String { return "Videos_setFullscreen_result" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Videos_fullscreen_args {
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_setFullscreen_result {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -5252,39 +5312,39 @@ extension Videos_fullscreen_args : TStruct {
 
     try proto.readStructEnd()
 
-    return Videos_fullscreen_args()
+    return Videos_setFullscreen_result()
   }
 
 }
 
 
 
-fileprivate final class Videos_fullscreen_result {
+fileprivate final class Videos_webFullscreen_args {
 
 
   fileprivate init() { }
 }
 
-fileprivate func ==(lhs: Videos_fullscreen_result, rhs: Videos_fullscreen_result) -> Bool {
+fileprivate func ==(lhs: Videos_webFullscreen_args, rhs: Videos_webFullscreen_args) -> Bool {
   return true
 }
 
-extension Videos_fullscreen_result : Hashable {
+extension Videos_webFullscreen_args : Hashable {
 
   fileprivate func hash(into hasher: inout Hasher) {
   }
 
 }
 
-extension Videos_fullscreen_result : TStruct {
+extension Videos_webFullscreen_args : TStruct {
 
   fileprivate static var fieldIds: [String: Int32] {
     return [:]
   }
 
-  fileprivate static var structName: String { return "Videos_fullscreen_result" }
+  fileprivate static var structName: String { return "Videos_webFullscreen_args" }
 
-  fileprivate static func read(from proto: TProtocol) throws -> Videos_fullscreen_result {
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_webFullscreen_args {
     _ = try proto.readStructBegin()
 
     fields: while true {
@@ -5301,7 +5361,66 @@ extension Videos_fullscreen_result : TStruct {
 
     try proto.readStructEnd()
 
-    return Videos_fullscreen_result()
+    return Videos_webFullscreen_args()
+  }
+
+}
+
+
+
+fileprivate final class Videos_webFullscreen_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Videos_webFullscreen_result, rhs: Videos_webFullscreen_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Videos_webFullscreen_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Videos_webFullscreen_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Videos_webFullscreen_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_webFullscreen_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Videos_webFullscreen_result(success: success)
   }
 
 }
@@ -5370,24 +5489,48 @@ extension VideosClient : Videos {
     try recv_sendVideoEvent()
   }
 
-  private func send_fullscreen() throws {
-    try outProtocol.writeMessageBegin(name: "fullscreen", type: .call, sequenceID: 0)
-    let args = Videos_fullscreen_args()
+  private func send_setFullscreen(isFullscreen: Bool) throws {
+    try outProtocol.writeMessageBegin(name: "setFullscreen", type: .call, sequenceID: 0)
+    let args = Videos_setFullscreen_args(isFullscreen: isFullscreen)
     try args.write(to: outProtocol)
     try outProtocol.writeMessageEnd()
   }
 
-  private func recv_fullscreen() throws {
+  private func recv_setFullscreen() throws {
     try inProtocol.readResultMessageBegin() 
-    _ = try Videos_fullscreen_result.read(from: inProtocol)
+    _ = try Videos_setFullscreen_result.read(from: inProtocol)
     try inProtocol.readMessageEnd()
 
   }
 
-  public func fullscreen() throws {
-    try send_fullscreen()
+  public func setFullscreen(isFullscreen: Bool) throws {
+    try send_setFullscreen(isFullscreen: isFullscreen)
     try outProtocol.transport.flush()
-    try recv_fullscreen()
+    try recv_setFullscreen()
+  }
+
+  private func send_webFullscreen() throws {
+    try outProtocol.writeMessageBegin(name: "webFullscreen", type: .call, sequenceID: 0)
+    let args = Videos_webFullscreen_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_webFullscreen() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Videos_webFullscreen_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "webFullscreen"))
+  }
+
+  public func webFullscreen() throws -> Bool {
+    try send_webFullscreen()
+    try outProtocol.transport.flush()
+    return try recv_webFullscreen()
   }
 
 }
@@ -5449,19 +5592,36 @@ extension VideosProcessor : TProcessor {
       try outProtocol.writeMessageEnd()
       try outProtocol.transport.flush()
     }
-    processorHandlers["fullscreen"] = { sequenceID, inProtocol, outProtocol, handler in
+    processorHandlers["setFullscreen"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Videos_fullscreen_args.read(from: inProtocol)
+      let args = try Videos_setFullscreen_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
-      var result = Videos_fullscreen_result()
+      var result = Videos_setFullscreen_result()
       do {
-        try handler.fullscreen()
+        try handler.setFullscreen(isFullscreen: args.isFullscreen)
       }
       catch let error { throw error }
 
-      try outProtocol.writeMessageBegin(name: "fullscreen", type: .reply, sequenceID: sequenceID)
+      try outProtocol.writeMessageBegin(name: "setFullscreen", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["webFullscreen"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_webFullscreen_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Videos_webFullscreen_result()
+      do {
+        result.success = try handler.webFullscreen()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "webFullscreen", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
       try outProtocol.transport.flush()
@@ -5573,25 +5733,50 @@ extension VideosProcessorAsync : TProcessor {
         } catch { }
       })
     }
-    processorHandlers["fullscreen"] = { sequenceID, inProtocol, outProtocol, handler in
+    processorHandlers["setFullscreen"] = { sequenceID, inProtocol, outProtocol, handler in
 
-      let args = try Videos_fullscreen_args.read(from: inProtocol)
+      let args = try Videos_setFullscreen_args.read(from: inProtocol)
 
       try inProtocol.readMessageEnd()
 
-      handler.fullscreen(completion: { asyncResult in
-        var result = Videos_fullscreen_result()
+      handler.setFullscreen(isFullscreen: args.isFullscreen, completion: { asyncResult in
+        var result = Videos_setFullscreen_result()
         do {
           try asyncResult.get()
         } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "fullscreen", sequenceID: sequenceID, ex: error)
+          _ = try? outProtocol.writeException(messageName: "setFullscreen", sequenceID: sequenceID, ex: error)
           return
         } catch let error {
-          _ = try? outProtocol.writeException(messageName: "fullscreen", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          _ = try? outProtocol.writeException(messageName: "setFullscreen", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
           return
         }
         do {
-          try outProtocol.writeMessageBegin(name: "fullscreen", type: .reply, sequenceID: sequenceID)
+          try outProtocol.writeMessageBegin(name: "setFullscreen", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["webFullscreen"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_webFullscreen_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.webFullscreen(completion: { asyncResult in
+        var result = Videos_webFullscreen_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "webFullscreen", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "webFullscreen", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "webFullscreen", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
