@@ -932,10 +932,18 @@ public protocol Videos {
   /// - Throws: 
   func sendVideoEvent(videoEvent: VideoEvent) throws
 
-  /// Android only
+  /// This method is used by the web layer to instruct the native layer to activate or deactivate fullscreen mode
+  /// This is currently only required for Android as the fullscreen control on the YouTube player in Android webviews is a no-op
+  /// @param isFullscreen true if the web layer is fullscreen, false otherwise
+  /// @returns true if the native operation was successful, false otherwise
+  /// On Android, this method will return true if the operation was successful, false otherwise
+  /// On iOS, this method will always return false
   ///
+  /// - Parameters:
+  ///   - isFullscreen: 
+  /// - Returns: Bool
   /// - Throws: 
-  func fullscreen() throws
+  func setFullscreen(isFullscreen: Bool) throws -> Bool
 
 }
 
@@ -963,10 +971,17 @@ public protocol VideosAsync {
   ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
   func sendVideoEvent(videoEvent: VideoEvent, completion: @escaping (Result<Void, Error>) -> Void)
 
-  /// Android only
+  /// This method is used by the web layer to instruct the native layer to activate or deactivate fullscreen mode
+  /// This is currently only required for Android as the fullscreen control on the YouTube player in Android webviews is a no-op
+  /// @param isFullscreen true if the web layer is fullscreen, false otherwise
+  /// @returns true if the native operation was successful, false otherwise
+  /// On Android, this method will return true if the operation was successful, false otherwise
+  /// On iOS, this method will always return false
   ///
-  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
-  func fullscreen(completion: @escaping (Result<Void, Error>) -> Void)
+  /// - Parameters:
+  ///   - isFullscreen: 
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func setFullscreen(isFullscreen: Bool, completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -1297,6 +1312,6 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v7.0.0"
+public let BRIDGET_VERSION : String = "v8.0.0"
 
 
