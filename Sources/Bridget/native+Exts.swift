@@ -7585,3 +7585,240 @@ extension NewslettersProcessorAsync : TProcessor {
   }
 }
 
+fileprivate final class Touch_setIsTouching_args {
+
+  fileprivate var isTouching: Bool
+
+
+  fileprivate init(isTouching: Bool) {
+    self.isTouching = isTouching
+  }
+
+}
+
+fileprivate func ==(lhs: Touch_setIsTouching_args, rhs: Touch_setIsTouching_args) -> Bool {
+  return
+    (lhs.isTouching == rhs.isTouching)
+}
+
+extension Touch_setIsTouching_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(isTouching)
+  }
+
+}
+
+extension Touch_setIsTouching_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["isTouching": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Touch_setIsTouching_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Touch_setIsTouching_args {
+    _ = try proto.readStructBegin()
+    var isTouching: Bool!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .bool):            isTouching = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(isTouching, named: "isTouching")
+
+    return Touch_setIsTouching_args(isTouching: isTouching)
+  }
+
+}
+
+
+
+fileprivate final class Touch_setIsTouching_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Touch_setIsTouching_result, rhs: Touch_setIsTouching_result) -> Bool {
+  return true
+}
+
+extension Touch_setIsTouching_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Touch_setIsTouching_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Touch_setIsTouching_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Touch_setIsTouching_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Touch_setIsTouching_result()
+  }
+
+}
+
+
+
+extension TouchClient : Touch {
+
+  private func send_setIsTouching(isTouching: Bool) throws {
+    try outProtocol.writeMessageBegin(name: "setIsTouching", type: .call, sequenceID: 0)
+    let args = Touch_setIsTouching_args(isTouching: isTouching)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_setIsTouching() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Touch_setIsTouching_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func setIsTouching(isTouching: Bool) throws {
+    try send_setIsTouching(isTouching: isTouching)
+    try outProtocol.transport.flush()
+    try recv_setIsTouching()
+  }
+
+}
+
+extension TouchProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["setIsTouching"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Touch_setIsTouching_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Touch_setIsTouching_result()
+      do {
+        try handler.setIsTouching(isTouching: args.isTouching)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "setIsTouching", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = TouchProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+        try outProtocol.transport.flush()
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+      try outProtocol.transport.flush()
+    }
+  }
+}
+
+extension TouchProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["setIsTouching"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Touch_setIsTouching_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.setIsTouching(isTouching: args.isTouching, completion: { asyncResult in
+        var result = Touch_setIsTouching_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "setIsTouching", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "setIsTouching", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "setIsTouching", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = TouchProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+

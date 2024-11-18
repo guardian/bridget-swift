@@ -1312,6 +1312,58 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.0.0"
+public protocol Touch {
+
+  /// Notify the native layer that the user has started or stopped touching.
+  /// @param isTouching true if the user has started touching, false otherwise
+  ///
+  /// - Parameters:
+  ///   - isTouching: 
+  /// - Throws: 
+  func setIsTouching(isTouching: Bool) throws
+
+}
+
+open class TouchClient : TClient /* , Touch */ {
+
+}
+
+public protocol TouchAsync {
+
+  /// Notify the native layer that the user has started or stopped touching.
+  /// @param isTouching true if the user has started touching, false otherwise
+  ///
+  /// - Parameters:
+  ///   - isTouching: 
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func setIsTouching(isTouching: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+
+}
+
+open class TouchProcessor /* Touch */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Touch) throws -> Void]
+
+  public var service: Touch
+
+  public required init(service: Touch) {
+    self.service = service
+  }
+
+}
+
+open class TouchProcessorAsync /* Touch */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, TouchAsync) throws -> Void]
+
+  public var service: TouchAsync
+
+  public required init(service: TouchAsync) {
+    self.service = service
+  }
+
+}
+
+public let BRIDGET_VERSION : String = "v0.0.0-2024-11-18-snapshot-1"
 
 
