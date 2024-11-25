@@ -1312,6 +1312,58 @@ open class NewslettersProcessorAsync /* Newsletters */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.0.0"
+public protocol Interaction {
+
+  /// Notify the native layer to disable the article swipe feature.
+  /// @param disableSwipe true if native needs to disable article swipe
+  ///
+  /// - Parameters:
+  ///   - disableSwipe: 
+  /// - Throws: 
+  func disableArticleSwipe(disableSwipe: Bool) throws
+
+}
+
+open class InteractionClient : TClient /* , Interaction */ {
+
+}
+
+public protocol InteractionAsync {
+
+  /// Notify the native layer to disable the article swipe feature.
+  /// @param disableSwipe true if native needs to disable article swipe
+  ///
+  /// - Parameters:
+  ///   - disableSwipe: 
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func disableArticleSwipe(disableSwipe: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+
+}
+
+open class InteractionProcessor /* Interaction */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Interaction) throws -> Void]
+
+  public var service: Interaction
+
+  public required init(service: Interaction) {
+    self.service = service
+  }
+
+}
+
+open class InteractionProcessorAsync /* Interaction */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, InteractionAsync) throws -> Void]
+
+  public var service: InteractionAsync
+
+  public required init(service: InteractionAsync) {
+    self.service = service
+  }
+
+}
+
+public let BRIDGET_VERSION : String = "v8.1.0"
 
 

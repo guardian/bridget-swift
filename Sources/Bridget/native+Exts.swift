@@ -7585,3 +7585,240 @@ extension NewslettersProcessorAsync : TProcessor {
   }
 }
 
+fileprivate final class Interaction_disableArticleSwipe_args {
+
+  fileprivate var disableSwipe: Bool
+
+
+  fileprivate init(disableSwipe: Bool) {
+    self.disableSwipe = disableSwipe
+  }
+
+}
+
+fileprivate func ==(lhs: Interaction_disableArticleSwipe_args, rhs: Interaction_disableArticleSwipe_args) -> Bool {
+  return
+    (lhs.disableSwipe == rhs.disableSwipe)
+}
+
+extension Interaction_disableArticleSwipe_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(disableSwipe)
+  }
+
+}
+
+extension Interaction_disableArticleSwipe_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["disableSwipe": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Interaction_disableArticleSwipe_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Interaction_disableArticleSwipe_args {
+    _ = try proto.readStructBegin()
+    var disableSwipe: Bool!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .bool):            disableSwipe = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(disableSwipe, named: "disableSwipe")
+
+    return Interaction_disableArticleSwipe_args(disableSwipe: disableSwipe)
+  }
+
+}
+
+
+
+fileprivate final class Interaction_disableArticleSwipe_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Interaction_disableArticleSwipe_result, rhs: Interaction_disableArticleSwipe_result) -> Bool {
+  return true
+}
+
+extension Interaction_disableArticleSwipe_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Interaction_disableArticleSwipe_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Interaction_disableArticleSwipe_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Interaction_disableArticleSwipe_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Interaction_disableArticleSwipe_result()
+  }
+
+}
+
+
+
+extension InteractionClient : Interaction {
+
+  private func send_disableArticleSwipe(disableSwipe: Bool) throws {
+    try outProtocol.writeMessageBegin(name: "disableArticleSwipe", type: .call, sequenceID: 0)
+    let args = Interaction_disableArticleSwipe_args(disableSwipe: disableSwipe)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_disableArticleSwipe() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Interaction_disableArticleSwipe_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func disableArticleSwipe(disableSwipe: Bool) throws {
+    try send_disableArticleSwipe(disableSwipe: disableSwipe)
+    try outProtocol.transport.flush()
+    try recv_disableArticleSwipe()
+  }
+
+}
+
+extension InteractionProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["disableArticleSwipe"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Interaction_disableArticleSwipe_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Interaction_disableArticleSwipe_result()
+      do {
+        try handler.disableArticleSwipe(disableSwipe: args.disableSwipe)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "disableArticleSwipe", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = InteractionProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+        try outProtocol.transport.flush()
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+      try outProtocol.transport.flush()
+    }
+  }
+}
+
+extension InteractionProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["disableArticleSwipe"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Interaction_disableArticleSwipe_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.disableArticleSwipe(disableSwipe: args.disableSwipe, completion: { asyncResult in
+        var result = Interaction_disableArticleSwipe_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "disableArticleSwipe", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "disableArticleSwipe", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "disableArticleSwipe", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = InteractionProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
