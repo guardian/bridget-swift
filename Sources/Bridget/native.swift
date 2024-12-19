@@ -499,6 +499,12 @@ public protocol Commercial {
   /// - Throws: 
   func updateAdverts(adSlots: TList<AdSlot>) throws
 
+  ///
+  /// - Parameters:
+  ///   - targetingParams: 
+  /// - Throws: 
+  func sendTargetingParams(targetingParams: TMap<String, String>) throws
+
 }
 
 open class CommercialClient : TClient /* , Commercial */ {
@@ -518,6 +524,12 @@ public protocol CommercialAsync {
   ///   - adSlots: 
   ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
   func updateAdverts(adSlots: TList<AdSlot>, completion: @escaping (Result<Void, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - targetingParams: 
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func sendTargetingParams(targetingParams: TMap<String, String>, completion: @escaping (Result<Void, Error>) -> Void)
 
 }
 
@@ -1364,6 +1376,6 @@ open class InteractionProcessorAsync /* Interaction */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.2.0"
+public let BRIDGET_VERSION : String = "v8.3.0"
 
 

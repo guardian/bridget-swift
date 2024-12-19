@@ -1487,6 +1487,115 @@ extension Commercial_updateAdverts_result : TStruct {
 
 
 
+fileprivate final class Commercial_sendTargetingParams_args {
+
+  fileprivate var targetingParams: TMap<String, String>
+
+
+  fileprivate init(targetingParams: TMap<String, String>) {
+    self.targetingParams = targetingParams
+  }
+
+}
+
+fileprivate func ==(lhs: Commercial_sendTargetingParams_args, rhs: Commercial_sendTargetingParams_args) -> Bool {
+  return
+    (lhs.targetingParams == rhs.targetingParams)
+}
+
+extension Commercial_sendTargetingParams_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(targetingParams)
+  }
+
+}
+
+extension Commercial_sendTargetingParams_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["targetingParams": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Commercial_sendTargetingParams_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Commercial_sendTargetingParams_args {
+    _ = try proto.readStructBegin()
+    var targetingParams: TMap<String, String>!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .map):             targetingParams = try TMap<String, String>.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(targetingParams, named: "targetingParams")
+
+    return Commercial_sendTargetingParams_args(targetingParams: targetingParams)
+  }
+
+}
+
+
+
+fileprivate final class Commercial_sendTargetingParams_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Commercial_sendTargetingParams_result, rhs: Commercial_sendTargetingParams_result) -> Bool {
+  return true
+}
+
+extension Commercial_sendTargetingParams_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Commercial_sendTargetingParams_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Commercial_sendTargetingParams_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Commercial_sendTargetingParams_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Commercial_sendTargetingParams_result()
+  }
+
+}
+
+
+
 extension CommercialClient : Commercial {
 
   private func send_insertAdverts(adSlots: TList<AdSlot>) throws {
@@ -1529,6 +1638,26 @@ extension CommercialClient : Commercial {
     try recv_updateAdverts()
   }
 
+  private func send_sendTargetingParams(targetingParams: TMap<String, String>) throws {
+    try outProtocol.writeMessageBegin(name: "sendTargetingParams", type: .call, sequenceID: 0)
+    let args = Commercial_sendTargetingParams_args(targetingParams: targetingParams)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_sendTargetingParams() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Commercial_sendTargetingParams_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func sendTargetingParams(targetingParams: TMap<String, String>) throws {
+    try send_sendTargetingParams(targetingParams: targetingParams)
+    try outProtocol.transport.flush()
+    try recv_sendTargetingParams()
+  }
+
 }
 
 extension CommercialProcessor : TProcessor {
@@ -1567,6 +1696,23 @@ extension CommercialProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "updateAdverts", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["sendTargetingParams"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Commercial_sendTargetingParams_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Commercial_sendTargetingParams_result()
+      do {
+        try handler.sendTargetingParams(targetingParams: args.targetingParams)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "sendTargetingParams", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
       try outProtocol.transport.flush()
@@ -1647,6 +1793,31 @@ extension CommercialProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "updateAdverts", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["sendTargetingParams"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Commercial_sendTargetingParams_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.sendTargetingParams(targetingParams: args.targetingParams, completion: { asyncResult in
+        var result = Commercial_sendTargetingParams_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "sendTargetingParams", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "sendTargetingParams", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "sendTargetingParams", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
