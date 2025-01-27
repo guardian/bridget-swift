@@ -1376,6 +1376,6 @@ open class InteractionProcessorAsync /* Interaction */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.3.2"
+public let BRIDGET_VERSION : String = "v8.3.3"
 
 
