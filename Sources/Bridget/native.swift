@@ -183,6 +183,41 @@ public enum SignInScreenReferrer : TEnum {
   }
 }
 
+public enum NativePlatform : TEnum {
+  case ios
+  case android
+
+  public static func read(from proto: TProtocol) throws -> NativePlatform {
+    let raw: Int32 = try proto.read()
+    let new = NativePlatform(rawValue: raw)
+    if let unwrapped = new {
+      return unwrapped
+    } else {
+      throw TProtocolError(error: .invalidData,
+                           message: "Invalid enum value (\(raw)) for \(NativePlatform.self)")
+    }
+  }
+
+  public init() {
+    self = .ios
+  }
+
+  public var rawValue: Int32 {
+    switch self {
+    case .ios: return 0
+    case .android: return 1
+    }
+  }
+
+  public init?(rawValue: Int32) {
+    switch rawValue {
+    case 0: self = .ios
+    case 1: self = .android
+    default: return nil
+    }
+  }
+}
+
 public enum DiscussionNativeError : TEnum {
   case unknown_error
 
@@ -1376,6 +1411,51 @@ open class InteractionProcessorAsync /* Interaction */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.3.3"
+public protocol Interactives {
+
+  ///
+  /// - Returns: NativePlatform
+  /// - Throws: 
+  func getNativePlatform() throws -> NativePlatform
+
+}
+
+open class InteractivesClient : TClient /* , Interactives */ {
+
+}
+
+public protocol InteractivesAsync {
+
+  ///
+  ///   - completion: Result<NativePlatform, Error> wrapping return and following Exceptions: 
+  func getNativePlatform(completion: @escaping (Result<NativePlatform, Error>) -> Void)
+
+}
+
+open class InteractivesProcessor /* Interactives */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Interactives) throws -> Void]
+
+  public var service: Interactives
+
+  public required init(service: Interactives) {
+    self.service = service
+  }
+
+}
+
+open class InteractivesProcessorAsync /* Interactives */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, InteractivesAsync) throws -> Void]
+
+  public var service: InteractivesAsync
+
+  public required init(service: InteractivesAsync) {
+    self.service = service
+  }
+
+}
+
+public let BRIDGET_VERSION : String = "v8.4.0"
 
 
