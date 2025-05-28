@@ -963,6 +963,114 @@ extension Environment_nativeThriftPackageVersion_result : TStruct {
 
 
 
+fileprivate final class Environment_nativePlatform_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Environment_nativePlatform_args, rhs: Environment_nativePlatform_args) -> Bool {
+  return true
+}
+
+extension Environment_nativePlatform_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Environment_nativePlatform_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Environment_nativePlatform_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Environment_nativePlatform_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Environment_nativePlatform_args()
+  }
+
+}
+
+
+
+fileprivate final class Environment_nativePlatform_result {
+
+  fileprivate var success: String?
+
+
+  fileprivate init() { }
+  fileprivate init(success: String?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Environment_nativePlatform_result, rhs: Environment_nativePlatform_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Environment_nativePlatform_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Environment_nativePlatform_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Environment_nativePlatform_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Environment_nativePlatform_result {
+    _ = try proto.readStructBegin()
+    var success: String?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .string):           success = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Environment_nativePlatform_result(success: success)
+  }
+
+}
+
+
+
 fileprivate final class Environment_isMyGuardianEnabled_args {
 
 
@@ -1097,6 +1205,30 @@ extension EnvironmentClient : Environment {
     return try recv_nativeThriftPackageVersion()
   }
 
+  private func send_nativePlatform() throws {
+    try outProtocol.writeMessageBegin(name: "nativePlatform", type: .call, sequenceID: 0)
+    let args = Environment_nativePlatform_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_nativePlatform() throws -> String {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Environment_nativePlatform_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "nativePlatform"))
+  }
+
+  public func nativePlatform() throws -> String {
+    try send_nativePlatform()
+    try outProtocol.transport.flush()
+    return try recv_nativePlatform()
+  }
+
   private func send_isMyGuardianEnabled() throws {
     try outProtocol.writeMessageBegin(name: "isMyGuardianEnabled", type: .call, sequenceID: 0)
     let args = Environment_isMyGuardianEnabled_args()
@@ -1142,6 +1274,23 @@ extension EnvironmentProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["nativePlatform"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Environment_nativePlatform_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Environment_nativePlatform_result()
+      do {
+        result.success = try handler.nativePlatform()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "nativePlatform", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
       try outProtocol.transport.flush()
@@ -1214,6 +1363,31 @@ extension EnvironmentProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "nativeThriftPackageVersion", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["nativePlatform"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Environment_nativePlatform_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.nativePlatform(completion: { asyncResult in
+        var result = Environment_nativePlatform_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "nativePlatform", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "nativePlatform", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "nativePlatform", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()

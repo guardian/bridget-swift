@@ -439,6 +439,11 @@ public protocol Environment {
   func nativeThriftPackageVersion() throws -> String
 
   ///
+  /// - Returns: String
+  /// - Throws: 
+  func nativePlatform() throws -> String
+
+  ///
   /// - Returns: Bool
   /// - Throws: 
   func isMyGuardianEnabled() throws -> Bool
@@ -454,6 +459,10 @@ public protocol EnvironmentAsync {
   ///
   ///   - completion: Result<String, Error> wrapping return and following Exceptions: 
   func nativeThriftPackageVersion(completion: @escaping (Result<String, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<String, Error> wrapping return and following Exceptions: 
+  func nativePlatform(completion: @escaping (Result<String, Error>) -> Void)
 
   ///
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
@@ -1376,6 +1385,6 @@ open class InteractionProcessorAsync /* Interaction */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.3.3"
+public let BRIDGET_VERSION : String = "v0.0.0-2025-05-28"
 
 
