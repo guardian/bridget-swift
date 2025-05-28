@@ -7993,3 +7993,243 @@ extension InteractionProcessorAsync : TProcessor {
   }
 }
 
+fileprivate final class Interactives_getNativePlatform_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Interactives_getNativePlatform_args, rhs: Interactives_getNativePlatform_args) -> Bool {
+  return true
+}
+
+extension Interactives_getNativePlatform_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Interactives_getNativePlatform_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Interactives_getNativePlatform_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Interactives_getNativePlatform_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Interactives_getNativePlatform_args()
+  }
+
+}
+
+
+
+fileprivate final class Interactives_getNativePlatform_result {
+
+  fileprivate var success: NativePlatform?
+
+
+  fileprivate init() { }
+  fileprivate init(success: NativePlatform?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Interactives_getNativePlatform_result, rhs: Interactives_getNativePlatform_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Interactives_getNativePlatform_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Interactives_getNativePlatform_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Interactives_getNativePlatform_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Interactives_getNativePlatform_result {
+    _ = try proto.readStructBegin()
+    var success: NativePlatform?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .i32):             success = try NativePlatform.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Interactives_getNativePlatform_result(success: success)
+  }
+
+}
+
+
+
+extension InteractivesClient : Interactives {
+
+  private func send_getNativePlatform() throws {
+    try outProtocol.writeMessageBegin(name: "getNativePlatform", type: .call, sequenceID: 0)
+    let args = Interactives_getNativePlatform_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_getNativePlatform() throws -> NativePlatform {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Interactives_getNativePlatform_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "getNativePlatform"))
+  }
+
+  public func getNativePlatform() throws -> NativePlatform {
+    try send_getNativePlatform()
+    try outProtocol.transport.flush()
+    return try recv_getNativePlatform()
+  }
+
+}
+
+extension InteractivesProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["getNativePlatform"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Interactives_getNativePlatform_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Interactives_getNativePlatform_result()
+      do {
+        result.success = try handler.getNativePlatform()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "getNativePlatform", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = InteractivesProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+        try outProtocol.transport.flush()
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+      try outProtocol.transport.flush()
+    }
+  }
+}
+
+extension InteractivesProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["getNativePlatform"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Interactives_getNativePlatform_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.getNativePlatform(completion: { asyncResult in
+        var result = Interactives_getNativePlatform_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "getNativePlatform", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "getNativePlatform", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "getNativePlatform", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = InteractivesProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
