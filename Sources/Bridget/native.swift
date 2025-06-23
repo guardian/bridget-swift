@@ -807,6 +807,59 @@ open class NotificationsProcessorAsync /* Notifications */ {
 
 }
 
+public protocol ListenToArticle {
+
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func shouldDisplayButton() throws -> Bool
+
+  ///
+  /// - Throws: 
+  func playAudio() throws
+
+}
+
+open class ListenToArticleClient : TClient /* , ListenToArticle */ {
+
+}
+
+public protocol ListenToArticleAsync {
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func shouldDisplayButton(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func playAudio(completion: @escaping (Result<Void, Error>) -> Void)
+
+}
+
+open class ListenToArticleProcessor /* ListenToArticle */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, ListenToArticle) throws -> Void]
+
+  public var service: ListenToArticle
+
+  public required init(service: ListenToArticle) {
+    self.service = service
+  }
+
+}
+
+open class ListenToArticleProcessorAsync /* ListenToArticle */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, ListenToArticleAsync) throws -> Void]
+
+  public var service: ListenToArticleAsync
+
+  public required init(service: ListenToArticleAsync) {
+    self.service = service
+  }
+
+}
+
 public protocol User {
 
   ///
@@ -1456,6 +1509,6 @@ open class InteractivesProcessorAsync /* Interactives */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.4.0"
+public let BRIDGET_VERSION : String = "v0.0.0-2025-06-18-snapshot"
 
 
