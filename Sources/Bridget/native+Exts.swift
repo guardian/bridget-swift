@@ -3661,6 +3661,627 @@ extension NotificationsProcessorAsync : TProcessor {
   }
 }
 
+fileprivate final class ListenToArticle_shouldDisplayButton_args {
+
+  fileprivate var articleId: String
+
+
+  fileprivate init(articleId: String) {
+    self.articleId = articleId
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_shouldDisplayButton_args, rhs: ListenToArticle_shouldDisplayButton_args) -> Bool {
+  return
+    (lhs.articleId == rhs.articleId)
+}
+
+extension ListenToArticle_shouldDisplayButton_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(articleId)
+  }
+
+}
+
+extension ListenToArticle_shouldDisplayButton_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["articleId": 1, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_shouldDisplayButton_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_shouldDisplayButton_args {
+    _ = try proto.readStructBegin()
+    var articleId: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           articleId = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(articleId, named: "articleId")
+
+    return ListenToArticle_shouldDisplayButton_args(articleId: articleId)
+  }
+
+}
+
+
+
+fileprivate final class ListenToArticle_shouldDisplayButton_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_shouldDisplayButton_result, rhs: ListenToArticle_shouldDisplayButton_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension ListenToArticle_shouldDisplayButton_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension ListenToArticle_shouldDisplayButton_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_shouldDisplayButton_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_shouldDisplayButton_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return ListenToArticle_shouldDisplayButton_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class ListenToArticle_playAudio_args {
+
+  fileprivate var articleId: String
+
+
+  fileprivate init(articleId: String) {
+    self.articleId = articleId
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_playAudio_args, rhs: ListenToArticle_playAudio_args) -> Bool {
+  return
+    (lhs.articleId == rhs.articleId)
+}
+
+extension ListenToArticle_playAudio_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(articleId)
+  }
+
+}
+
+extension ListenToArticle_playAudio_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["articleId": 1, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_playAudio_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_playAudio_args {
+    _ = try proto.readStructBegin()
+    var articleId: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           articleId = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(articleId, named: "articleId")
+
+    return ListenToArticle_playAudio_args(articleId: articleId)
+  }
+
+}
+
+
+
+fileprivate final class ListenToArticle_playAudio_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_playAudio_result, rhs: ListenToArticle_playAudio_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension ListenToArticle_playAudio_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension ListenToArticle_playAudio_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_playAudio_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_playAudio_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return ListenToArticle_playAudio_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class ListenToArticle_isPlayingAudio_args {
+
+  fileprivate var articleId: String
+
+
+  fileprivate init(articleId: String) {
+    self.articleId = articleId
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_isPlayingAudio_args, rhs: ListenToArticle_isPlayingAudio_args) -> Bool {
+  return
+    (lhs.articleId == rhs.articleId)
+}
+
+extension ListenToArticle_isPlayingAudio_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(articleId)
+  }
+
+}
+
+extension ListenToArticle_isPlayingAudio_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["articleId": 1, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_isPlayingAudio_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_isPlayingAudio_args {
+    _ = try proto.readStructBegin()
+    var articleId: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           articleId = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(articleId, named: "articleId")
+
+    return ListenToArticle_isPlayingAudio_args(articleId: articleId)
+  }
+
+}
+
+
+
+fileprivate final class ListenToArticle_isPlayingAudio_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_isPlayingAudio_result, rhs: ListenToArticle_isPlayingAudio_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension ListenToArticle_isPlayingAudio_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension ListenToArticle_isPlayingAudio_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_isPlayingAudio_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_isPlayingAudio_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return ListenToArticle_isPlayingAudio_result(success: success)
+  }
+
+}
+
+
+
+extension ListenToArticleClient : ListenToArticle {
+
+  private func send_shouldDisplayButton(articleId: String) throws {
+    try outProtocol.writeMessageBegin(name: "shouldDisplayButton", type: .call, sequenceID: 0)
+    let args = ListenToArticle_shouldDisplayButton_args(articleId: articleId)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_shouldDisplayButton() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try ListenToArticle_shouldDisplayButton_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "shouldDisplayButton"))
+  }
+
+  public func shouldDisplayButton(articleId: String) throws -> Bool {
+    try send_shouldDisplayButton(articleId: articleId)
+    try outProtocol.transport.flush()
+    return try recv_shouldDisplayButton()
+  }
+
+  private func send_playAudio(articleId: String) throws {
+    try outProtocol.writeMessageBegin(name: "playAudio", type: .call, sequenceID: 0)
+    let args = ListenToArticle_playAudio_args(articleId: articleId)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_playAudio() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try ListenToArticle_playAudio_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "playAudio"))
+  }
+
+  public func playAudio(articleId: String) throws -> Bool {
+    try send_playAudio(articleId: articleId)
+    try outProtocol.transport.flush()
+    return try recv_playAudio()
+  }
+
+  private func send_isPlayingAudio(articleId: String) throws {
+    try outProtocol.writeMessageBegin(name: "isPlayingAudio", type: .call, sequenceID: 0)
+    let args = ListenToArticle_isPlayingAudio_args(articleId: articleId)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isPlayingAudio() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try ListenToArticle_isPlayingAudio_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isPlayingAudio"))
+  }
+
+  public func isPlayingAudio(articleId: String) throws -> Bool {
+    try send_isPlayingAudio(articleId: articleId)
+    try outProtocol.transport.flush()
+    return try recv_isPlayingAudio()
+  }
+
+}
+
+extension ListenToArticleProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["shouldDisplayButton"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_shouldDisplayButton_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = ListenToArticle_shouldDisplayButton_result()
+      do {
+        result.success = try handler.shouldDisplayButton(articleId: args.articleId)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "shouldDisplayButton", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["playAudio"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_playAudio_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = ListenToArticle_playAudio_result()
+      do {
+        result.success = try handler.playAudio(articleId: args.articleId)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "playAudio", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["isPlayingAudio"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_isPlayingAudio_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = ListenToArticle_isPlayingAudio_result()
+      do {
+        result.success = try handler.isPlayingAudio(articleId: args.articleId)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isPlayingAudio", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = ListenToArticleProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+        try outProtocol.transport.flush()
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+      try outProtocol.transport.flush()
+    }
+  }
+}
+
+extension ListenToArticleProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["shouldDisplayButton"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_shouldDisplayButton_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.shouldDisplayButton(articleId: args.articleId, completion: { asyncResult in
+        var result = ListenToArticle_shouldDisplayButton_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "shouldDisplayButton", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "shouldDisplayButton", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "shouldDisplayButton", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["playAudio"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_playAudio_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.playAudio(articleId: args.articleId, completion: { asyncResult in
+        var result = ListenToArticle_playAudio_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "playAudio", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "playAudio", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "playAudio", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["isPlayingAudio"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_isPlayingAudio_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isPlayingAudio(articleId: args.articleId, completion: { asyncResult in
+        var result = ListenToArticle_isPlayingAudio_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isPlayingAudio", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isPlayingAudio", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isPlayingAudio", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = ListenToArticleProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
 fileprivate final class User_isPremium_args {
 
 
