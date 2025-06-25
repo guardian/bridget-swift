@@ -1456,6 +1456,6 @@ open class InteractivesProcessorAsync /* Interactives */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.4.0"
+public let BRIDGET_VERSION : String = "v0.0.0-2025-06-25-snapshot-2"
 
 
