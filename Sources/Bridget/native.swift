@@ -478,11 +478,6 @@ public protocol Environment {
   /// - Throws: 
   func isMyGuardianEnabled() throws -> Bool
 
-  ///
-  /// - Returns: Bool
-  /// - Throws: 
-  func isListenToArticleEnabled() throws -> Bool
-
 }
 
 open class EnvironmentClient : TClient /* , Environment */ {
@@ -498,10 +493,6 @@ public protocol EnvironmentAsync {
   ///
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
   func isMyGuardianEnabled(completion: @escaping (Result<Bool, Error>) -> Void)
-
-  ///
-  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
-  func isListenToArticleEnabled(completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -1553,6 +1544,6 @@ open class InteractivesProcessorAsync /* Interactives */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.5.0"
+public let BRIDGET_VERSION : String = "v8.5.1"
 
 

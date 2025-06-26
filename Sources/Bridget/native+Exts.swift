@@ -1071,114 +1071,6 @@ extension Environment_isMyGuardianEnabled_result : TStruct {
 
 
 
-fileprivate final class Environment_isListenToArticleEnabled_args {
-
-
-  fileprivate init() { }
-}
-
-fileprivate func ==(lhs: Environment_isListenToArticleEnabled_args, rhs: Environment_isListenToArticleEnabled_args) -> Bool {
-  return true
-}
-
-extension Environment_isListenToArticleEnabled_args : Hashable {
-
-  fileprivate func hash(into hasher: inout Hasher) {
-  }
-
-}
-
-extension Environment_isListenToArticleEnabled_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return [:]
-  }
-
-  fileprivate static var structName: String { return "Environment_isListenToArticleEnabled_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Environment_isListenToArticleEnabled_args {
-    _ = try proto.readStructBegin()
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Environment_isListenToArticleEnabled_args()
-  }
-
-}
-
-
-
-fileprivate final class Environment_isListenToArticleEnabled_result {
-
-  fileprivate var success: Bool?
-
-
-  fileprivate init() { }
-  fileprivate init(success: Bool?) {
-    self.success = success
-  }
-
-}
-
-fileprivate func ==(lhs: Environment_isListenToArticleEnabled_result, rhs: Environment_isListenToArticleEnabled_result) -> Bool {
-  return
-    (lhs.success == rhs.success)
-}
-
-extension Environment_isListenToArticleEnabled_result : Hashable {
-
-  fileprivate func hash(into hasher: inout Hasher) {
-    hasher.combine(success)
-  }
-
-}
-
-extension Environment_isListenToArticleEnabled_result : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return ["success": 0, ]
-  }
-
-  fileprivate static var structName: String { return "Environment_isListenToArticleEnabled_result" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Environment_isListenToArticleEnabled_result {
-    _ = try proto.readStructBegin()
-    var success: Bool?
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (0, .bool):            success = try Bool.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
-    }
-
-    try proto.readStructEnd()
-
-    return Environment_isListenToArticleEnabled_result(success: success)
-  }
-
-}
-
-
-
 extension EnvironmentClient : Environment {
 
   private func send_nativeThriftPackageVersion() throws {
@@ -1229,30 +1121,6 @@ extension EnvironmentClient : Environment {
     return try recv_isMyGuardianEnabled()
   }
 
-  private func send_isListenToArticleEnabled() throws {
-    try outProtocol.writeMessageBegin(name: "isListenToArticleEnabled", type: .call, sequenceID: 0)
-    let args = Environment_isListenToArticleEnabled_args()
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  private func recv_isListenToArticleEnabled() throws -> Bool {
-    try inProtocol.readResultMessageBegin() 
-    let result = try Environment_isListenToArticleEnabled_result.read(from: inProtocol)
-    try inProtocol.readMessageEnd()
-
-    if let success = result.success {
-      return success
-    }
-    throw TApplicationError(error: .missingResult(methodName: "isListenToArticleEnabled"))
-  }
-
-  public func isListenToArticleEnabled() throws -> Bool {
-    try send_isListenToArticleEnabled()
-    try outProtocol.transport.flush()
-    return try recv_isListenToArticleEnabled()
-  }
-
 }
 
 extension EnvironmentProcessor : TProcessor {
@@ -1291,23 +1159,6 @@ extension EnvironmentProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "isMyGuardianEnabled", type: .reply, sequenceID: sequenceID)
-      try result.write(to: outProtocol)
-      try outProtocol.writeMessageEnd()
-      try outProtocol.transport.flush()
-    }
-    processorHandlers["isListenToArticleEnabled"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Environment_isListenToArticleEnabled_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      var result = Environment_isListenToArticleEnabled_result()
-      do {
-        result.success = try handler.isListenToArticleEnabled()
-      }
-      catch let error { throw error }
-
-      try outProtocol.writeMessageBegin(name: "isListenToArticleEnabled", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
       try outProtocol.transport.flush()
@@ -1388,31 +1239,6 @@ extension EnvironmentProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "isMyGuardianEnabled", type: .reply, sequenceID: sequenceID)
-          try result.write(to: outProtocol)
-          try outProtocol.writeMessageEnd()
-          try outProtocol.transport.flush()
-        } catch { }
-      })
-    }
-    processorHandlers["isListenToArticleEnabled"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Environment_isListenToArticleEnabled_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-      handler.isListenToArticleEnabled(completion: { asyncResult in
-        var result = Environment_isListenToArticleEnabled_result()
-        do {
-          try result.success = asyncResult.get()
-        } catch let error as TApplicationError {
-          _ = try? outProtocol.writeException(messageName: "isListenToArticleEnabled", sequenceID: sequenceID, ex: error)
-          return
-        } catch let error {
-          _ = try? outProtocol.writeException(messageName: "isListenToArticleEnabled", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
-          return
-        }
-        do {
-          try outProtocol.writeMessageBegin(name: "isListenToArticleEnabled", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
