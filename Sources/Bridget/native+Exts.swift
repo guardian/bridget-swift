@@ -1071,6 +1071,114 @@ extension Environment_isMyGuardianEnabled_result : TStruct {
 
 
 
+fileprivate final class Environment_isListenToArticleEnabled_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Environment_isListenToArticleEnabled_args, rhs: Environment_isListenToArticleEnabled_args) -> Bool {
+  return true
+}
+
+extension Environment_isListenToArticleEnabled_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Environment_isListenToArticleEnabled_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Environment_isListenToArticleEnabled_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Environment_isListenToArticleEnabled_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Environment_isListenToArticleEnabled_args()
+  }
+
+}
+
+
+
+fileprivate final class Environment_isListenToArticleEnabled_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Environment_isListenToArticleEnabled_result, rhs: Environment_isListenToArticleEnabled_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Environment_isListenToArticleEnabled_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Environment_isListenToArticleEnabled_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Environment_isListenToArticleEnabled_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Environment_isListenToArticleEnabled_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Environment_isListenToArticleEnabled_result(success: success)
+  }
+
+}
+
+
+
 extension EnvironmentClient : Environment {
 
   private func send_nativeThriftPackageVersion() throws {
@@ -1121,6 +1229,30 @@ extension EnvironmentClient : Environment {
     return try recv_isMyGuardianEnabled()
   }
 
+  private func send_isListenToArticleEnabled() throws {
+    try outProtocol.writeMessageBegin(name: "isListenToArticleEnabled", type: .call, sequenceID: 0)
+    let args = Environment_isListenToArticleEnabled_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isListenToArticleEnabled() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Environment_isListenToArticleEnabled_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isListenToArticleEnabled"))
+  }
+
+  public func isListenToArticleEnabled() throws -> Bool {
+    try send_isListenToArticleEnabled()
+    try outProtocol.transport.flush()
+    return try recv_isListenToArticleEnabled()
+  }
+
 }
 
 extension EnvironmentProcessor : TProcessor {
@@ -1159,6 +1291,23 @@ extension EnvironmentProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "isMyGuardianEnabled", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["isListenToArticleEnabled"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Environment_isListenToArticleEnabled_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Environment_isListenToArticleEnabled_result()
+      do {
+        result.success = try handler.isListenToArticleEnabled()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isListenToArticleEnabled", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
       try outProtocol.transport.flush()
@@ -1239,6 +1388,31 @@ extension EnvironmentProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "isMyGuardianEnabled", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["isListenToArticleEnabled"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Environment_isListenToArticleEnabled_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isListenToArticleEnabled(completion: { asyncResult in
+        var result = Environment_isListenToArticleEnabled_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isListenToArticleEnabled", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isListenToArticleEnabled", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isListenToArticleEnabled", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
@@ -3645,6 +3819,812 @@ extension NotificationsProcessorAsync : TProcessor {
     let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
 
     if let processorHandler = NotificationsProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+fileprivate final class ListenToArticle_isAvailable_args {
+
+  fileprivate var articleId: String
+
+
+  fileprivate init(articleId: String) {
+    self.articleId = articleId
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_isAvailable_args, rhs: ListenToArticle_isAvailable_args) -> Bool {
+  return
+    (lhs.articleId == rhs.articleId)
+}
+
+extension ListenToArticle_isAvailable_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(articleId)
+  }
+
+}
+
+extension ListenToArticle_isAvailable_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["articleId": 1, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_isAvailable_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_isAvailable_args {
+    _ = try proto.readStructBegin()
+    var articleId: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           articleId = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(articleId, named: "articleId")
+
+    return ListenToArticle_isAvailable_args(articleId: articleId)
+  }
+
+}
+
+
+
+fileprivate final class ListenToArticle_isAvailable_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_isAvailable_result, rhs: ListenToArticle_isAvailable_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension ListenToArticle_isAvailable_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension ListenToArticle_isAvailable_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_isAvailable_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_isAvailable_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return ListenToArticle_isAvailable_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class ListenToArticle_play_args {
+
+  fileprivate var articleId: String
+
+
+  fileprivate init(articleId: String) {
+    self.articleId = articleId
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_play_args, rhs: ListenToArticle_play_args) -> Bool {
+  return
+    (lhs.articleId == rhs.articleId)
+}
+
+extension ListenToArticle_play_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(articleId)
+  }
+
+}
+
+extension ListenToArticle_play_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["articleId": 1, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_play_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_play_args {
+    _ = try proto.readStructBegin()
+    var articleId: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           articleId = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(articleId, named: "articleId")
+
+    return ListenToArticle_play_args(articleId: articleId)
+  }
+
+}
+
+
+
+fileprivate final class ListenToArticle_play_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_play_result, rhs: ListenToArticle_play_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension ListenToArticle_play_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension ListenToArticle_play_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_play_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_play_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return ListenToArticle_play_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class ListenToArticle_isPlaying_args {
+
+  fileprivate var articleId: String
+
+
+  fileprivate init(articleId: String) {
+    self.articleId = articleId
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_isPlaying_args, rhs: ListenToArticle_isPlaying_args) -> Bool {
+  return
+    (lhs.articleId == rhs.articleId)
+}
+
+extension ListenToArticle_isPlaying_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(articleId)
+  }
+
+}
+
+extension ListenToArticle_isPlaying_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["articleId": 1, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_isPlaying_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_isPlaying_args {
+    _ = try proto.readStructBegin()
+    var articleId: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           articleId = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(articleId, named: "articleId")
+
+    return ListenToArticle_isPlaying_args(articleId: articleId)
+  }
+
+}
+
+
+
+fileprivate final class ListenToArticle_isPlaying_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_isPlaying_result, rhs: ListenToArticle_isPlaying_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension ListenToArticle_isPlaying_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension ListenToArticle_isPlaying_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_isPlaying_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_isPlaying_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return ListenToArticle_isPlaying_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class ListenToArticle_pause_args {
+
+  fileprivate var articleId: String
+
+
+  fileprivate init(articleId: String) {
+    self.articleId = articleId
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_pause_args, rhs: ListenToArticle_pause_args) -> Bool {
+  return
+    (lhs.articleId == rhs.articleId)
+}
+
+extension ListenToArticle_pause_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(articleId)
+  }
+
+}
+
+extension ListenToArticle_pause_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["articleId": 1, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_pause_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_pause_args {
+    _ = try proto.readStructBegin()
+    var articleId: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           articleId = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(articleId, named: "articleId")
+
+    return ListenToArticle_pause_args(articleId: articleId)
+  }
+
+}
+
+
+
+fileprivate final class ListenToArticle_pause_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_pause_result, rhs: ListenToArticle_pause_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension ListenToArticle_pause_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension ListenToArticle_pause_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_pause_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_pause_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return ListenToArticle_pause_result(success: success)
+  }
+
+}
+
+
+
+extension ListenToArticleClient : ListenToArticle {
+
+  private func send_isAvailable(articleId: String) throws {
+    try outProtocol.writeMessageBegin(name: "isAvailable", type: .call, sequenceID: 0)
+    let args = ListenToArticle_isAvailable_args(articleId: articleId)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isAvailable() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try ListenToArticle_isAvailable_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isAvailable"))
+  }
+
+  public func isAvailable(articleId: String) throws -> Bool {
+    try send_isAvailable(articleId: articleId)
+    try outProtocol.transport.flush()
+    return try recv_isAvailable()
+  }
+
+  private func send_play(articleId: String) throws {
+    try outProtocol.writeMessageBegin(name: "play", type: .call, sequenceID: 0)
+    let args = ListenToArticle_play_args(articleId: articleId)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_play() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try ListenToArticle_play_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "play"))
+  }
+
+  public func play(articleId: String) throws -> Bool {
+    try send_play(articleId: articleId)
+    try outProtocol.transport.flush()
+    return try recv_play()
+  }
+
+  private func send_isPlaying(articleId: String) throws {
+    try outProtocol.writeMessageBegin(name: "isPlaying", type: .call, sequenceID: 0)
+    let args = ListenToArticle_isPlaying_args(articleId: articleId)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isPlaying() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try ListenToArticle_isPlaying_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isPlaying"))
+  }
+
+  public func isPlaying(articleId: String) throws -> Bool {
+    try send_isPlaying(articleId: articleId)
+    try outProtocol.transport.flush()
+    return try recv_isPlaying()
+  }
+
+  private func send_pause(articleId: String) throws {
+    try outProtocol.writeMessageBegin(name: "pause", type: .call, sequenceID: 0)
+    let args = ListenToArticle_pause_args(articleId: articleId)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_pause() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try ListenToArticle_pause_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "pause"))
+  }
+
+  public func pause(articleId: String) throws -> Bool {
+    try send_pause(articleId: articleId)
+    try outProtocol.transport.flush()
+    return try recv_pause()
+  }
+
+}
+
+extension ListenToArticleProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["isAvailable"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_isAvailable_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = ListenToArticle_isAvailable_result()
+      do {
+        result.success = try handler.isAvailable(articleId: args.articleId)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isAvailable", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["play"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_play_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = ListenToArticle_play_result()
+      do {
+        result.success = try handler.play(articleId: args.articleId)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "play", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["isPlaying"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_isPlaying_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = ListenToArticle_isPlaying_result()
+      do {
+        result.success = try handler.isPlaying(articleId: args.articleId)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isPlaying", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["pause"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_pause_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = ListenToArticle_pause_result()
+      do {
+        result.success = try handler.pause(articleId: args.articleId)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "pause", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = ListenToArticleProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+        try outProtocol.transport.flush()
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+      try outProtocol.transport.flush()
+    }
+  }
+}
+
+extension ListenToArticleProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["isAvailable"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_isAvailable_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isAvailable(articleId: args.articleId, completion: { asyncResult in
+        var result = ListenToArticle_isAvailable_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isAvailable", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isAvailable", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isAvailable", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["play"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_play_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.play(articleId: args.articleId, completion: { asyncResult in
+        var result = ListenToArticle_play_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "play", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "play", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "play", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["isPlaying"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_isPlaying_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isPlaying(articleId: args.articleId, completion: { asyncResult in
+        var result = ListenToArticle_isPlaying_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isPlaying", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isPlaying", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isPlaying", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["pause"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_pause_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.pause(articleId: args.articleId, completion: { asyncResult in
+        var result = ListenToArticle_pause_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "pause", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "pause", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "pause", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = ListenToArticleProcessorAsync.processorHandlers[messageName] {
       do {
         try processorHandler(sequenceID, inProtocol, outProtocol, service)
       }

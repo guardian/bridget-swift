@@ -478,6 +478,11 @@ public protocol Environment {
   /// - Throws: 
   func isMyGuardianEnabled() throws -> Bool
 
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isListenToArticleEnabled() throws -> Bool
+
 }
 
 open class EnvironmentClient : TClient /* , Environment */ {
@@ -493,6 +498,10 @@ public protocol EnvironmentAsync {
   ///
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
   func isMyGuardianEnabled(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isListenToArticleEnabled(completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -802,6 +811,94 @@ open class NotificationsProcessorAsync /* Notifications */ {
   public var service: NotificationsAsync
 
   public required init(service: NotificationsAsync) {
+    self.service = service
+  }
+
+}
+
+public protocol ListenToArticle {
+
+  ///
+  /// - Parameters:
+  ///   - articleId: 
+  /// - Returns: Bool
+  /// - Throws: 
+  func isAvailable(articleId: String) throws -> Bool
+
+  ///
+  /// - Parameters:
+  ///   - articleId: 
+  /// - Returns: Bool
+  /// - Throws: 
+  func play(articleId: String) throws -> Bool
+
+  ///
+  /// - Parameters:
+  ///   - articleId: 
+  /// - Returns: Bool
+  /// - Throws: 
+  func isPlaying(articleId: String) throws -> Bool
+
+  ///
+  /// - Parameters:
+  ///   - articleId: 
+  /// - Returns: Bool
+  /// - Throws: 
+  func pause(articleId: String) throws -> Bool
+
+}
+
+open class ListenToArticleClient : TClient /* , ListenToArticle */ {
+
+}
+
+public protocol ListenToArticleAsync {
+
+  ///
+  /// - Parameters:
+  ///   - articleId: 
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isAvailable(articleId: String, completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - articleId: 
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func play(articleId: String, completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - articleId: 
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isPlaying(articleId: String, completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - articleId: 
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func pause(articleId: String, completion: @escaping (Result<Bool, Error>) -> Void)
+
+}
+
+open class ListenToArticleProcessor /* ListenToArticle */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, ListenToArticle) throws -> Void]
+
+  public var service: ListenToArticle
+
+  public required init(service: ListenToArticle) {
+    self.service = service
+  }
+
+}
+
+open class ListenToArticleProcessorAsync /* ListenToArticle */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, ListenToArticleAsync) throws -> Void]
+
+  public var service: ListenToArticleAsync
+
+  public required init(service: ListenToArticleAsync) {
     self.service = service
   }
 
@@ -1456,6 +1553,6 @@ open class InteractivesProcessorAsync /* Interactives */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.4.0"
+public let BRIDGET_VERSION : String = "v8.5.0"
 
 
