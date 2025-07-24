@@ -819,6 +819,13 @@ public protocol ListenToArticle {
   ///
   /// - Parameters:
   ///   - articleId: 
+  /// - Returns: Int32
+  /// - Throws: 
+  func getAudioDuration(articleId: String) throws -> Int32
+
+  ///
+  /// - Parameters:
+  ///   - articleId: 
   /// - Returns: Bool
   /// - Throws: 
   func play(articleId: String) throws -> Bool
@@ -850,6 +857,12 @@ public protocol ListenToArticleAsync {
   ///   - articleId: 
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
   func isAvailable(articleId: String, completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  /// - Parameters:
+  ///   - articleId: 
+  ///   - completion: Result<Int32, Error> wrapping return and following Exceptions: 
+  func getAudioDuration(articleId: String, completion: @escaping (Result<Int32, Error>) -> Void)
 
   ///
   /// - Parameters:
@@ -1544,6 +1557,6 @@ open class InteractivesProcessorAsync /* Interactives */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.5.1"
+public let BRIDGET_VERSION : String = "v0.0.0-SNAPSHOT-2025-07-24"
 
 
