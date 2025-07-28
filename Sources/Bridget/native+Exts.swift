@@ -3780,6 +3780,125 @@ extension ListenToArticle_isAvailable_result : TStruct {
 
 
 
+fileprivate final class ListenToArticle_getAudioDurationSeconds_args {
+
+  fileprivate var articleId: String
+
+
+  fileprivate init(articleId: String) {
+    self.articleId = articleId
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_getAudioDurationSeconds_args, rhs: ListenToArticle_getAudioDurationSeconds_args) -> Bool {
+  return
+    (lhs.articleId == rhs.articleId)
+}
+
+extension ListenToArticle_getAudioDurationSeconds_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(articleId)
+  }
+
+}
+
+extension ListenToArticle_getAudioDurationSeconds_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["articleId": 1, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_getAudioDurationSeconds_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_getAudioDurationSeconds_args {
+    _ = try proto.readStructBegin()
+    var articleId: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           articleId = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(articleId, named: "articleId")
+
+    return ListenToArticle_getAudioDurationSeconds_args(articleId: articleId)
+  }
+
+}
+
+
+
+fileprivate final class ListenToArticle_getAudioDurationSeconds_result {
+
+  fileprivate var success: Int32?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Int32?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: ListenToArticle_getAudioDurationSeconds_result, rhs: ListenToArticle_getAudioDurationSeconds_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension ListenToArticle_getAudioDurationSeconds_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension ListenToArticle_getAudioDurationSeconds_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "ListenToArticle_getAudioDurationSeconds_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> ListenToArticle_getAudioDurationSeconds_result {
+    _ = try proto.readStructBegin()
+    var success: Int32?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .i32):             success = try Int32.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return ListenToArticle_getAudioDurationSeconds_result(success: success)
+  }
+
+}
+
+
+
 fileprivate final class ListenToArticle_play_args {
 
   fileprivate var articleId: String
@@ -4163,6 +4282,30 @@ extension ListenToArticleClient : ListenToArticle {
     return try recv_isAvailable()
   }
 
+  private func send_getAudioDurationSeconds(articleId: String) throws {
+    try outProtocol.writeMessageBegin(name: "getAudioDurationSeconds", type: .call, sequenceID: 0)
+    let args = ListenToArticle_getAudioDurationSeconds_args(articleId: articleId)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_getAudioDurationSeconds() throws -> Int32 {
+    try inProtocol.readResultMessageBegin() 
+    let result = try ListenToArticle_getAudioDurationSeconds_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "getAudioDurationSeconds"))
+  }
+
+  public func getAudioDurationSeconds(articleId: String) throws -> Int32 {
+    try send_getAudioDurationSeconds(articleId: articleId)
+    try outProtocol.transport.flush()
+    return try recv_getAudioDurationSeconds()
+  }
+
   private func send_play(articleId: String) throws {
     try outProtocol.writeMessageBegin(name: "play", type: .call, sequenceID: 0)
     let args = ListenToArticle_play_args(articleId: articleId)
@@ -4256,6 +4399,23 @@ extension ListenToArticleProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "isAvailable", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["getAudioDurationSeconds"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_getAudioDurationSeconds_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = ListenToArticle_getAudioDurationSeconds_result()
+      do {
+        result.success = try handler.getAudioDurationSeconds(articleId: args.articleId)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "getAudioDurationSeconds", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
       try outProtocol.transport.flush()
@@ -4362,6 +4522,31 @@ extension ListenToArticleProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "isAvailable", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["getAudioDurationSeconds"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try ListenToArticle_getAudioDurationSeconds_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.getAudioDurationSeconds(articleId: args.articleId, completion: { asyncResult in
+        var result = ListenToArticle_getAudioDurationSeconds_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "getAudioDurationSeconds", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "getAudioDurationSeconds", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "getAudioDurationSeconds", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
