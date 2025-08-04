@@ -8102,6 +8102,246 @@ extension AnalyticsProcessorAsync : TProcessor {
   }
 }
 
+fileprivate final class AbTesting_getParticipations_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: AbTesting_getParticipations_args, rhs: AbTesting_getParticipations_args) -> Bool {
+  return true
+}
+
+extension AbTesting_getParticipations_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension AbTesting_getParticipations_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "AbTesting_getParticipations_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> AbTesting_getParticipations_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return AbTesting_getParticipations_args()
+  }
+
+}
+
+
+
+fileprivate final class AbTesting_getParticipations_result {
+
+  fileprivate var success: TMap<String, String>?
+
+
+  fileprivate init() { }
+  fileprivate init(success: TMap<String, String>?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: AbTesting_getParticipations_result, rhs: AbTesting_getParticipations_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension AbTesting_getParticipations_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension AbTesting_getParticipations_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "AbTesting_getParticipations_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> AbTesting_getParticipations_result {
+    _ = try proto.readStructBegin()
+    var success: TMap<String, String>?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .map):             success = try TMap<String, String>.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return AbTesting_getParticipations_result(success: success)
+  }
+
+}
+
+
+
+extension AbTestingClient : AbTesting {
+
+  private func send_getParticipations() throws {
+    try outProtocol.writeMessageBegin(name: "getParticipations", type: .call, sequenceID: 0)
+    let args = AbTesting_getParticipations_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_getParticipations() throws -> TMap<String, String> {
+    try inProtocol.readResultMessageBegin() 
+    let result = try AbTesting_getParticipations_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "getParticipations"))
+  }
+
+  public func getParticipations() throws -> TMap<String, String> {
+    try send_getParticipations()
+    try outProtocol.transport.flush()
+    return try recv_getParticipations()
+  }
+
+}
+
+extension AbTestingProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["getParticipations"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try AbTesting_getParticipations_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = AbTesting_getParticipations_result()
+      do {
+        result.success = try handler.getParticipations()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "getParticipations", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = AbTestingProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+        try outProtocol.transport.flush()
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+      try outProtocol.transport.flush()
+    }
+  }
+}
+
+extension AbTestingProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["getParticipations"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try AbTesting_getParticipations_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.getParticipations(completion: { asyncResult in
+        var result = AbTesting_getParticipations_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "getParticipations", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "getParticipations", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "getParticipations", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = AbTestingProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
 fileprivate final class Navigation_openPrivacySettings_args {
 
 

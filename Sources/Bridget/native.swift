@@ -1345,6 +1345,51 @@ open class AnalyticsProcessorAsync /* Analytics */ {
 
 }
 
+public protocol AbTesting {
+
+  ///
+  /// - Returns: TMap<String, String>
+  /// - Throws: 
+  func getParticipations() throws -> TMap<String, String>
+
+}
+
+open class AbTestingClient : TClient /* , AbTesting */ {
+
+}
+
+public protocol AbTestingAsync {
+
+  ///
+  ///   - completion: Result<TMap<String, String>, Error> wrapping return and following Exceptions: 
+  func getParticipations(completion: @escaping (Result<TMap<String, String>, Error>) -> Void)
+
+}
+
+open class AbTestingProcessor /* AbTesting */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, AbTesting) throws -> Void]
+
+  public var service: AbTesting
+
+  public required init(service: AbTesting) {
+    self.service = service
+  }
+
+}
+
+open class AbTestingProcessorAsync /* AbTesting */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, AbTestingAsync) throws -> Void]
+
+  public var service: AbTestingAsync
+
+  public required init(service: AbTestingAsync) {
+    self.service = service
+  }
+
+}
+
 public protocol Navigation {
 
   ///
@@ -1557,6 +1602,6 @@ open class InteractivesProcessorAsync /* Interactives */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.6.0"
+public let BRIDGET_VERSION : String = "v0.0.0-2025-08-04"
 
 
