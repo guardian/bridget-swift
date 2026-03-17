@@ -908,6 +908,68 @@ open class ListenToArticleProcessorAsync /* ListenToArticle */ {
 
 }
 
+public protocol Audio {
+
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isAvailable() throws -> Bool
+
+  ///
+  /// - Throws: 
+  func play() throws
+
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isPlaying() throws -> Bool
+
+}
+
+open class AudioClient : TClient /* , Audio */ {
+
+}
+
+public protocol AudioAsync {
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isAvailable(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func play(completion: @escaping (Result<Void, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isPlaying(completion: @escaping (Result<Bool, Error>) -> Void)
+
+}
+
+open class AudioProcessor /* Audio */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Audio) throws -> Void]
+
+  public var service: Audio
+
+  public required init(service: Audio) {
+    self.service = service
+  }
+
+}
+
+open class AudioProcessorAsync /* Audio */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, AudioAsync) throws -> Void]
+
+  public var service: AudioAsync
+
+  public required init(service: AudioAsync) {
+    self.service = service
+  }
+
+}
+
 public protocol User {
 
   ///
@@ -1602,6 +1664,6 @@ open class InteractivesProcessorAsync /* Interactives */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.7.0"
+public let BRIDGET_VERSION : String = "v0.0.2-2026-03-17"
 
 
