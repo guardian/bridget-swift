@@ -6491,6 +6491,114 @@ extension Videos_setFullscreen_result : TStruct {
 
 
 
+fileprivate final class Videos_isAutoplayEnabled_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Videos_isAutoplayEnabled_args, rhs: Videos_isAutoplayEnabled_args) -> Bool {
+  return true
+}
+
+extension Videos_isAutoplayEnabled_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Videos_isAutoplayEnabled_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Videos_isAutoplayEnabled_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_isAutoplayEnabled_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Videos_isAutoplayEnabled_args()
+  }
+
+}
+
+
+
+fileprivate final class Videos_isAutoplayEnabled_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Videos_isAutoplayEnabled_result, rhs: Videos_isAutoplayEnabled_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Videos_isAutoplayEnabled_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Videos_isAutoplayEnabled_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Videos_isAutoplayEnabled_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_isAutoplayEnabled_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Videos_isAutoplayEnabled_result(success: success)
+  }
+
+}
+
+
+
 extension VideosClient : Videos {
 
   private func send_insertVideos(videoSlots: TList<VideoSlot>) throws {
@@ -6577,6 +6685,30 @@ extension VideosClient : Videos {
     return try recv_setFullscreen()
   }
 
+  private func send_isAutoplayEnabled() throws {
+    try outProtocol.writeMessageBegin(name: "isAutoplayEnabled", type: .call, sequenceID: 0)
+    let args = Videos_isAutoplayEnabled_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isAutoplayEnabled() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Videos_isAutoplayEnabled_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isAutoplayEnabled"))
+  }
+
+  public func isAutoplayEnabled() throws -> Bool {
+    try send_isAutoplayEnabled()
+    try outProtocol.transport.flush()
+    return try recv_isAutoplayEnabled()
+  }
+
 }
 
 extension VideosProcessor : TProcessor {
@@ -6649,6 +6781,23 @@ extension VideosProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "setFullscreen", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["isAutoplayEnabled"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_isAutoplayEnabled_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Videos_isAutoplayEnabled_result()
+      do {
+        result.success = try handler.isAutoplayEnabled()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isAutoplayEnabled", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
       try outProtocol.transport.flush()
@@ -6779,6 +6928,31 @@ extension VideosProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "setFullscreen", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["isAutoplayEnabled"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_isAutoplayEnabled_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isAutoplayEnabled(completion: { asyncResult in
+        var result = Videos_isAutoplayEnabled_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isAutoplayEnabled", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isAutoplayEnabled", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isAutoplayEnabled", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()

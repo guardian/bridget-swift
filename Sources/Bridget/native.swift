@@ -1093,6 +1093,11 @@ public protocol Videos {
   /// - Throws: 
   func setFullscreen(isFullscreen: Bool) throws -> Bool
 
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isAutoplayEnabled() throws -> Bool
+
 }
 
 open class VideosClient : TClient /* , Videos */ {
@@ -1130,6 +1135,10 @@ public protocol VideosAsync {
   ///   - isFullscreen: 
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
   func setFullscreen(isFullscreen: Bool, completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isAutoplayEnabled(completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -1602,6 +1611,6 @@ open class InteractivesProcessorAsync /* Interactives */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.7.0"
+public let BRIDGET_VERSION : String = "v8.8.0"
 
 
