@@ -18,6 +18,12 @@ public enum MediaEvent : TEnum {
   case percent50
   case percent75
   case end
+  case pause
+  case mute
+  case unmute
+  case enter_fullscreen
+  case exit_fullscreen
+  case view
 
   public static func read(from proto: TProtocol) throws -> MediaEvent {
     let raw: Int32 = try proto.read()
@@ -43,6 +49,12 @@ public enum MediaEvent : TEnum {
     case .percent50: return 4
     case .percent75: return 5
     case .end: return 6
+    case .pause: return 7
+    case .mute: return 8
+    case .unmute: return 9
+    case .enter_fullscreen: return 10
+    case .exit_fullscreen: return 11
+    case .view: return 12
     }
   }
 
@@ -55,6 +67,12 @@ public enum MediaEvent : TEnum {
     case 4: self = .percent50
     case 5: self = .percent75
     case 6: self = .end
+    case 7: self = .pause
+    case 8: self = .mute
+    case 9: self = .unmute
+    case 10: self = .enter_fullscreen
+    case 11: self = .exit_fullscreen
+    case 12: self = .view
     default: return nil
     }
   }
@@ -908,6 +926,68 @@ open class ListenToArticleProcessorAsync /* ListenToArticle */ {
 
 }
 
+public protocol Audio {
+
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isAvailable() throws -> Bool
+
+  ///
+  /// - Throws: 
+  func play() throws
+
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isPlaying() throws -> Bool
+
+}
+
+open class AudioClient : TClient /* , Audio */ {
+
+}
+
+public protocol AudioAsync {
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isAvailable(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func play(completion: @escaping (Result<Void, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isPlaying(completion: @escaping (Result<Bool, Error>) -> Void)
+
+}
+
+open class AudioProcessor /* Audio */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Audio) throws -> Void]
+
+  public var service: Audio
+
+  public required init(service: Audio) {
+    self.service = service
+  }
+
+}
+
+open class AudioProcessorAsync /* Audio */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, AudioAsync) throws -> Void]
+
+  public var service: AudioAsync
+
+  public required init(service: AudioAsync) {
+    self.service = service
+  }
+
+}
+
 public protocol User {
 
   ///
@@ -1093,6 +1173,11 @@ public protocol Videos {
   /// - Throws: 
   func setFullscreen(isFullscreen: Bool) throws -> Bool
 
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isAutoplayEnabled() throws -> Bool
+
 }
 
 open class VideosClient : TClient /* , Videos */ {
@@ -1130,6 +1215,10 @@ public protocol VideosAsync {
   ///   - isFullscreen: 
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
   func setFullscreen(isFullscreen: Bool, completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isAutoplayEnabled(completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -1602,6 +1691,6 @@ open class InteractivesProcessorAsync /* Interactives */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.7.0"
+public let BRIDGET_VERSION : String = "v8.9.2"
 
 
