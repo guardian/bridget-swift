@@ -458,6 +458,49 @@ public final class VideoEvent {
 
 }
 
+public final class MatchNotificationsAvailability {
+
+  public var isAvailable: Bool
+
+  public var unavailableReason: String?
+
+
+  public init(isAvailable: Bool) {
+    self.isAvailable = isAvailable
+  }
+
+  public init(isAvailable: Bool, unavailableReason: String?) {
+    self.isAvailable = isAvailable
+    self.unavailableReason = unavailableReason
+  }
+
+}
+
+public final class FootballTeam {
+
+  public var id: String
+
+
+  public init(id: String) {
+    self.id = id
+  }
+
+}
+
+public final class FootballMatch {
+
+  public var homeTeam: FootballTeam
+
+  public var awayTeam: FootballTeam
+
+
+  public init(homeTeam: FootballTeam, awayTeam: FootballTeam) {
+    self.homeTeam = homeTeam
+    self.awayTeam = awayTeam
+  }
+
+}
+
 public enum DiscussionServiceResponse {
 
   /// the JSON parsing will be done in DCR
@@ -807,6 +850,55 @@ open class NotificationsProcessorAsync /* Notifications */ {
 
 }
 
+public protocol MatchNotifications {
+
+  ///
+  /// - Parameters:
+  ///   - footballMatch: 
+  /// - Returns: MatchNotificationsAvailability
+  /// - Throws: 
+  func isAvailable(footballMatch: FootballMatch) throws -> MatchNotificationsAvailability
+
+}
+
+open class MatchNotificationsClient : TClient /* , MatchNotifications */ {
+
+}
+
+public protocol MatchNotificationsAsync {
+
+  ///
+  /// - Parameters:
+  ///   - footballMatch: 
+  ///   - completion: Result<MatchNotificationsAvailability, Error> wrapping return and following Exceptions: 
+  func isAvailable(footballMatch: FootballMatch, completion: @escaping (Result<MatchNotificationsAvailability, Error>) -> Void)
+
+}
+
+open class MatchNotificationsProcessor /* MatchNotifications */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, MatchNotifications) throws -> Void]
+
+  public var service: MatchNotifications
+
+  public required init(service: MatchNotifications) {
+    self.service = service
+  }
+
+}
+
+open class MatchNotificationsProcessorAsync /* MatchNotifications */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, MatchNotificationsAsync) throws -> Void]
+
+  public var service: MatchNotificationsAsync
+
+  public required init(service: MatchNotificationsAsync) {
+    self.service = service
+  }
+
+}
+
 public protocol ListenToArticle {
 
   ///
@@ -903,6 +995,68 @@ open class ListenToArticleProcessorAsync /* ListenToArticle */ {
   public var service: ListenToArticleAsync
 
   public required init(service: ListenToArticleAsync) {
+    self.service = service
+  }
+
+}
+
+public protocol Audio {
+
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isAvailable() throws -> Bool
+
+  ///
+  /// - Throws: 
+  func play() throws
+
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isPlaying() throws -> Bool
+
+}
+
+open class AudioClient : TClient /* , Audio */ {
+
+}
+
+public protocol AudioAsync {
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isAvailable(completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Void, Error> wrapping return and following Exceptions: 
+  func play(completion: @escaping (Result<Void, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isPlaying(completion: @escaping (Result<Bool, Error>) -> Void)
+
+}
+
+open class AudioProcessor /* Audio */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, Audio) throws -> Void]
+
+  public var service: Audio
+
+  public required init(service: Audio) {
+    self.service = service
+  }
+
+}
+
+open class AudioProcessorAsync /* Audio */ {
+
+  typealias ProcessorHandlerDictionary = [String: (Int32, TProtocol, TProtocol, AudioAsync) throws -> Void]
+
+  public var service: AudioAsync
+
+  public required init(service: AudioAsync) {
     self.service = service
   }
 
@@ -1093,6 +1247,11 @@ public protocol Videos {
   /// - Throws: 
   func setFullscreen(isFullscreen: Bool) throws -> Bool
 
+  ///
+  /// - Returns: Bool
+  /// - Throws: 
+  func isAutoplayEnabled() throws -> Bool
+
 }
 
 open class VideosClient : TClient /* , Videos */ {
@@ -1130,6 +1289,10 @@ public protocol VideosAsync {
   ///   - isFullscreen: 
   ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
   func setFullscreen(isFullscreen: Bool, completion: @escaping (Result<Bool, Error>) -> Void)
+
+  ///
+  ///   - completion: Result<Bool, Error> wrapping return and following Exceptions: 
+  func isAutoplayEnabled(completion: @escaping (Result<Bool, Error>) -> Void)
 
 }
 
@@ -1602,6 +1765,6 @@ open class InteractivesProcessorAsync /* Interactives */ {
 
 }
 
-public let BRIDGET_VERSION : String = "v8.7.0"
+public let BRIDGET_VERSION : String = "v8.9.1-2026-05-07"
 
 
