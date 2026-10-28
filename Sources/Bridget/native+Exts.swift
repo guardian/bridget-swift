@@ -785,6 +785,200 @@ extension VideoEvent : TStruct {
 
 
 
+public func ==(lhs: MatchNotificationsAvailability, rhs: MatchNotificationsAvailability) -> Bool {
+  return
+    (lhs.isAvailable == rhs.isAvailable) &&
+    (lhs.unavailableReason == rhs.unavailableReason)
+}
+
+extension MatchNotificationsAvailability : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "MatchNotificationsAvailability("
+    desc += "isAvailable=\(String(describing: self.isAvailable)), "
+    desc += "unavailableReason=\(String(describing: self.unavailableReason))"
+    return desc
+  }
+
+}
+
+extension MatchNotificationsAvailability : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(isAvailable)
+    hasher.combine(unavailableReason)
+  }
+
+}
+
+extension MatchNotificationsAvailability : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["isAvailable": 1, "unavailableReason": 2, ]
+  }
+
+  public static var structName: String { return "MatchNotificationsAvailability" }
+
+  public static func read(from proto: TProtocol) throws -> MatchNotificationsAvailability {
+    _ = try proto.readStructBegin()
+    var isAvailable: Bool!
+    var unavailableReason: String?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .bool):            isAvailable = try Bool.read(from: proto)
+        case (2, .string):           unavailableReason = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(isAvailable, named: "isAvailable")
+
+    return MatchNotificationsAvailability(isAvailable: isAvailable, unavailableReason: unavailableReason)
+  }
+
+}
+
+
+
+public func ==(lhs: FootballTeam, rhs: FootballTeam) -> Bool {
+  return
+    (lhs.paId == rhs.paId) &&
+    (lhs.name == rhs.name)
+}
+
+extension FootballTeam : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "FootballTeam("
+    desc += "paId=\(String(describing: self.paId)), "
+    desc += "name=\(String(describing: self.name))"
+    return desc
+  }
+
+}
+
+extension FootballTeam : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(paId)
+    hasher.combine(name)
+  }
+
+}
+
+extension FootballTeam : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["paId": 1, "name": 2, ]
+  }
+
+  public static var structName: String { return "FootballTeam" }
+
+  public static func read(from proto: TProtocol) throws -> FootballTeam {
+    _ = try proto.readStructBegin()
+    var paId: String!
+    var name: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           paId = try String.read(from: proto)
+        case (2, .string):           name = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(paId, named: "paId")
+    try proto.validateValue(name, named: "name")
+
+    return FootballTeam(paId: paId, name: name)
+  }
+
+}
+
+
+
+public func ==(lhs: FootballMatch, rhs: FootballMatch) -> Bool {
+  return
+    (lhs.homeTeam == rhs.homeTeam) &&
+    (lhs.awayTeam == rhs.awayTeam)
+}
+
+extension FootballMatch : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "FootballMatch("
+    desc += "homeTeam=\(String(describing: self.homeTeam)), "
+    desc += "awayTeam=\(String(describing: self.awayTeam))"
+    return desc
+  }
+
+}
+
+extension FootballMatch : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(homeTeam)
+    hasher.combine(awayTeam)
+  }
+
+}
+
+extension FootballMatch : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["homeTeam": 1, "awayTeam": 2, ]
+  }
+
+  public static var structName: String { return "FootballMatch" }
+
+  public static func read(from proto: TProtocol) throws -> FootballMatch {
+    _ = try proto.readStructBegin()
+    var homeTeam: FootballTeam!
+    var awayTeam: FootballTeam!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           homeTeam = try FootballTeam.read(from: proto)
+        case (2, .struct):           awayTeam = try FootballTeam.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(homeTeam, named: "homeTeam")
+    try proto.validateValue(awayTeam, named: "awayTeam")
+
+    return FootballMatch(homeTeam: homeTeam, awayTeam: awayTeam)
+  }
+
+}
+
+
+
 public func ==(lhs: DiscussionServiceResponse, rhs: DiscussionServiceResponse) -> Bool {
   return {
     switch (lhs, rhs) {
@@ -850,6 +1044,63 @@ extension DiscussionServiceResponse : TStruct {
     }
 
     throw TProtocolError(error: .unknown, message: "Missing required value for type: DiscussionServiceResponse")  }
+
+}
+
+
+
+public func ==(lhs: MaybeEmail, rhs: MaybeEmail) -> Bool {
+  return
+    (lhs.emailAddress == rhs.emailAddress)
+}
+
+extension MaybeEmail : CustomStringConvertible {
+
+  public var description : String {
+    var desc = "MaybeEmail("
+    desc += "emailAddress=\(String(describing: self.emailAddress))"
+    return desc
+  }
+
+}
+
+extension MaybeEmail : Hashable {
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(emailAddress)
+  }
+
+}
+
+extension MaybeEmail : TStruct {
+
+  public static var fieldIds: [String: Int32] {
+    return ["emailAddress": 1, ]
+  }
+
+  public static var structName: String { return "MaybeEmail" }
+
+  public static func read(from proto: TProtocol) throws -> MaybeEmail {
+    _ = try proto.readStructBegin()
+    var emailAddress: String?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           emailAddress = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return MaybeEmail(emailAddress: emailAddress)
+  }
 
 }
 
@@ -3661,6 +3912,257 @@ extension NotificationsProcessorAsync : TProcessor {
   }
 }
 
+fileprivate final class MatchNotifications_isAvailable_args {
+
+  fileprivate var footballMatch: FootballMatch
+
+
+  fileprivate init(footballMatch: FootballMatch) {
+    self.footballMatch = footballMatch
+  }
+
+}
+
+fileprivate func ==(lhs: MatchNotifications_isAvailable_args, rhs: MatchNotifications_isAvailable_args) -> Bool {
+  return
+    (lhs.footballMatch == rhs.footballMatch)
+}
+
+extension MatchNotifications_isAvailable_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(footballMatch)
+  }
+
+}
+
+extension MatchNotifications_isAvailable_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["footballMatch": 1, ]
+  }
+
+  fileprivate static var structName: String { return "MatchNotifications_isAvailable_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> MatchNotifications_isAvailable_args {
+    _ = try proto.readStructBegin()
+    var footballMatch: FootballMatch!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .struct):           footballMatch = try FootballMatch.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(footballMatch, named: "footballMatch")
+
+    return MatchNotifications_isAvailable_args(footballMatch: footballMatch)
+  }
+
+}
+
+
+
+fileprivate final class MatchNotifications_isAvailable_result {
+
+  fileprivate var success: MatchNotificationsAvailability?
+
+
+  fileprivate init() { }
+  fileprivate init(success: MatchNotificationsAvailability?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: MatchNotifications_isAvailable_result, rhs: MatchNotifications_isAvailable_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension MatchNotifications_isAvailable_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension MatchNotifications_isAvailable_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "MatchNotifications_isAvailable_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> MatchNotifications_isAvailable_result {
+    _ = try proto.readStructBegin()
+    var success: MatchNotificationsAvailability?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .struct):           success = try MatchNotificationsAvailability.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return MatchNotifications_isAvailable_result(success: success)
+  }
+
+}
+
+
+
+extension MatchNotificationsClient : MatchNotifications {
+
+  private func send_isAvailable(footballMatch: FootballMatch) throws {
+    try outProtocol.writeMessageBegin(name: "isAvailable", type: .call, sequenceID: 0)
+    let args = MatchNotifications_isAvailable_args(footballMatch: footballMatch)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isAvailable() throws -> MatchNotificationsAvailability {
+    try inProtocol.readResultMessageBegin() 
+    let result = try MatchNotifications_isAvailable_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isAvailable"))
+  }
+
+  public func isAvailable(footballMatch: FootballMatch) throws -> MatchNotificationsAvailability {
+    try send_isAvailable(footballMatch: footballMatch)
+    try outProtocol.transport.flush()
+    return try recv_isAvailable()
+  }
+
+}
+
+extension MatchNotificationsProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["isAvailable"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try MatchNotifications_isAvailable_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = MatchNotifications_isAvailable_result()
+      do {
+        result.success = try handler.isAvailable(footballMatch: args.footballMatch)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isAvailable", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = MatchNotificationsProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+        try outProtocol.transport.flush()
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+      try outProtocol.transport.flush()
+    }
+  }
+}
+
+extension MatchNotificationsProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["isAvailable"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try MatchNotifications_isAvailable_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isAvailable(footballMatch: args.footballMatch, completion: { asyncResult in
+        var result = MatchNotifications_isAvailable_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isAvailable", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isAvailable", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isAvailable", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = MatchNotificationsProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
 fileprivate final class ListenToArticle_isAvailable_args {
 
   fileprivate var articleId: String
@@ -4636,6 +5138,580 @@ extension ListenToArticleProcessorAsync : TProcessor {
     let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
 
     if let processorHandler = ListenToArticleProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+fileprivate final class Audio_isAvailable_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Audio_isAvailable_args, rhs: Audio_isAvailable_args) -> Bool {
+  return true
+}
+
+extension Audio_isAvailable_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Audio_isAvailable_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Audio_isAvailable_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Audio_isAvailable_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Audio_isAvailable_args()
+  }
+
+}
+
+
+
+fileprivate final class Audio_isAvailable_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Audio_isAvailable_result, rhs: Audio_isAvailable_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Audio_isAvailable_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Audio_isAvailable_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Audio_isAvailable_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Audio_isAvailable_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Audio_isAvailable_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class Audio_play_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Audio_play_args, rhs: Audio_play_args) -> Bool {
+  return true
+}
+
+extension Audio_play_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Audio_play_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Audio_play_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Audio_play_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Audio_play_args()
+  }
+
+}
+
+
+
+fileprivate final class Audio_play_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Audio_play_result, rhs: Audio_play_result) -> Bool {
+  return true
+}
+
+extension Audio_play_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Audio_play_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Audio_play_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Audio_play_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Audio_play_result()
+  }
+
+}
+
+
+
+fileprivate final class Audio_isPlaying_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Audio_isPlaying_args, rhs: Audio_isPlaying_args) -> Bool {
+  return true
+}
+
+extension Audio_isPlaying_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Audio_isPlaying_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Audio_isPlaying_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Audio_isPlaying_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Audio_isPlaying_args()
+  }
+
+}
+
+
+
+fileprivate final class Audio_isPlaying_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Audio_isPlaying_result, rhs: Audio_isPlaying_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Audio_isPlaying_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Audio_isPlaying_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Audio_isPlaying_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Audio_isPlaying_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Audio_isPlaying_result(success: success)
+  }
+
+}
+
+
+
+extension AudioClient : Audio {
+
+  private func send_isAvailable() throws {
+    try outProtocol.writeMessageBegin(name: "isAvailable", type: .call, sequenceID: 0)
+    let args = Audio_isAvailable_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isAvailable() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Audio_isAvailable_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isAvailable"))
+  }
+
+  public func isAvailable() throws -> Bool {
+    try send_isAvailable()
+    try outProtocol.transport.flush()
+    return try recv_isAvailable()
+  }
+
+  private func send_play() throws {
+    try outProtocol.writeMessageBegin(name: "play", type: .call, sequenceID: 0)
+    let args = Audio_play_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_play() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Audio_play_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func play() throws {
+    try send_play()
+    try outProtocol.transport.flush()
+    try recv_play()
+  }
+
+  private func send_isPlaying() throws {
+    try outProtocol.writeMessageBegin(name: "isPlaying", type: .call, sequenceID: 0)
+    let args = Audio_isPlaying_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isPlaying() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Audio_isPlaying_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isPlaying"))
+  }
+
+  public func isPlaying() throws -> Bool {
+    try send_isPlaying()
+    try outProtocol.transport.flush()
+    return try recv_isPlaying()
+  }
+
+}
+
+extension AudioProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["isAvailable"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Audio_isAvailable_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Audio_isAvailable_result()
+      do {
+        result.success = try handler.isAvailable()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isAvailable", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["play"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Audio_play_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Audio_play_result()
+      do {
+        try handler.play()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "play", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["isPlaying"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Audio_isPlaying_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Audio_isPlaying_result()
+      do {
+        result.success = try handler.isPlaying()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isPlaying", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = AudioProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+        try outProtocol.transport.flush()
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+      try outProtocol.transport.flush()
+    }
+  }
+}
+
+extension AudioProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["isAvailable"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Audio_isAvailable_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isAvailable(completion: { asyncResult in
+        var result = Audio_isAvailable_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isAvailable", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isAvailable", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isAvailable", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["play"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Audio_play_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.play(completion: { asyncResult in
+        var result = Audio_play_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "play", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "play", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "play", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["isPlaying"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Audio_isPlaying_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isPlaying(completion: { asyncResult in
+        var result = Audio_isPlaying_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isPlaying", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isPlaying", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isPlaying", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = AudioProcessorAsync.processorHandlers[messageName] {
       do {
         try processorHandler(sequenceID, inProtocol, outProtocol, service)
       }
@@ -6372,6 +7448,115 @@ extension Videos_sendVideoEvent_result : TStruct {
 
 
 
+fileprivate final class Videos_sendVideoAttentionTimes_args {
+
+  fileprivate var componentAttentionMs: TMap<String, Int64>
+
+
+  fileprivate init(componentAttentionMs: TMap<String, Int64>) {
+    self.componentAttentionMs = componentAttentionMs
+  }
+
+}
+
+fileprivate func ==(lhs: Videos_sendVideoAttentionTimes_args, rhs: Videos_sendVideoAttentionTimes_args) -> Bool {
+  return
+    (lhs.componentAttentionMs == rhs.componentAttentionMs)
+}
+
+extension Videos_sendVideoAttentionTimes_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(componentAttentionMs)
+  }
+
+}
+
+extension Videos_sendVideoAttentionTimes_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["componentAttentionMs": 1, ]
+  }
+
+  fileprivate static var structName: String { return "Videos_sendVideoAttentionTimes_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_sendVideoAttentionTimes_args {
+    _ = try proto.readStructBegin()
+    var componentAttentionMs: TMap<String, Int64>!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .map):             componentAttentionMs = try TMap<String, Int64>.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(componentAttentionMs, named: "componentAttentionMs")
+
+    return Videos_sendVideoAttentionTimes_args(componentAttentionMs: componentAttentionMs)
+  }
+
+}
+
+
+
+fileprivate final class Videos_sendVideoAttentionTimes_result {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Videos_sendVideoAttentionTimes_result, rhs: Videos_sendVideoAttentionTimes_result) -> Bool {
+  return true
+}
+
+extension Videos_sendVideoAttentionTimes_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Videos_sendVideoAttentionTimes_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Videos_sendVideoAttentionTimes_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_sendVideoAttentionTimes_result {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Videos_sendVideoAttentionTimes_result()
+  }
+
+}
+
+
+
 fileprivate final class Videos_setFullscreen_args {
 
   fileprivate var isFullscreen: Bool
@@ -6491,6 +7676,114 @@ extension Videos_setFullscreen_result : TStruct {
 
 
 
+fileprivate final class Videos_isAutoplayEnabled_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Videos_isAutoplayEnabled_args, rhs: Videos_isAutoplayEnabled_args) -> Bool {
+  return true
+}
+
+extension Videos_isAutoplayEnabled_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Videos_isAutoplayEnabled_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Videos_isAutoplayEnabled_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_isAutoplayEnabled_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Videos_isAutoplayEnabled_args()
+  }
+
+}
+
+
+
+fileprivate final class Videos_isAutoplayEnabled_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Videos_isAutoplayEnabled_result, rhs: Videos_isAutoplayEnabled_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Videos_isAutoplayEnabled_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Videos_isAutoplayEnabled_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Videos_isAutoplayEnabled_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Videos_isAutoplayEnabled_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Videos_isAutoplayEnabled_result(success: success)
+  }
+
+}
+
+
+
 extension VideosClient : Videos {
 
   private func send_insertVideos(videoSlots: TList<VideoSlot>) throws {
@@ -6553,6 +7846,26 @@ extension VideosClient : Videos {
     try recv_sendVideoEvent()
   }
 
+  private func send_sendVideoAttentionTimes(componentAttentionMs: TMap<String, Int64>) throws {
+    try outProtocol.writeMessageBegin(name: "sendVideoAttentionTimes", type: .call, sequenceID: 0)
+    let args = Videos_sendVideoAttentionTimes_args(componentAttentionMs: componentAttentionMs)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_sendVideoAttentionTimes() throws {
+    try inProtocol.readResultMessageBegin() 
+    _ = try Videos_sendVideoAttentionTimes_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+  }
+
+  public func sendVideoAttentionTimes(componentAttentionMs: TMap<String, Int64>) throws {
+    try send_sendVideoAttentionTimes(componentAttentionMs: componentAttentionMs)
+    try outProtocol.transport.flush()
+    try recv_sendVideoAttentionTimes()
+  }
+
   private func send_setFullscreen(isFullscreen: Bool) throws {
     try outProtocol.writeMessageBegin(name: "setFullscreen", type: .call, sequenceID: 0)
     let args = Videos_setFullscreen_args(isFullscreen: isFullscreen)
@@ -6575,6 +7888,30 @@ extension VideosClient : Videos {
     try send_setFullscreen(isFullscreen: isFullscreen)
     try outProtocol.transport.flush()
     return try recv_setFullscreen()
+  }
+
+  private func send_isAutoplayEnabled() throws {
+    try outProtocol.writeMessageBegin(name: "isAutoplayEnabled", type: .call, sequenceID: 0)
+    let args = Videos_isAutoplayEnabled_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isAutoplayEnabled() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Videos_isAutoplayEnabled_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isAutoplayEnabled"))
+  }
+
+  public func isAutoplayEnabled() throws -> Bool {
+    try send_isAutoplayEnabled()
+    try outProtocol.transport.flush()
+    return try recv_isAutoplayEnabled()
   }
 
 }
@@ -6636,6 +7973,23 @@ extension VideosProcessor : TProcessor {
       try outProtocol.writeMessageEnd()
       try outProtocol.transport.flush()
     }
+    processorHandlers["sendVideoAttentionTimes"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_sendVideoAttentionTimes_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Videos_sendVideoAttentionTimes_result()
+      do {
+        try handler.sendVideoAttentionTimes(componentAttentionMs: args.componentAttentionMs)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "sendVideoAttentionTimes", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
     processorHandlers["setFullscreen"] = { sequenceID, inProtocol, outProtocol, handler in
 
       let args = try Videos_setFullscreen_args.read(from: inProtocol)
@@ -6649,6 +8003,23 @@ extension VideosProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "setFullscreen", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["isAutoplayEnabled"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_isAutoplayEnabled_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Videos_isAutoplayEnabled_result()
+      do {
+        result.success = try handler.isAutoplayEnabled()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isAutoplayEnabled", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
       try outProtocol.transport.flush()
@@ -6760,6 +8131,31 @@ extension VideosProcessorAsync : TProcessor {
         } catch { }
       })
     }
+    processorHandlers["sendVideoAttentionTimes"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_sendVideoAttentionTimes_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.sendVideoAttentionTimes(componentAttentionMs: args.componentAttentionMs, completion: { asyncResult in
+        var result = Videos_sendVideoAttentionTimes_result()
+        do {
+          try asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "sendVideoAttentionTimes", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "sendVideoAttentionTimes", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "sendVideoAttentionTimes", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
     processorHandlers["setFullscreen"] = { sequenceID, inProtocol, outProtocol, handler in
 
       let args = try Videos_setFullscreen_args.read(from: inProtocol)
@@ -6779,6 +8175,31 @@ extension VideosProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "setFullscreen", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["isAutoplayEnabled"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Videos_isAutoplayEnabled_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isAutoplayEnabled(completion: { asyncResult in
+        var result = Videos_isAutoplayEnabled_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isAutoplayEnabled", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isAutoplayEnabled", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isAutoplayEnabled", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
@@ -8855,6 +10276,114 @@ extension Newsletters_requestSignUp_result : TStruct {
 
 
 
+fileprivate final class Newsletters_getLoggedInUserEmail_args {
+
+
+  fileprivate init() { }
+}
+
+fileprivate func ==(lhs: Newsletters_getLoggedInUserEmail_args, rhs: Newsletters_getLoggedInUserEmail_args) -> Bool {
+  return true
+}
+
+extension Newsletters_getLoggedInUserEmail_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+  }
+
+}
+
+extension Newsletters_getLoggedInUserEmail_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return [:]
+  }
+
+  fileprivate static var structName: String { return "Newsletters_getLoggedInUserEmail_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Newsletters_getLoggedInUserEmail_args {
+    _ = try proto.readStructBegin()
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Newsletters_getLoggedInUserEmail_args()
+  }
+
+}
+
+
+
+fileprivate final class Newsletters_getLoggedInUserEmail_result {
+
+  fileprivate var success: MaybeEmail?
+
+
+  fileprivate init() { }
+  fileprivate init(success: MaybeEmail?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: Newsletters_getLoggedInUserEmail_result, rhs: Newsletters_getLoggedInUserEmail_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension Newsletters_getLoggedInUserEmail_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension Newsletters_getLoggedInUserEmail_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "Newsletters_getLoggedInUserEmail_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> Newsletters_getLoggedInUserEmail_result {
+    _ = try proto.readStructBegin()
+    var success: MaybeEmail?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .struct):           success = try MaybeEmail.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return Newsletters_getLoggedInUserEmail_result(success: success)
+  }
+
+}
+
+
+
 extension NewslettersClient : Newsletters {
 
   private func send_requestSignUp(emailAddress: String, newsletterIdentityName: String) throws {
@@ -8881,6 +10410,30 @@ extension NewslettersClient : Newsletters {
     return try recv_requestSignUp()
   }
 
+  private func send_getLoggedInUserEmail() throws {
+    try outProtocol.writeMessageBegin(name: "getLoggedInUserEmail", type: .call, sequenceID: 0)
+    let args = Newsletters_getLoggedInUserEmail_args()
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_getLoggedInUserEmail() throws -> MaybeEmail {
+    try inProtocol.readResultMessageBegin() 
+    let result = try Newsletters_getLoggedInUserEmail_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "getLoggedInUserEmail"))
+  }
+
+  public func getLoggedInUserEmail() throws -> MaybeEmail {
+    try send_getLoggedInUserEmail()
+    try outProtocol.transport.flush()
+    return try recv_getLoggedInUserEmail()
+  }
+
 }
 
 extension NewslettersProcessor : TProcessor {
@@ -8902,6 +10455,23 @@ extension NewslettersProcessor : TProcessor {
       catch let error { throw error }
 
       try outProtocol.writeMessageBegin(name: "requestSignUp", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["getLoggedInUserEmail"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Newsletters_getLoggedInUserEmail_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = Newsletters_getLoggedInUserEmail_result()
+      do {
+        result.success = try handler.getLoggedInUserEmail()
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "getLoggedInUserEmail", type: .reply, sequenceID: sequenceID)
       try result.write(to: outProtocol)
       try outProtocol.writeMessageEnd()
       try outProtocol.transport.flush()
@@ -8957,6 +10527,31 @@ extension NewslettersProcessorAsync : TProcessor {
         }
         do {
           try outProtocol.writeMessageBegin(name: "requestSignUp", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["getLoggedInUserEmail"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try Newsletters_getLoggedInUserEmail_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.getLoggedInUserEmail(completion: { asyncResult in
+        var result = Newsletters_getLoggedInUserEmail_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "getLoggedInUserEmail", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "getLoggedInUserEmail", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "getLoggedInUserEmail", type: .reply, sequenceID: sequenceID)
           try result.write(to: outProtocol)
           try outProtocol.writeMessageEnd()
           try outProtocol.transport.flush()
@@ -9448,6 +11043,844 @@ extension InteractivesProcessorAsync : TProcessor {
     let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
 
     if let processorHandler = InteractivesProcessorAsync.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+    }
+  }
+}
+
+fileprivate final class LiveActivities_isAvailable_args {
+
+  fileprivate var activityType: String
+
+  fileprivate var activityId: String
+
+
+  fileprivate init(activityType: String, activityId: String) {
+    self.activityType = activityType
+    self.activityId = activityId
+  }
+
+}
+
+fileprivate func ==(lhs: LiveActivities_isAvailable_args, rhs: LiveActivities_isAvailable_args) -> Bool {
+  return
+    (lhs.activityType == rhs.activityType) &&
+    (lhs.activityId == rhs.activityId)
+}
+
+extension LiveActivities_isAvailable_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(activityType)
+    hasher.combine(activityId)
+  }
+
+}
+
+extension LiveActivities_isAvailable_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["activityType": 1, "activityId": 2, ]
+  }
+
+  fileprivate static var structName: String { return "LiveActivities_isAvailable_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> LiveActivities_isAvailable_args {
+    _ = try proto.readStructBegin()
+    var activityType: String!
+    var activityId: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           activityType = try String.read(from: proto)
+        case (2, .string):           activityId = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(activityType, named: "activityType")
+    try proto.validateValue(activityId, named: "activityId")
+
+    return LiveActivities_isAvailable_args(activityType: activityType, activityId: activityId)
+  }
+
+}
+
+
+
+fileprivate final class LiveActivities_isAvailable_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: LiveActivities_isAvailable_result, rhs: LiveActivities_isAvailable_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension LiveActivities_isAvailable_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension LiveActivities_isAvailable_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "LiveActivities_isAvailable_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> LiveActivities_isAvailable_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return LiveActivities_isAvailable_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class LiveActivities_follow_args {
+
+  fileprivate var activityType: String
+
+  fileprivate var activityId: String
+
+
+  fileprivate init(activityType: String, activityId: String) {
+    self.activityType = activityType
+    self.activityId = activityId
+  }
+
+}
+
+fileprivate func ==(lhs: LiveActivities_follow_args, rhs: LiveActivities_follow_args) -> Bool {
+  return
+    (lhs.activityType == rhs.activityType) &&
+    (lhs.activityId == rhs.activityId)
+}
+
+extension LiveActivities_follow_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(activityType)
+    hasher.combine(activityId)
+  }
+
+}
+
+extension LiveActivities_follow_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["activityType": 1, "activityId": 2, ]
+  }
+
+  fileprivate static var structName: String { return "LiveActivities_follow_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> LiveActivities_follow_args {
+    _ = try proto.readStructBegin()
+    var activityType: String!
+    var activityId: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           activityType = try String.read(from: proto)
+        case (2, .string):           activityId = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(activityType, named: "activityType")
+    try proto.validateValue(activityId, named: "activityId")
+
+    return LiveActivities_follow_args(activityType: activityType, activityId: activityId)
+  }
+
+}
+
+
+
+fileprivate final class LiveActivities_follow_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: LiveActivities_follow_result, rhs: LiveActivities_follow_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension LiveActivities_follow_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension LiveActivities_follow_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "LiveActivities_follow_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> LiveActivities_follow_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return LiveActivities_follow_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class LiveActivities_unfollow_args {
+
+  fileprivate var activityType: String
+
+  fileprivate var activityId: String
+
+
+  fileprivate init(activityType: String, activityId: String) {
+    self.activityType = activityType
+    self.activityId = activityId
+  }
+
+}
+
+fileprivate func ==(lhs: LiveActivities_unfollow_args, rhs: LiveActivities_unfollow_args) -> Bool {
+  return
+    (lhs.activityType == rhs.activityType) &&
+    (lhs.activityId == rhs.activityId)
+}
+
+extension LiveActivities_unfollow_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(activityType)
+    hasher.combine(activityId)
+  }
+
+}
+
+extension LiveActivities_unfollow_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["activityType": 1, "activityId": 2, ]
+  }
+
+  fileprivate static var structName: String { return "LiveActivities_unfollow_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> LiveActivities_unfollow_args {
+    _ = try proto.readStructBegin()
+    var activityType: String!
+    var activityId: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           activityType = try String.read(from: proto)
+        case (2, .string):           activityId = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(activityType, named: "activityType")
+    try proto.validateValue(activityId, named: "activityId")
+
+    return LiveActivities_unfollow_args(activityType: activityType, activityId: activityId)
+  }
+
+}
+
+
+
+fileprivate final class LiveActivities_unfollow_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: LiveActivities_unfollow_result, rhs: LiveActivities_unfollow_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension LiveActivities_unfollow_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension LiveActivities_unfollow_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "LiveActivities_unfollow_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> LiveActivities_unfollow_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return LiveActivities_unfollow_result(success: success)
+  }
+
+}
+
+
+
+fileprivate final class LiveActivities_isFollowing_args {
+
+  fileprivate var activityType: String
+
+  fileprivate var activityId: String
+
+
+  fileprivate init(activityType: String, activityId: String) {
+    self.activityType = activityType
+    self.activityId = activityId
+  }
+
+}
+
+fileprivate func ==(lhs: LiveActivities_isFollowing_args, rhs: LiveActivities_isFollowing_args) -> Bool {
+  return
+    (lhs.activityType == rhs.activityType) &&
+    (lhs.activityId == rhs.activityId)
+}
+
+extension LiveActivities_isFollowing_args : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(activityType)
+    hasher.combine(activityId)
+  }
+
+}
+
+extension LiveActivities_isFollowing_args : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["activityType": 1, "activityId": 2, ]
+  }
+
+  fileprivate static var structName: String { return "LiveActivities_isFollowing_args" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> LiveActivities_isFollowing_args {
+    _ = try proto.readStructBegin()
+    var activityType: String!
+    var activityId: String!
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (1, .string):           activityType = try String.read(from: proto)
+        case (2, .string):           activityId = try String.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+    // Required fields
+    try proto.validateValue(activityType, named: "activityType")
+    try proto.validateValue(activityId, named: "activityId")
+
+    return LiveActivities_isFollowing_args(activityType: activityType, activityId: activityId)
+  }
+
+}
+
+
+
+fileprivate final class LiveActivities_isFollowing_result {
+
+  fileprivate var success: Bool?
+
+
+  fileprivate init() { }
+  fileprivate init(success: Bool?) {
+    self.success = success
+  }
+
+}
+
+fileprivate func ==(lhs: LiveActivities_isFollowing_result, rhs: LiveActivities_isFollowing_result) -> Bool {
+  return
+    (lhs.success == rhs.success)
+}
+
+extension LiveActivities_isFollowing_result : Hashable {
+
+  fileprivate func hash(into hasher: inout Hasher) {
+    hasher.combine(success)
+  }
+
+}
+
+extension LiveActivities_isFollowing_result : TStruct {
+
+  fileprivate static var fieldIds: [String: Int32] {
+    return ["success": 0, ]
+  }
+
+  fileprivate static var structName: String { return "LiveActivities_isFollowing_result" }
+
+  fileprivate static func read(from proto: TProtocol) throws -> LiveActivities_isFollowing_result {
+    _ = try proto.readStructBegin()
+    var success: Bool?
+
+    fields: while true {
+
+      let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+      switch (fieldID, fieldType) {
+        case (_, .stop):            break fields
+        case (0, .bool):            success = try Bool.read(from: proto)
+        case let (_, unknownType):  try proto.skip(type: unknownType)
+      }
+
+      try proto.readFieldEnd()
+    }
+
+    try proto.readStructEnd()
+
+    return LiveActivities_isFollowing_result(success: success)
+  }
+
+}
+
+
+
+extension LiveActivitiesClient : LiveActivities {
+
+  private func send_isAvailable(activityType: String, activityId: String) throws {
+    try outProtocol.writeMessageBegin(name: "isAvailable", type: .call, sequenceID: 0)
+    let args = LiveActivities_isAvailable_args(activityType: activityType, activityId: activityId)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isAvailable() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try LiveActivities_isAvailable_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isAvailable"))
+  }
+
+  public func isAvailable(activityType: String, activityId: String) throws -> Bool {
+    try send_isAvailable(activityType: activityType, activityId: activityId)
+    try outProtocol.transport.flush()
+    return try recv_isAvailable()
+  }
+
+  private func send_follow(activityType: String, activityId: String) throws {
+    try outProtocol.writeMessageBegin(name: "follow", type: .call, sequenceID: 0)
+    let args = LiveActivities_follow_args(activityType: activityType, activityId: activityId)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_follow() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try LiveActivities_follow_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "follow"))
+  }
+
+  public func follow(activityType: String, activityId: String) throws -> Bool {
+    try send_follow(activityType: activityType, activityId: activityId)
+    try outProtocol.transport.flush()
+    return try recv_follow()
+  }
+
+  private func send_unfollow(activityType: String, activityId: String) throws {
+    try outProtocol.writeMessageBegin(name: "unfollow", type: .call, sequenceID: 0)
+    let args = LiveActivities_unfollow_args(activityType: activityType, activityId: activityId)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_unfollow() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try LiveActivities_unfollow_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "unfollow"))
+  }
+
+  public func unfollow(activityType: String, activityId: String) throws -> Bool {
+    try send_unfollow(activityType: activityType, activityId: activityId)
+    try outProtocol.transport.flush()
+    return try recv_unfollow()
+  }
+
+  private func send_isFollowing(activityType: String, activityId: String) throws {
+    try outProtocol.writeMessageBegin(name: "isFollowing", type: .call, sequenceID: 0)
+    let args = LiveActivities_isFollowing_args(activityType: activityType, activityId: activityId)
+    try args.write(to: outProtocol)
+    try outProtocol.writeMessageEnd()
+  }
+
+  private func recv_isFollowing() throws -> Bool {
+    try inProtocol.readResultMessageBegin() 
+    let result = try LiveActivities_isFollowing_result.read(from: inProtocol)
+    try inProtocol.readMessageEnd()
+
+    if let success = result.success {
+      return success
+    }
+    throw TApplicationError(error: .missingResult(methodName: "isFollowing"))
+  }
+
+  public func isFollowing(activityType: String, activityId: String) throws -> Bool {
+    try send_isFollowing(activityType: activityType, activityId: activityId)
+    try outProtocol.transport.flush()
+    return try recv_isFollowing()
+  }
+
+}
+
+extension LiveActivitiesProcessor : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["isAvailable"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try LiveActivities_isAvailable_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = LiveActivities_isAvailable_result()
+      do {
+        result.success = try handler.isAvailable(activityType: args.activityType, activityId: args.activityId)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isAvailable", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["follow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try LiveActivities_follow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = LiveActivities_follow_result()
+      do {
+        result.success = try handler.follow(activityType: args.activityType, activityId: args.activityId)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "follow", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["unfollow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try LiveActivities_unfollow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = LiveActivities_unfollow_result()
+      do {
+        result.success = try handler.unfollow(activityType: args.activityType, activityId: args.activityId)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "unfollow", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    processorHandlers["isFollowing"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try LiveActivities_isFollowing_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      var result = LiveActivities_isFollowing_result()
+      do {
+        result.success = try handler.isFollowing(activityType: args.activityType, activityId: args.activityId)
+      }
+      catch let error { throw error }
+
+      try outProtocol.writeMessageBegin(name: "isFollowing", type: .reply, sequenceID: sequenceID)
+      try result.write(to: outProtocol)
+      try outProtocol.writeMessageEnd()
+      try outProtocol.transport.flush()
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = LiveActivitiesProcessor.processorHandlers[messageName] {
+      do {
+        try processorHandler(sequenceID, inProtocol, outProtocol, service)
+      }
+      catch let error as TApplicationError {
+        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+        try outProtocol.transport.flush()
+      }
+    }
+    else {
+      try inProtocol.skip(type: .struct)
+      try inProtocol.readMessageEnd()
+      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+      try outProtocol.transport.flush()
+    }
+  }
+}
+
+extension LiveActivitiesProcessorAsync : TProcessor {
+
+  static let processorHandlers: ProcessorHandlerDictionary = {
+
+    var processorHandlers = ProcessorHandlerDictionary()
+
+    processorHandlers["isAvailable"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try LiveActivities_isAvailable_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isAvailable(activityType: args.activityType, activityId: args.activityId, completion: { asyncResult in
+        var result = LiveActivities_isAvailable_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isAvailable", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isAvailable", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isAvailable", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["follow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try LiveActivities_follow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.follow(activityType: args.activityType, activityId: args.activityId, completion: { asyncResult in
+        var result = LiveActivities_follow_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "follow", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "follow", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "follow", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["unfollow"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try LiveActivities_unfollow_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.unfollow(activityType: args.activityType, activityId: args.activityId, completion: { asyncResult in
+        var result = LiveActivities_unfollow_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "unfollow", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "unfollow", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "unfollow", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    processorHandlers["isFollowing"] = { sequenceID, inProtocol, outProtocol, handler in
+
+      let args = try LiveActivities_isFollowing_args.read(from: inProtocol)
+
+      try inProtocol.readMessageEnd()
+
+      handler.isFollowing(activityType: args.activityType, activityId: args.activityId, completion: { asyncResult in
+        var result = LiveActivities_isFollowing_result()
+        do {
+          try result.success = asyncResult.get()
+        } catch let error as TApplicationError {
+          _ = try? outProtocol.writeException(messageName: "isFollowing", sequenceID: sequenceID, ex: error)
+          return
+        } catch let error {
+          _ = try? outProtocol.writeException(messageName: "isFollowing", sequenceID: sequenceID, ex: TApplicationError(error: .internalError))
+          return
+        }
+        do {
+          try outProtocol.writeMessageBegin(name: "isFollowing", type: .reply, sequenceID: sequenceID)
+          try result.write(to: outProtocol)
+          try outProtocol.writeMessageEnd()
+          try outProtocol.transport.flush()
+        } catch { }
+      })
+    }
+    return processorHandlers
+  }()
+
+  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+
+    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+    if let processorHandler = LiveActivitiesProcessorAsync.processorHandlers[messageName] {
       do {
         try processorHandler(sequenceID, inProtocol, outProtocol, service)
       }
